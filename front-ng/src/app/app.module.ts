@@ -65,6 +65,7 @@ import { ComponentMaster, ServiceMaster } from './page/modules';
         // ...CoreComponentMaster,
         // ...globalComps,
         ...pagesAuth,
+  
         // ...pagesMaster,
         // ...demos,
         // ...ComponentMaster,

@@ -52,8 +52,8 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Transaksi', icon: 'fa fa-fw fa-gg',
                 items: [
-                    { label: 'Penerimaan Barang Supplier', icon: 'fa fa-fw fa-table', routerLink: ['/pegawai'] },
-                    { label: 'Daftar Penerimaan', icon: 'fa fa-fw fa-table', routerLink: ['/user-login'] },
+                    { label: 'Penerimaan Barang Supplier', icon: 'fa fa-fw fa-table', routerLink: ['/penerimaan-barang-supplier'] },
+                    { label: 'Daftar Penerimaan', icon: 'fa fa-fw fa-table', routerLink: ['/daftar-penerimaan-barang-supplier'] },
                 ]
             },
             {
