@@ -5,10 +5,8 @@
 
   <form [formGroup]="formGroup">
     <div class="ui-g ui-fluid">
-
       <div class="ui-g-12">
         <p-fieldset legend="Pencarian" [toggleable]="true">
-
           <div class="ui-g-12 ui-md-2">
             <label class="label-web-profile" for="input">No Penerimaan </label>
             <input type="text" formControlName="noPenerimaan" pInputText />
@@ -21,36 +19,39 @@
             <label class="label-web-profile" for="input">Nama Supplier </label>
             <input type="text" formControlName="namaSupplier" pInputText />
           </div>
-
-
           <div class="ui-g-12 ui-md-2">
-            <label class="label-web-profile" for="input">Tgl Penerimaan </label>
-            <div class="ui-g-12 ui-md-6">
-              <p-calendar dataType="string" formControlName="tglPenerimaan" dateFormat="dd/mm/yy" [defaultDate]="now"
-                [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
-                [showTime]="true">
-              </p-calendar>
-            </div>
-            <div class="ui-g-12 ui-md-6">
-              <p-calendar dataType="string" formControlName="tglPenerimaan" dateFormat="dd/mm/yy" [defaultDate]="now"
-                [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
-                [showTime]="true">
-              </p-calendar>
-            </div>
-
+            <label class="label-web-profile" for="input">Tgl Awal </label>
+            <p-calendar dataType="string" formControlName="tglPenerimaan" dateFormat="dd/mm/yy" [defaultDate]="now"
+              [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
+              [showTime]="true">
+            </p-calendar>
           </div>
           <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">Tgl Akhir </label>
+            <p-calendar dataType="string" formControlName="tglPenerimaan" dateFormat="dd/mm/yy" [defaultDate]="now"
+              [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
+              [showTime]="true">
+            </p-calendar>
+          </div>
+          <div class="ui-g-12 ui-md-1" style="margin-top:10px">
             <button pButton type="submit" label="Cari" icon="fa-search" (click)="simpan()"></button>
           </div>
-
-
+        </p-fieldset>
       </div>
-      </p-fieldset>
+      <div class="ui-g-12">
+          <p-dataTable [globalFilter]="gs" [value]="listData" [rows]="10" [paginator]="true" [pageLinks]="3"
+            [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected"
+            (onRowSelect)="onRowSelect($event)">
+            <p-column field="no" header="No" [style]="{'width':'30px'}"></p-column>
+            <p-column field="namalengkap" header="Kode Produk"></p-column>
+            <p-column field="namalengkap" header="Nama Produk"></p-column>
+            <p-column field="namalengkap" header="Qty Produk"></p-column>
+            <p-column field="namauser" header="Harga Satuan"></p-column>
+            <p-column field="kelompokuser" header="Harga Jual"></p-column>
+            <p-column field="kelompokuser" header="Total"></p-column>
+          </p-dataTable>
+        </div>
+
     </div>
-
-
-
-
-
   </form>
 </div>
