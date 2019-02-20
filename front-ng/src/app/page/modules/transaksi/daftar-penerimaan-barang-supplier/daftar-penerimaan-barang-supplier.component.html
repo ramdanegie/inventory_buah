@@ -1,0 +1,56 @@
+<div class="card card-w-title">
+  <div class="card card-form-header">
+    <h1>Daftar Penerimaan Barang Supplier</h1>
+  </div>
+
+  <form [formGroup]="formGroup">
+    <div class="ui-g ui-fluid">
+
+      <div class="ui-g-12">
+        <p-fieldset legend="Pencarian" [toggleable]="true">
+
+          <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">No Penerimaan </label>
+            <input type="text" formControlName="noPenerimaan" pInputText />
+          </div>
+          <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">No Faktur </label>
+            <input type="text" formControlName="noFaktur" pInputText />
+          </div>
+          <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">Nama Supplier </label>
+            <input type="text" formControlName="namaSupplier" pInputText />
+          </div>
+
+
+          <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">Tgl Penerimaan </label>
+            <div class="ui-g-12 ui-md-6">
+              <p-calendar dataType="string" formControlName="tglPenerimaan" dateFormat="dd/mm/yy" [defaultDate]="now"
+                [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
+                [showTime]="true">
+              </p-calendar>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+              <p-calendar dataType="string" formControlName="tglPenerimaan" dateFormat="dd/mm/yy" [defaultDate]="now"
+                [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
+                [showTime]="true">
+              </p-calendar>
+            </div>
+
+          </div>
+          <div class="ui-g-12 ui-md-2">
+            <button pButton type="submit" label="Cari" icon="fa-search" (click)="simpan()"></button>
+          </div>
+
+
+      </div>
+      </p-fieldset>
+    </div>
+
+
+
+
+
+  </form>
+</div>
