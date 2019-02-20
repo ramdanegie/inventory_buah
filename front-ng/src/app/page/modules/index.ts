@@ -4,6 +4,7 @@ export * from './404/not-found.component';
 // master
 export * from './master/user-login/user-login.component';
 export * from './master/kelompok-user/kelompok-user.component';
+export * from './master/produk/produk.component';
 
 // transaksi
 export * from './transaksi/penerimaan-barang-supplier/penerimaan-barang-supplier.component';
