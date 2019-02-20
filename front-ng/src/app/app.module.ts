@@ -39,6 +39,7 @@ import { Http, HttpModule } from '@angular/http';
 import { pagesAuth } from './page/auth';
 import { ComponentMaster, ServiceMaster } from './page/modules';
 
+
 // import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 @NgModule({
     imports: [

@@ -1,0 +1,98 @@
+<div class="card card-w-title">
+  <div class="card card-form-header">
+    <h1>Pegawai</h1>
+  </div>
+  <form [formGroup]="formGroup">
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <p-fieldset legend="Daftar Pegawai" [toggleable]="true">
+          <div class="ui-g-12">
+            <div style="text-align: left;margin-left: 10px" class="ng-star-inserted"><i class="fa fa-search"
+                style="margin:4px 4px 0px 0"></i><input pinputtext="" placeholder="Filter Data" size="50"
+                style="width:auto" type="text" #gs class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+            </div>
+          </div>
+          <div class="ui-g-12">
+            <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
+              [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected"
+              (onRowSelect)="onRowSelect($event)">
+              <p-column field="no" header="No" [style]="{'width':'30px'}"></p-column>
+              <p-column field="namalengkap" header="Nama Lengkap"></p-column>
+              <p-column field="namapanggilan" header="Nama Panggilan"></p-column>
+              <p-column field="tgllahir" header="Tgl Lahir"></p-column>
+              <p-column field="jeniskelamin" header="Jenis Kelamin"></p-column>
+              <p-column field="alamat" header="Alamat"></p-column>
+              <p-column field="notelp" header="No Hp/No Telpon"></p-column>
+            </p-dataTable>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="ui-g-12 ">
+        <div class="ui-g-1">
+          <button type="button" pButton icon="fa fa-plus" (click)="showDialogToAdd()" label="Tambah"></button>
+        </div>
+      </div>
+      <p-dialog header="Tambah" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
+        [width]="700" [minWidth]="100" [minHeight]="80" [baseZIndex]="8000" [positionTop]="80" appendTo="body">
+        <div class="ui-g-12">
+          <div class="ui-g ui-fluid">
+            <!-- <form [formGroup]="formTambah" (ngSubmit)="simpan()"> -->
+            <div class="ui-g-12">
+              <p-fieldset legend="Masukan Data" [toggleable]="true">
+                <div class="ui-g-6">
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">Nama Lengkap</label>
+                    <input type="text" formControlName="namaLengkap" pInputText />
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">Nama Panggilan</label>
+                    <input type="text" pInputText formControlName="namaPanggilan" />
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                    <label class="label-web-profile" for="input">Tgl Lahir </label>
+                    <p-calendar dataType="string" formControlName="tglLahir" dateFormat="dd/mm/yy" [defaultDate]="now"
+                      [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
+                      [showTime]="false">
+                    </p-calendar>
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">Jenis Kelamin</label>
+                    <p-dropdown [filter]="true" [options]="listJK" [autoWidth]="false"
+                      formControlName="kdJenisKelamin"></p-dropdown>
+                  </div>
+
+                </div>
+
+                <div class="ui-g-6">
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">Alamat</label>
+                    <p-dropdown [filter]="true" [options]="listAlamat" [autoWidth]="false" formControlName="kdAlamat">
+                    </p-dropdown>
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">No HP</label>
+                    <input type="text" pInputText formControlName="noHp" />
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">No Telpon</label>
+                    <input type="text" pInputText formControlName="noTlp" />
+                  </div>
+                </div>
+              </p-fieldset>
+            </div>
+            <div class="ui-g-12">
+              <div class="ui-g-3 ui-g-offset-6">
+                <button pButton type="submit" (click)="save()" label="Simpan" icon="fa fa-save"></button>
+              </div>
+              <div class="ui-g-3">
+                <button pButton type="button" (click)="displayDialog = false" label="Tutup"
+                  icon="fa fa-angle-left"></button>
+              </div>
+            </div>
+            <!-- </form> -->
+          </div>
+        </div>
+      </p-dialog>
+    </div>
+  </form>
+</div>
