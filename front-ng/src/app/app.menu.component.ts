@@ -42,7 +42,7 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Kelompok Produk', icon: 'fa fa-fw fa-circle-o-notch', routerLink: ['/messages'] },
                     { label: 'Kode Generate', icon: 'fa fa-fw fa-area-chart', routerLink: ['/charts'] },
                     { label: 'Map Produk To Satuan Standar', icon: 'fa fa-fw fa-arrow-circle-o-up', routerLink: ['/file'] },
-                    { label: 'Pegawai', icon: 'fa fa-fw fa-user-secret', routerLink: ['/misc'] },
+                    { label: 'Pegawai', icon: 'fa fa-fw fa-user-secret', routerLink: ['/pegawai'] },
                     { label: 'Produk', icon: 'fa fa-fw fa-square-o', routerLink: ['/produk'] },
                     { label: 'Satuan Standar', icon: 'fa fa-fw fa-sign-in', url: 'assets/pages/login.html', target: '_blank' },
                     { label: 'Supplier', icon: 'fa fa-fw fa-exclamation-circle', url: 'assets/pages/error.html', target: '_blank' },

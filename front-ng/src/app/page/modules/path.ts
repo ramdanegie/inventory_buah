@@ -12,6 +12,7 @@ export const pathMaster = [
     // MASTER
     { canActivate: [AuthGuard], path: 'user-login', component: pMaster.UserLoginComponent },
     { canActivate: [AuthGuard], path: 'kelompok-user', component: pMaster.KelompokUserComponent },
+    { canActivate: [AuthGuard], path: 'pegawai', component: pMaster.PegawaiComponent },
     { canActivate: [AuthGuard], path: 'produk', component: pMaster.ProdukComponent },
     // END MASTER
     
