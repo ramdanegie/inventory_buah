@@ -1,0 +1,195 @@
+<div class="ui-fluid">
+    <div ui-g>
+        <div class="ui-g-7">
+            <div *ngIf="pilModApp" class="borderBot">MODUL APLIKASI</div>
+            <div class="ui-g" *ngIf="pilModApp">
+                <div *ngFor="let modulAppImg of modAppImg; let i = index; trackBy: trackByFn">
+                    <img src="{{ modulAppImg.modulIconImage }}" class="{{ modulAppImg.classBorder }}" /><br/>
+                    <span>{{ modulAppImg.modulAplikasi }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-5" *ngIf="pilAll">
+            <div class="ui-fluid">
+                <div class="ui-g-7">&nbsp;</div>
+                <div class="ui-g-5">
+                     <p-dropdown [options]="bahasa" [(ngModel)]="bahasaTerpilih" (onChange)="pilihBahasa()">
+                        <ng-template let-bhs pTemplate="item">
+                            <div class="ui-helper-clearfix" style="position: relative;height: 10px;">
+                                <span [class]="classBahasa(bhs.value)"></span>
+                                    {{bhs.label}}
+                                </div>
+                        </ng-template>
+                    </p-dropdown>
+               </div>
+            </div>
+            <div class="login-body">
+                <div class="login-panel ui-fluid">
+                    <div class="ui-g login-container" style="padding-bottom: 20px;">
+                        <div class="ui-g-12 logo-container">
+                            <a class="morpheus-logo-link" href="#/dashboard">
+                                <img src="assets/layout/images/morpheus-logo-green.svg" class="morpheus-logo" />
+                                <span class="morpheus-logo-text">
+                                    MEDIFIRST 2000
+                                </span>
+                            </a>
+                        </div>
+                        <div class="ui-g-12" *ngIf="!pilProfile">
+                            {{ 'selamatdatang' | translate }}
+                            <br/>
+                            {{ 'di' | translate }}
+                            <br/>
+                            <br/>
+                            <strong>{{ perusahaan }}</strong>
+                            <br/>
+                            <hr/>
+                        </div>
+                        <div class="ui-g-12" *ngIf="pilProfile">
+                            <div class="ui-g">
+                                <div class="ui-g-8">
+                                    <span class="ui-float-label">
+                                        <p-dropdown id="per" class="ui-inputwrapper-filled" [options]="profile" [(ngModel)]="profileTerpilih">
+                                        </p-dropdown>
+                                        <label>{{ 'Perusahaan' | translate }}</label>
+                                    </span>
+                                    <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                </div>
+                                <div class="ui-g-4 button-container">
+                                    <button (click)="selectProfile()" type="button"
+                                    class="ui-button green-btn raised-btn ui-widget ui-state-default ui-corner-all ui-button-text-icon-left">
+                                    <span class="ui-button-icon-left ui-c fa fa-fw fa-check"></span>
+                                    <span class="ui-button-text ui-c">{{ 'Pilih' | translate }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-g-12" *ngIf="!pilModApp">
+                            <span width="100%">{{ 'modulaplikasi' | translate }}</span>
+                            <br/>
+                            <br/>
+                            <strong>{{ modul }}</strong>
+                            <br/>
+                            <hr/>
+                        </div>
+                        <div class="ui-g-12" *ngIf="pilModApp">
+							<div class="ui-g-8" style="padding: 0px; text-align: left">
+								<label for="mod">{{ 'Modul Aplikasi' | translate }}</label>
+							</div>
+							<div class="ui-g-8">
+								<p-dropdown (onChange)="pilihModApp()" [options]="modApp" [autoWidth]="false" [(ngModel)]="modAppTerpilih"></p-dropdown>
+								<img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+							</div>
+							<div class="ui-g-4">
+								<button (click)="selectModApp()" type="button"
+								class="ui-button green-btn raised-btn ui-widget ui-state-default ui-corner-all ui-button-text-icon-left">
+								<span class="ui-button-icon-left ui-c fa fa-fw fa-check"></span>
+								<span class="ui-button-text ui-c">{{ 'pilih' | translate }}</span>
+								</button>
+							</div>
+                        </div>
+                        <div class="ui-g-12" *ngIf="pilRuangan">
+                            <div class="ui-g">
+                                <div class="ui-g-8">
+                                    <span class="ui-float-label">
+                                        <p-dropdown id="ru" class="ui-inputwrapper-filled" [options]="ruangan" [(ngModel)]="ruanganTerpilih">
+                                        </p-dropdown>
+                                        <label for="ru">{{ 'Unit Kerja' | translate }}</label>
+                                    </span>
+                                    <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                </div>
+                                <div class="ui-g-4 button-container">
+                                    <button (click)="selectRuangan()" type="button"
+                                    class="ui-button green-btn raised-btn ui-widget ui-state-default ui-corner-all ui-button-text-icon-left">
+                                    <span class="ui-button-icon-left ui-c fa fa-fw fa-check"></span>
+                                    <span class="ui-button-text ui-c">{{ 'pilih' | translate }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-g-12 button-container"></div>
+                        <div class="ui-g-12 button-container"></div>
+                        <div class="ui-g-12 button-container">
+                            <button (click)="kembali()" pButton type="button"
+                                label="{{ 'batal' | translate }}"
+                                icon="fa-close"
+                                iconPos="left">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-5" *ngIf="!pilAll">
+            <div class="ui-fluid">
+                <div class="ui-g-7">&nbsp;</div>
+                <div class="ui-g-5">
+                     <p-dropdown [options]="bahasa" [(ngModel)]="bahasaTerpilih" (onChange)="pilihBahasa()">
+                        <ng-template let-bhs pTemplate="item">
+                            <div class="ui-helper-clearfix" style="position: relative;height: 10px;">
+                                <span [class]="classBahasa(bhs.value)"></span>
+                                    {{bhs.label}}
+                                </div>
+                        </ng-template>
+                    </p-dropdown>
+               </div>
+            </div>
+            <form (ngSubmit)="f.form.valid" #f="ngForm" novalidate>
+                <div class="login-body">
+                    <div class="login-panel ui-fluid">
+                        <div class="ui-g login-container" style="padding-bottom: 20px;">
+                            <div class="ui-g-12 logo-container">
+                                <a class="morpheus-logo-link" href="#/dashboard">
+                                    <img src="assets/layout/images/morpheus-logo-green.svg" class="morpheus-logo" />
+                                    <span class="morpheus-logo-text">
+                                        MEDIFIRST HR-3000
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="ui-g-12">
+                                <span class="ui-float-label">
+                                    <input type="text"
+                                        autocomplete="off"
+                                        placeholder=""
+                                        [disabled]="loading"
+                                        id="username"
+                                        name="username" [(ngModel)]="model.username" #username="ngModel" required pInputText>
+                                     <label for="username">{{'username' | translate}}</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12">
+                                <span class="ui-float-label">
+                                    <input type="password"
+                                        autocomplete="off"
+                                        [disabled]="loading"
+                                        id="password"
+                                        name="password" [(ngModel)]="model.password" #password="ngModel" required pInputText>
+                                     <label for="password">{{'password' | translate}}</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 button-container"></div>
+                            <div class="ui-g-12 button-container"></div>
+                            <div class="ui-g-12 button-container">
+                                <button (click)="loginUser()" pButton type="button"
+                                    label="{{ 'signin' | translate }}"
+                                    icon="fa-user"
+                                    iconPos="left"
+                                    [disabled]="loading || !f.form.valid">
+                                </button>
+                                <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </form>
+         </div>
+    </div>
+</div>
+
+
+<!--                                <div class="ui-g-12 chkbox-container">
+                                <input type="checkbox" id="remember-me" />
+                                <label for="remember-me">Remember Me</label>
+                            </div> -->
+
+
+<!--                 <div class="ui-g-7" style="text-align: right;"> {{ 'bahasa' | translate }} : </div> -->

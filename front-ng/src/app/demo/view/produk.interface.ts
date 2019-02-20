@@ -1,0 +1,43 @@
+import {EventEmitter} from '@angular/core';
+
+export interface Produk {
+	// KdProduk?: any;
+    KdProduk_Intern?: any;
+    NamaProduk?: any;
+    ReportDisplay?: any;
+    DeskripsiProduk?: any;
+    QtyTerkecil?: any;
+    QtyJualTerkecil?: any;
+    KdDetailJenisProduk?: any;
+    NilaiNormal?: any;
+    KdSatuanStandar?: any;
+    Kekuatan?: any;
+    KdSatuanKecil?: any;
+    KdGolonganProduk?: any;
+    KdDetailGolonganProduk?: any;
+    KdKategoryProduk?: any;
+    KdStatusProduk?: any;
+    KdBentukProduk?: any;
+    KdGProduk?: any;
+    KdProdusenProduk?: any;
+    KdTypeProduk?: any;
+    KdBahanProduk?: any;
+    KdWarnaProduk?: any;
+    TglProduksi?: any;
+    KdDepartemen?: any;
+    KdUnitLaporan?: any;
+    KdJenisPeriksa?: any;
+    KdFungsiProduk?: any;
+    KdLevelTingkat?: any;
+    KdAccount?: any;
+    KdBarcode?: any;
+    KodeExternal?: any;
+    NamaExternal?: any;
+    isProdukIntern?: any;
+    QtySKS?: any;
+    TglDaftar?: any;
+    KdSifatProduk?: any;
+    RetensiMaxHari?: any;
+    StatusEnabled?: any;
+    NoRec?: any;
+}

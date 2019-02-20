@@ -1,0 +1,196 @@
+<!-- <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425"></p-confirmDialog> -->
+<div class="card card-w-title">
+    <div class="card card-form-header">
+        <h1>Produk</h1>
+    </div>
+    <!-- <form (ngSubmit)="onSubmit()"> -->
+
+
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-4">
+                <!-- <p>
+                        <mat-form-field appearance="legacy">
+                          <mat-label>Legacy form field</mat-label>
+                          <input matInput placeholder="Placeholder">
+                          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                          <mat-hint>Hint</mat-hint>
+                        </mat-form-field>
+                      </p>
+                      <p>
+                        <mat-form-field appearance="standard">
+                          <mat-label>Standard form field</mat-label>
+                          <input matInput placeholder="Placeholder">
+                          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                          <mat-hint>Hint</mat-hint>
+                        </mat-form-field>
+                      </p>
+                      <p>
+                        <mat-form-field appearance="fill">
+                          <mat-label>Fill form field</mat-label>
+                          <input matInput placeholder="Placeholder">
+                          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                          <mat-hint>Hint</mat-hint>
+                        </mat-form-field>
+                      </p> -->
+                      <!-- <p>
+                        <mat-form-field appearance="outline">
+                          <mat-label>Outline form field</mat-label>
+                          <input matInput placeholder="Placeholder">
+                          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+                          <mat-hint>Hint</mat-hint>
+                        </mat-form-field>
+                      </p> -->
+                      
+                      
+                      <!-- Copyright 2018 Google Inc. All Rights Reserved.
+                          Use of this source code is governed by an MIT-style license that
+                          can be found in the LICENSE file at http://angular.io/license -->
+
+            <div class="ui-g-12 ui-md-12">
+                <label class="label-web-profile" for="input">Nama Produk </label>
+                <input type="text" placeholder="Nama Produk" pInputText />
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <label class="label-web-profile" for="input">Deskripsi Produk </label>
+                <textarea placeholder="Deskripsi" rows="5" cols="30" pInputTextarea autoResize="autoResize"></textarea>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <label class="label-web-profile" for="input">Satuan</label>
+                <p-dropdown [options]="d_satuan" [autoWidth]="false"></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <label class="label-web-profile" for="input">Tgl Produksi </label>
+                <p-calendar dataType="string" dateFormat="dd/mm/yy" [defaultDate]="defaultDateAwal" [showIcon]="true"
+                    [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" [showTime]="true"></p-calendar>
+            </div>
+        </div>
+        <div class="ui-g-4">
+                <!-- <div class="input-group">
+                        <input type="text" class="float-giw" value="John Doe"/>
+                        <label class="labelfloat">Name</label>
+                      </div>
+                      
+                       <div class="input-group">
+                        <input type="email" class="float-giw" />
+                        <label class="labelfloat">Email</label>
+                      </div>
+                      
+                       <div class="input-group">
+                        <input type="password" class="float-giw" />
+                        <label class="labelfloat">Password</label>
+                      </div> -->
+            <!-- <div class="ui-g-12 ui-md-12">
+                <div class="mdc-text-field mdc-text-field--outlined">
+                    <input type="text" id="tf-outlined" class="mdc-text-field__input">
+                    <div class="mdc-notched-outline">
+                        <div class="mdc-notched-outline__leading"></div>
+                        <div class="mdc-notched-outline__notch">
+                            <label for="tf-outlined" class="mdc-floating-label">Your Name</label>
+                        </div>
+                        <div class="mdc-notched-outline__trailing"></div>
+                    </div>
+                </div>
+                <div class="mdc-text-field">
+                        <input type="text" id="my-text-field" class="mdc-text-field__input">
+                        <label class="mdc-floating-label" for="my-text-field">Hint text</label>
+                        <div class="mdc-line-ripple"></div>
+                      </div>
+            </div> -->
+            <div class="ui-g-12 ui-md-12">
+                <label class="label-web-profile" for="input">Deskripsi Produk </label>
+                <textarea placeholder="Deskripsi" rows="5" cols="30" pInputTextarea autoResize="autoResize"></textarea>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <label class="label-web-profile" for="input">Satuan</label>
+                <p-dropdown [options]="d_satuan" [filter]="true" [autoWidth]="false"></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <label class="label-web-profile" for="input">Tgl Produksi </label>
+                <p-calendar dataType="string" dateFormat="dd/mm/yy" [defaultDate]="defaultDateAwal" [showIcon]="true"
+                    [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030" [showTime]="true"></p-calendar>
+            </div>
+        </div>
+        <div class="ui-g-4">
+            <p-fieldset legend="Optional" [toggleable]="true" [collapsed]="true">
+                <div class="ui-g-12 ui-md-12">
+                    <label class="label-web-profile" for="input">Kode External </label>
+                    <input type="text" s pInputText />
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <label class="label-web-profile" for="input">Nama External </label>
+                    <input type="text" s pInputText />
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <label class="label-web-profile" for="input">Report Display </label>
+                    <input type="text" s pInputText />
+                </div>
+            </p-fieldset>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-1 ui-g-offset-7">
+                <button pButton type="submit" label="Simpan" icon="fa-save"></button>
+            </div>
+            <div class="ui-g-1">
+                <button pButton type="button" label="Hapus" icon="fa-trash" (click)="delete()"></button>
+                <!-- <button pButton type="button" label="Edit" icon="fa-flash" (click)="recover()"></button> -->
+            </div>
+            <div class="ui-g-1">
+                <button pButton type="button" label="Batal" icon="fa-refresh" (click)="reset()"></button>
+            </div>
+            <div class="ui-g-1">
+                <button pButton type="button" label="Cetak" icon="fa-print" (click)="print()"></button>
+            </div>
+            <div class="ui-g-1">
+                <p-splitButton label="Export" icon="fa-external-link"></p-splitButton>
+            </div>
+        </div>
+    </div>
+    <!-- </form> -->
+</div>
+<div class="card card-w-title">
+    <div class="card card-form-header">
+        <h1>Daftar</h1>
+    </div>
+    <div class="ui-g ui-fluid">
+        <!-- <div class="ui-g-12">
+            <div class="ui-g-12 ui-lg-4">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input #gs type="text" pInputText size="50" tooltipPosition="top" style="width: 100%">
+            </div>
+        </div> -->
+        <div class="ui-g-12">
+            <div style="text-align: left;margin-left: 10px" class="ng-star-inserted"><i class="fa fa-search"
+                    style="margin:4px 4px 0px 0"></i><input pinputtext="" placeholder="Filter Data" size="50"
+                    style="width:auto" type="text" #gs class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <p-dataTable [value]="cars" [loading]="loading" loadingIcon="fa-spinner" scrollable="true" #dt
+                selectionMode="single" [(selection)]="selectedCar" [style]="{'margin-bottom':'20px'}"
+                [globalFilter]="gs" [totalRecords]="100" [pageLinks]="5" [rows]="5" [paginator]="true"
+                [rowsPerPageOptions]="[5,10,20]" scrollable="true" selectionMode="single">
+                <p-column header="No" [style]="{'width':'40px'}">
+                    <ng-template let-index="rowIndex+1" pTemplate="body">
+                        {{index}}
+                    </ng-template>
+                </p-column>
+                <p-column field="vin" header="Vin" [style]="{'width':'150px'}"></p-column>
+                <p-column field="year" header="Year" [style]="{'width':'150px'}"></p-column>
+                <p-column field="brand" header="Brand" [style]="{'width':'150px'}"></p-column>
+                <p-column field="color" header="Color" [style]="{'width':'150px'}"></p-column>
+                <p-column field="vin" header="Vin" [style]="{'width':'150px'}"></p-column>
+                <p-column field="year" header="Year" [style]="{'width':'150px'}"></p-column>
+                <p-column field="brand" header="Brand" [style]="{'width':'150px'}"></p-column>
+                <p-column field="color" header="Color" [style]="{'width':'150px'}"></p-column>
+                <p-column field="vin" header="Vin" [style]="{'width':'150px'}"></p-column>
+                <p-column field="year" header="Year" [style]="{'width':'150px'}"></p-column>
+                <p-column field="brand" header="Brand" [style]="{'width':'150px'}"></p-column>
+                <p-column field="color" header="Color" [style]="{'width':'150px'}"></p-column>
+                <p-column field="vin" header="Vin" [style]="{'width':'150px'}"></p-column>
+                <p-column field="year" header="Year" [style]="{'width':'150px'}"></p-column>
+                <p-column field="brand" header="Brand" [style]="{'width':'150px'}"></p-column>
+                <p-column field="color" header="Color" [style]="{'width':'150px'}"></p-column>
+            </p-dataTable>
+        </div>
+    </div>
+</div>

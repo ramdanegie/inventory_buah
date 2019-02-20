@@ -1,0 +1,168 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+.ui-float-label {
+	margin-top: 10px;
+}
+
+/* .login-panel {
+	width: 520px !important;
+} */
+
+.borderBot {
+	padding: 5px;
+	border-bottom: #AAA 2px solid;
+}
+.logo-top-bar{
+  background-color: rgb(24, 24, 148);
+  border-radius: 50%;
+  /* border: 4px solid  rgb(24, 24, 148); */
+}
+
+.borderMod {
+	border: #555 3px solid;
+	margin: 5px;
+  width: 300px;
+  height:150px;
+}
+
+.borderNone {
+	border: #f8f8f8 3px solid;
+	margin: 5px;
+  width: 300px;
+  height:150px;
+}
+.ui-placeholder {
+    color: #bababa !important;
+}
+.ui-paginator .ui-dropdown {
+	width: -webkit-fit-content !important;
+	width: -moz-fit-content !important;
+	width: fit-content !important;
+	min-width: 5em;
+}
+.ui-datepicker select.ui-datepicker-month{
+	border-color: #dedee0;
+	/* color: #535b6a; */
+	background-color: #f3f3f4;
+	/* background-image: url(textures/highlight.png); */
+	background-image: none,linear-gradient(to bottom,rgba(255,255,255,.2) 0,rgba(255,255,255,0) 100%);
+	border: 1px solid #cccccc;
+
+}
+
+/* SPLASH CUBE */
+/*Topbar*/
+/* Topbar Profile */
+/*Sidebar*/
+/*Footer*/
+.splash-container {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  position: absolute;
+  background-color: #2d3f47;
+}
+
+.splash-screen2 {
+  width: 40px;
+  height: 40px;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+
+}
+
+.style-loading {
+  width: 40px;
+  height: 40px;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  /* z-index: -1; */
+}
+.splash-screen2 .splash-cube {
+  width: 33%;
+  height: 33%;
+  background-color: #f4f4f4;
+  float: left;
+  -webkit-animation: splash-cubeGridScaleDelay 1.3s infinite ease-in-out;
+  animation: splash-cubeGridScaleDelay 1.3s infinite ease-in-out;
+}
+
+.splash-screen2 .splash-cube1 {
+  -webkit-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+
+.splash-screen2 .splash-cube2 {
+  -webkit-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+
+.splash-screen2 .splash-cube3 {
+  -webkit-animation-delay: 0.4s;
+  animation-delay: 0.4s;
+}
+
+.splash-screen2 .splash-cube4 {
+  -webkit-animation-delay: 0.1s;
+  animation-delay: 0.1s;
+}
+
+.splash-screen2 .splash-cube5 {
+  -webkit-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+
+.splash-screen2 .splash-cube6 {
+  -webkit-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+
+.splash-screen2 .splash-cube7 {
+  -webkit-animation-delay: 0s;
+  animation-delay: 0s;
+}
+
+.splash-screen2 .splash-cube8 {
+  -webkit-animation-delay: 0.1s;
+  animation-delay: 0.1s;
+}
+
+.splash-screen2 .splash-cube9 {
+  -webkit-animation-delay: 0.2s;
+  animation-delay: 0.2s;
+}
+
+@-webkit-keyframes splash-cubeGridScaleDelay {
+  0%, 70%, 100% {
+    -webkit-transform: scale3D(1, 1, 1);
+    transform: scale3D(1, 1, 1);
+  }
+  35% {
+    -webkit-transform: scale3D(0, 0, 1);
+    transform: scale3D(0, 0, 1);
+  }
+}
+@keyframes splash-cubeGridScaleDelay {
+  0%, 70%, 100% {
+    -webkit-transform: scale3D(1, 1, 1);
+    transform: scale3D(1, 1, 1);
+  }
+  35% {
+    -webkit-transform: scale3D(0, 0, 1);
+    transform: scale3D(0, 0, 1);
+  }
+}
+/* Add your variable customizations of layout here */
+
+body .ui-progressbar .ui-progressbar-value {
+  background: rgb(255, 187, 0);
+}
+body .ui-progressbar {
+  border: 0 none;
+  background-color: rgba(253, 255, 111, 0.973);
+  height: 6px;
+ }
+

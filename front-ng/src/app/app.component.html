@@ -1,0 +1,18 @@
+<div class="layout-wrapper" [ngClass]="{'layout-wrapper-menu-active':sidebarActive,
+                                        'layout-overlay-menu':overlay}">
+    <app-loader *ngIf="show" ></app-loader>
+    <!-- <div mk-layout-content-before-header> -->
+        <!-- <div *mkLoadingPage="{checkPendingHttp: true, checkPendingRoute: true}">
+            <mk-material-bar></mk-material-bar>
+        </div> -->
+    <!-- </div> -->
+    <app-topbar *ngIf="isLogin"></app-topbar>
+    <app-sidebar *ngIf="isLogin"></app-sidebar>
+    <div class="layout-content">
+        <app-alert></app-alert>
+        <app-info></app-info>
+        <router-outlet></router-outlet>
+        <app-footer *ngIf="isLogin"></app-footer>
+    </div>
+
+</div>

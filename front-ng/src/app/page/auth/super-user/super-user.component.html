@@ -1,0 +1,50 @@
+<!-- <p-dialog header="Supervisi" [(visible)]="show" [width]="400" closable="false" closeOnEscape="false" modal="true">
+	<form (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+            <div class="login-panel ui-fluid">
+                <div class="ui-g login-container" style="padding-bottom: 20px;">
+                    <div class="ui-g-12">
+                        <span>Butuh Supervisi untuk melanjutkan</span>
+                    </div>                    
+                    <div class="ui-g-12">
+                        <input type="text" 
+                            autocomplete="off" 
+                            class="ui-inputtext ui-corner-all ui-state-default ui-widget" 
+                            placeholder="Username"
+                            name="username" [(ngModel)]="model.username" #username="ngModel" required>
+                    </div>
+                    <div class="ui-g-12">
+                        <input type="password" 
+                            autocomplete="off" 
+                            class="ui-inputtext ui-corner-all ui-state-default ui-widget" 
+                            placeholder="Password"
+                            name="password" [(ngModel)]="model.password" #password="ngModel" required>
+                    </div>
+
+                    <div class="ui-g-12 button-container">
+                        <div class="ui-g-12 ui-lg-6">
+                            <button (click)="loginUser()"  pButton type="button"  
+                                label="{{ 'signin' | translate }}" 
+                                icon="fa-user" 
+                                iconPos="left"
+                                [disabled]="loading || !f.form.valid">
+                            </button>
+                        </div>
+                        <div class="ui-g-12 ui-lg-6">
+                            <button (click)="batal()" pButton type="button"  
+                                label="{{ 'batal' | translate }}" 
+                                icon="fa-user" 
+                                iconPos="left"
+                                [disabled]="loading">
+                            </button>
+                        </div>
+                        
+                        <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    </div>
+
+                    <div class="ui-g-12" *ngIf="error">
+                        <span>{{ info | translate }}</span>
+                    </div>                        
+                </div>
+            </div>
+	</form>
+</p-dialog> -->

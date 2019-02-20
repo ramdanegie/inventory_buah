@@ -1,0 +1,78 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db
+
+#
+catatanAdiS.txt
+kerjaan-syam.txt
+
+/src/app/global/*.ts
+/src/app/page/modules/path.ts
+/src/app/page/modules/index.ts
+remotes/origin/faisal
+/src/app/global/config.ts
+/src/app/page/master/asal
+/src/app/page/master/alamat
+/src/app/page/master/dokumen
+/src/app/page/master/event
+/src/app/page/master/departemen
+/src/app/page/master/modul-aplikasi
+/src/app/page/master/objek-modul-aplikasi
+/src/app/page/modules/2-prosedur-pelayanan
+/src/app/page/modules/alamatm
+/src/app/page/modules/departemen
+/src/app/page/modules/produk
+/src/app/page/modules/laporan-tahunan
+/src/app/page/modules/2-fasilitas-pelayanan
+/src/app/page/modules/asal
+/src/app/page/modules/maping-modul-to-kelompok-user
+/src/app/page/modules/maping-pegawai-to-modul-aplikasi
+/src/app/page/modules/maping-objek-modul-aplikasi
+/src/app/page/modules/objek-modul-aplikasi
+/src/app/page/modules/modul-aplikasi
+/src/app/page/core/maping-objek-modul-aplikasi
+/src/app/page/core/maping-modul-to-kelompok-user
+/src/app/page/core/maping-pegawai-to-modul-aplikasi
+/src/app/page/core/modul-aplikasi
+/src/app/page/core/objek-modul-aplikasi
+/src/app/global/config.ts
+/src/app/global/config.ts

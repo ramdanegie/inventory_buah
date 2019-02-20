@@ -1,0 +1,235 @@
+<style>
+    .exception-body {
+        background-color: #f5f5f5;
+        padding-top: 100px;
+        padding-bottom: 150px;
+        height: auto;
+        background-size: contain;
+    }
+
+    .exception-body * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .exception-body .exception-panel {
+        background-color: #ffffff;
+        width: 400px;
+        height: 323px;
+        margin: 0 auto;
+        padding-bottom: 20px;
+        -webkit-box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        -moz-box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .exception-body .exception-panel .ui-button {
+        background-color: #ffffff;
+        display: block;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        margin: 100px 0 0 30px;
+    }
+
+    .exception-body .exception-panel .ui-button:enabled:not(:focus):hover {
+        background-color: #e8e8e8;
+    }
+
+    .exception-body .exception-band {
+        height: 80px;
+        margin-top: -160px;
+        z-index: 1000;
+    }
+
+    .exception-body .exception-band .exception-content {
+        margin: 0 auto;
+        width: 400px;
+        position: relative;
+        padding: 15px 30px;
+    }
+
+    .exception-body .exception-band .exception-content h1 {
+        padding: 0;
+        margin: 0;
+    }
+
+    .exception-body .exception-band .exception-content p {
+        padding: 0;
+        margin: 0;
+    }
+
+    .exception-body .exception-band .exception-content img {
+        position: absolute;
+        width: 48px;
+        right: 30px;
+        top: 16px;
+    }
+
+    .exception-body.error-body {
+        background: url("../images/exception/error-image.png") no-repeat 0 -100px;
+    }
+
+    .exception-body.error-body .exception-panel img {
+        width: 100%;
+    }
+
+    .exception-body.error-body .exception-panel .ui-button {
+        color: #f44336;
+    }
+
+    .exception-body.error-body .exception-panel .ui-button.ui-state-hover {
+        background-color: #e8e8e8;
+        color: #000000;
+        color: #f44336;
+    }
+
+    .exception-body.error-body .exception-band {
+        background-color: #f44336;
+    }
+
+    .exception-body.error-body .exception-band .exception-content {
+        color: #ffebee;
+    }
+
+    .exception-body.pagenotfound-body {
+        background: url("../../../../assets/img/404-image.png") no-repeat 0 -100px;
+    }
+
+    .exception-body.pagenotfound-body .exception-panel img {
+        width: 200px;
+        margin: 0 auto;
+        display: block;
+        position: relative;
+        top: -97px
+    }
+
+    .exception-body.pagenotfound-body .exception-panel .ui-button {
+        color: #00796b;
+        margin-top: 0px;
+        font-size: 14px;
+        margin-right: 100px;
+
+    }
+
+    .exception-body.pagenotfound-body .exception-panel .ui-button.ui-state-hover {
+        background-color: #e8e8e8;
+        color: #000000;
+        color: #00796b;
+    }
+
+    .exception-body.pagenotfound-body .exception-band {
+        background-color: #00796b;
+    }
+
+    .exception-body.pagenotfound-body .exception-band .exception-content {
+        color: #b2dfdb;
+    }
+
+    .exception-body.accessdenied-body {
+        background: url("../images/exception/access-image.png") no-repeat 0 -100px;
+    }
+
+    .exception-body.accessdenied-body .exception-panel img {
+        width: 300px;
+        display: block;
+        margin: 0 auto;
+        position: relative;
+        top: 6px;
+    }
+
+    .exception-body.accessdenied-body .exception-panel .ui-button {
+        color: #f57c00;
+        margin-top: 110px;
+    }
+
+    .exception-body.accessdenied-body .exception-panel .ui-button.ui-state-hover {
+        background-color: #e8e8e8;
+        color: #000000;
+        color: #f57c00;
+    }
+
+    .exception-body.accessdenied-body .exception-band {
+        background-color: #f57c00;
+    }
+
+    .exception-body.accessdenied-body .exception-band .exception-content {
+        color: #ffe0b2;
+    }
+
+    @media (min-width: 1441px) {
+        .exception-body {
+            background-size: contain !important;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .exception-body .exception-panel {
+            width: 350px;
+        }
+
+        .exception-body .exception-band {
+            margin-top: -180px;
+        }
+
+        .exception-body .exception-band .exception-content img {
+            right: 48px;
+        }
+
+        .exception-body.error-body .exception-panel .ui-button {
+            margin-top: 111px;
+        }
+
+        .exception-body.pagenotfound-body .exception-panel img {
+            width: 175px;
+        }
+
+        .exception-body.pagenotfound-body .exception-panel .ui-button {
+            margin-top: 117px;
+        }
+
+        .exception-body.accessdenied-body .exception-panel img {
+            width: 262px;
+        }
+
+        .exception-body.accessdenied-body .exception-panel .ui-button {
+            margin-top: 120px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .exception-body .exception-band .exception-content {
+            width: 350px;
+            padding: 15px 10px;
+        }
+
+        .exception-body .exception-band .exception-content img {
+            right: 24px;
+        }
+    }
+</style>
+<!-- <div id="clouds">
+    <div class="cloud x1"></div>
+    <div class="cloud x1_5"></div>
+    <div class="cloud x2"></div>
+    <div class="cloud x3"></div>
+    <div class="cloud x4"></div>
+    <div class="cloud x5"></div>
+</div> -->
+
+<body class="exception-body pagenotfound-body">
+    <div class="exception-panel">
+        <img src="../../../../assets/img/icon-404.png" />
+
+        <a class='btn' href='#'>BACK TO HOME</a>
+    </div>
+
+    <div class="exception-band">
+        <div class="exception-content">
+            <h1>PAGE NOT FOUND</h1>
+            <p>The page you requested cannot be found</p>
+            <img src="../../../../assets/img/logo.png" />
+        </div>
+    </div>
+</body>
