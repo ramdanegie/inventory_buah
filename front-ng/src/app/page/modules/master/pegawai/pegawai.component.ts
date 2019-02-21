@@ -96,10 +96,37 @@ export class PegawaiComponent implements OnInit {
     });
 
   }
+  edit(e) {
+    this.formGroup.get('idPegawai').setValue(e.id);
+    this.formGroup.get('namaLengkap').setValue(e.namalengkap);
+    this.formGroup.get('namaPanggilan').setValue(e.namapanggilan);
+    this.formGroup.get('noHp').setValue(e.nohp);
+    this.formGroup.get('noTlp').setValue(e.notlp);
+    this.formGroup.get('kdJenisKelamin').setValue(e.jeniskelaminfk);
+    this.formGroup.get('kdAlamat').setValue(e.alamatfk);
+    this.formGroup.get('tglLahir').setValue(new Date(e.tgllahir));
+    this.displayDialog = true;
+  }
+  hapus(e) {
+
+    let jsonDelete = {
+      'idPegawai': e.id
+    }
+    this.confirmationService.confirm({
+      message: 'Yakin mau menghapus data?',
+      accept: () => {
+        this.httpService.post('master/pegawai/delete-pegawai', jsonDelete).subscribe(data => {
+          this.getData()
+          this.resetForm()
+        }, error => {
+          this.alertService.error('Error', JSON.stringify(error));
+        });
+      }
+    })
+  }
   resetForm() {
     this.formGroup.get('idPegawai').reset();
     this.formGroup.get('namaLengkap').reset();
-    this.formGroup.get('namaPanggilan').reset();
     this.formGroup.get('namaPanggilan').reset();
     this.formGroup.get('noHp').reset();
     this.formGroup.get('noTlp').reset();

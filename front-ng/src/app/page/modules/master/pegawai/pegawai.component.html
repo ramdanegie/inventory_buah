@@ -1,3 +1,4 @@
+<p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle" width="400"></p-confirmDialog>
 <div class="card card-w-title">
   <div class="card card-form-header">
     <h1>Pegawai</h1>
@@ -23,6 +24,12 @@
               <p-column field="jeniskelamin" header="Jenis Kelamin"></p-column>
               <p-column field="alamat" header="Alamat"></p-column>
               <p-column field="notelp" header="No Hp/No Telpon"></p-column>
+              <p-column [style]="{'width':'100px'}">
+                <ng-template let-h="rowData" pTemplate="body">
+                  <button type="button" pButton (click)="edit(h)" icon="fa-edit"></button>
+                  <button class="ui-button-danger" type="button" pButton (click)="hapus(h)" icon="fa-remove"></button>
+                </ng-template>
+              </p-column>
             </p-dataTable>
           </div>
         </p-fieldset>
@@ -31,6 +38,12 @@
         <div class="ui-g-1">
           <button type="button" pButton icon="fa fa-plus" (click)="showDialogToAdd()" label="Tambah"></button>
         </div>
+        <!-- <div class="ui-g-1">
+          <button type="button" pButton icon="fa fa-edit" (click)="showDialogToAdd()" label="Ubah"></button>
+        </div>
+        <div class="ui-g-1">
+          <button type="button" pButton icon="fa fa-trash" (click)="showDialogToAdd()" label="Hapus"></button>
+        </div> -->
       </div>
       <p-dialog header="Tambah" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
         [width]="700" [minWidth]="100" [minHeight]="80" [baseZIndex]="8000" [positionTop]="80" appendTo="body">
@@ -57,8 +70,8 @@
                   </div>
                   <div class="ui-g-12 ui-md-12">
                     <label for="input">Jenis Kelamin</label>
-                    <p-dropdown [filter]="true" [options]="listJK" [autoWidth]="false"
-                      formControlName="kdJenisKelamin"></p-dropdown>
+                    <p-dropdown [filter]="true" [options]="listJK" [autoWidth]="false" formControlName="kdJenisKelamin">
+                    </p-dropdown>
                   </div>
 
                 </div>

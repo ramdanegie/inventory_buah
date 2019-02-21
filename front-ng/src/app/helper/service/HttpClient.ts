@@ -72,7 +72,7 @@ export class HttpClient implements OnDestroy {
       event.xhr.setRequestHeader('X-url', window.location.hash);
       event.xhr.setRequestHeader('X-token', this.userDto.token);
       event.xhr.setRequestHeader('token', this.userDto.token);
-      // event.xhr.setRequestHeader('KdRuangan', this.userDto.idRuangan);
+
     }
   }
 
@@ -154,7 +154,6 @@ export class HttpClient implements OnDestroy {
   }
 
   get(url, callBack: (res: any) => any = null, auth: boolean = false, tokenSuper: string = null) {
-    // debugger
     this.method = 1;
     this.url = url;
     this.isSuperUserReq = auth;
@@ -164,7 +163,6 @@ export class HttpClient implements OnDestroy {
     const headers = new Headers();
     this.createAuthorizationHeader(headers, tokenSuper);
     const options = new RequestOptions({ headers: headers });
-    // console.log('cek-header = ', headers);
     return this.http.get(Configuration.get().apiBackend + url
       , { headers: headers, withCredentials: false }
     )
@@ -212,8 +210,6 @@ export class HttpClient implements OnDestroy {
   }
 
   post(url, data, callBack: (res: any) => any = null, auth: boolean = false, tokenSuper: string = null) {
-    // console.log(data);
-    // this.capitalizeContentJSON(data);
     this.createAuthorizationHeader
     this.method = 2;
     this.url = url;
@@ -228,7 +224,7 @@ export class HttpClient implements OnDestroy {
     console.log(JSON.stringify(data));
     return this.http.post(Configuration.get().apiBackend + url, data, options)
       .map((res: Response) => {
-        // this.alert.info( 'Tambah', 'Data berhasil ditambah.');
+        this.alert.success( 'Info', 'Sukses');
         if (callBack !== undefined && callBack !== null) {
           callBack(res.json());
         }
