@@ -15,8 +15,7 @@
           </div>
           <div class="ui-g-12">
             <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
-              [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected"
-              >
+              [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected">
               <!-- (onRowSelect)="onRowSelect($event)" -->
               <p-column field="no" header="No" [style]="{'width':'30px'}"></p-column>
               <p-column field="namalengkap" header="Nama Lengkap"></p-column>
@@ -25,10 +24,10 @@
               <p-column field="jeniskelamin" header="Jenis Kelamin"></p-column>
               <p-column field="alamat" header="Alamat"></p-column>
               <p-column field="notelp" header="No Hp/No Telpon"></p-column>
-              <p-column [style]="{'width':'100px'}">
+              <p-column [style]="{'width':'80px'}">
                 <ng-template let-h="rowData" pTemplate="body">
-                  <button type="button" pButton (click)="edit(h)" icon="fa-edit"></button>
-                  <button class="ui-button-danger" type="button" pButton (click)="hapus(h)" icon="fa-remove"></button>
+                  <button pButton type="button" (click)="edit(h)" icon="fa-edit"></button>
+                  <button pButton type="button" (click)="hapus(h)" icon="fa-trash"></button>
                 </ng-template>
               </p-column>
             </p-dataTable>
