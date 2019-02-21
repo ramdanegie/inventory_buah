@@ -33,6 +33,7 @@ export class PegawaiComponent implements OnInit {
 
 
   ngOnInit() {
+    this.getCombo()
     this.formGroup = this.fb.group({
       'idPegawai': new FormControl(null),
       'namaLengkap': new FormControl(null),
@@ -48,7 +49,7 @@ export class PegawaiComponent implements OnInit {
   }
 
   showDialogToAdd() {
-    this.getCombo()
+
     this.resetForm()
     this.displayDialog = true;
   }

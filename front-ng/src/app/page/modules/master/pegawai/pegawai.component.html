@@ -16,7 +16,8 @@
           <div class="ui-g-12">
             <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
               [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected"
-              (onRowSelect)="onRowSelect($event)">
+              >
+              <!-- (onRowSelect)="onRowSelect($event)" -->
               <p-column field="no" header="No" [style]="{'width':'30px'}"></p-column>
               <p-column field="namalengkap" header="Nama Lengkap"></p-column>
               <p-column field="namapanggilan" header="Nama Panggilan"></p-column>
