@@ -46,6 +46,7 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->get('pegawai/get-daftar-pegawai', 'Master\MasterController@getDaftarPegawai');
 		$app->post('pegawai/save-pegawai', 'Master\MasterController@savePegawai');
 		$app->get('get-combo', 'Master\MasterController@getCombo');
+		$app->post('pegawai/delete-pegawai', 'Master\MasterController@deletePegawai');
 
 
 	});

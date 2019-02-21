@@ -161,4 +161,34 @@ class  MasterController extends Controller
 
 		return response()->json($result);
 	}
+	public function deletePegawai (Request $request)
+	{
+		DB::beginTransaction();
+		try{
+			Pegawai::where('id',$request['idPegawai'])->update(
+				[ 'statusenabled' =>  false]
+			);
+			$transStatus = 'true';
+		} catch (\Exception $e) {
+			$transStatus = 'false';
+		}
+		if ($transStatus == 'true') {
+			$transMessage = "Sukses";
+			DB::commit();
+			$result = array(
+				'status' => 200,
+				'message' => $transMessage,
+				'as' => 'ramdanegie',
+			);
+		} else {
+			$transMessage = "Terjadi Kesalahan";
+			DB::rollBack();
+			$result = array(
+				'status' => 500,
+				'message'  => $transMessage,
+				'as' => 'ramdanegie',
+			);
+		}
+		return response()->json($result,$result['status']);
+	}
 }
