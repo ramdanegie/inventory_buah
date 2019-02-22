@@ -31,6 +31,17 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		/** AgamaM */
 		$app->get('agama/get-agama', 'ExampleController@getAgama');
 
+		/** Alamat*/
+		$app->get('alamat/get', 'Master\AlamatController@getAlamat');
+		$app->post('alamat/save', 'Master\AlamatController@saveAlamat');
+		$app->post('alamat/delete', 'Master\AlamatController@deleteAlamat');
+
+		/** Customer*/
+		$app->get('customer/get', 'Master\CustomerController@get');
+		$app->post('customer/save', 'Master\CustomerController@save');
+		$app->post('customer/delete', 'Master\CustomerController@delete');
+
+
 		/** Kelompok User*/
 		$app->get('kelompokuser/get-all', 'Master\KelompokUserController@getAll');
 		$app->post('kelompokuser/save-kelompokuser', 'Master\KelompokUserController@saveKelompokUser');

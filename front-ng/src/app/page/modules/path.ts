@@ -14,6 +14,8 @@ export const pathMaster = [
     { canActivate: [AuthGuard], path: 'kelompok-user', component: pMaster.KelompokUserComponent },
     { canActivate: [AuthGuard], path: 'pegawai', component: pMaster.PegawaiComponent },
     { canActivate: [AuthGuard], path: 'produk', component: pMaster.ProdukComponent },
+    { canActivate: [AuthGuard], path: 'alamat', component: pMaster.AlamatComponent },
+    { canActivate: [AuthGuard], path: 'customer', component: pMaster.CustomerComponent },
     // END MASTER
     
     // TRANSAKSI

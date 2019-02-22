@@ -6,6 +6,8 @@ export * from './master/user-login/user-login.component';
 export * from './master/kelompok-user/kelompok-user.component';
 export * from './master/pegawai/pegawai.component';
 export * from './master/produk/produk.component';
+export * from './master/alamat/alamat.component';
+export * from './master/customer/customer.component';
 
 // transaksi
 export * from './transaksi/penerimaan-barang-supplier/penerimaan-barang-supplier.component';
