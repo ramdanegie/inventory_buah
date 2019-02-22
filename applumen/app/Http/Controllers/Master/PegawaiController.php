@@ -8,7 +8,8 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
-use App\Model\Master\Pegawai;
+use App\Model\Master\Pegawai_M;
+use App\Model\Master\PegawaiM;
 use App\Model\Standar\KelompokUser_S;
 use Illuminate\Http\Request;
 use App\Traits\Core;
@@ -25,7 +26,7 @@ class  PegawaiController extends Controller
 
 	public function getPegawaiByNama ($nama)
 	{
-		$pegawai = Pegawai::where('statusenabled',true)
+		$pegawai = Pegawai_M::where('statusenabled',true)
 			->where('namalengkap','ilike','%'.$nama.'%')
 			->select('id','namalengkap')
 			->orderBy('namalengkap');

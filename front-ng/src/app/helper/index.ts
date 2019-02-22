@@ -25,6 +25,7 @@ export { Authentication } from './service/authentication.service';
 export { FileService } from './service/FileService';
 export { HelperService } from './service/HelperService';
 
+export { CacheService } from './service/cache.service';
 
 
 export { Configuration } from './config';
@@ -49,7 +50,8 @@ export const helperServices = [
         helper.Authentication,
         helper.FileService,
         helper.LoaderService,
-        helper.HelperService
+        helper.HelperService,
+        helper.CacheService
 
 ];
 

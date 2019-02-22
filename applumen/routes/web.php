@@ -28,16 +28,18 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 
 	/* Example */
 	$app->group(['prefix' => 'master/'/*, 'middleware' => 'auth2'*/], function ($app) {
-		/** Agama */
+		/** AgamaM */
 		$app->get('agama/get-agama', 'ExampleController@getAgama');
 
 		/** Kelompok User*/
 		$app->get('kelompokuser/get-all', 'Master\KelompokUserController@getAll');
+		$app->post('kelompokuser/save-kelompokuser', 'Master\KelompokUserController@saveKelompokUser');
+		$app->post('kelompokuser/delete-kelompokuser', 'Master\KelompokUserController@deleteKelompokUser');
 
-		/** Pegawai*/
+		/** PegawaiM*/
 		$app->get('pegawai/get-pegawai-by-nama/{nama}', 'Master\PegawaiController@getPegawaiByNama');
 
-		/** Pegawai*/
+		/** PegawaiM*/
 		$app->get('loginuser/get-daftar-login-user', 'Master\LoginUserController@getDaftarLoginUser');
 		$app->post('loginuser/save-login-user', 'Master\LoginUserController@saveLoginUser');
 		$app->post('loginuser/delete-login-user', 'Master\LoginUserController@deleteLoginUser');
@@ -49,6 +51,14 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->post('pegawai/delete-pegawai', 'Master\MasterController@deletePegawai');
 
 
+	});
+
+	$app->group(['prefix' => 'transaksi/'/*, 'middleware' => 'auth2'*/], function ($app) {
+		/** Penerimaan Barang */
+		$app->get('penerimaan/get-list-data', 'Transaksi\PenerimaanBarangController@getListCombo');
+		$app->post('penerimaan/save-penerimaan', 'Transaksi\PenerimaanBarangController@savePenerimaan');
+		$app->get('penerimaan/get-daftar-penerimaan', 'Transaksi\PenerimaanBarangController@getDaftarPenerimaanSuplier');
+		$app->post('penerimaan/delete-penerimaan', 'Transaksi\PenerimaanBarangController@hapusPenerimaan');
 	});
 
 	/* Master */

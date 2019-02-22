@@ -14,12 +14,10 @@ class KelompokUser_S extends Model
 	protected $table = 'kelompokuser_s';
 	public $timestamps = false;
 	public $incrementing = false;
-	protected $primaryKey = [
-		'id'
-	];
-	protected $fillable = [
-
-	];
+	protected $primaryKey = 'id';
+//	protected $fillable = [
+//
+//	];
 
 	public static function queryTable($request, $KdProfile)
 	{

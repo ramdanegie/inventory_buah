@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 
 
-use App\Model\Master\Agama;
+use App\Model\Master\AgamaM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class ExampleController extends Controller

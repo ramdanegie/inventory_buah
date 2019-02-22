@@ -2,20 +2,21 @@
 /**
  * Created by IntelliJ IDEA.
  * User: Egie Ramdan
- * Date: 18/02/2019
- * Time: 20.28
+ * Date: 22/02/2019
+ * Time: 23.43
  */
 
-namespace App\Model\Master;
+
+namespace App\Model\Transaksi;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Pegawai extends Model
+class StrukPenerimaan_T extends Model
 {
-	protected $table = 'pegawai_m';
+	protected $table = 'strukpenerimaan_t';
 	public $timestamps = false;
 	public $incrementing = false;
-	protected $primaryKey = 'id';
+	protected $primaryKey = 'norec';
 //	protected $fillable = [
 //		'id',
 //		'kdprofile',
@@ -27,7 +28,7 @@ class Pegawai extends Model
 //		'norec'
 //	];
 	public static function queryTable($request){
-		$table = 'pegawai_m';
+		$table = 'strukpenerimaan_t';
 		$param['table_from']= $table;
 		$param['select']= array($table.'.*');
 		$param['label'] = array();
