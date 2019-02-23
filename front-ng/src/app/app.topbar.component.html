@@ -9,7 +9,7 @@
         <img src="../assets/img/logo.png" class="logo-top-bar morpheus-logo" />
         <!-- <img src="assets/layout/images/morpheus-logo-{{app.theme}}.svg" class="morpheus-logo" /> -->
         <span class="morpheus-logo-text">
-            UHMAN
+            INHUMAN
         </span>
     </a>
 
@@ -21,9 +21,14 @@
         <li #search class="search-item" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === search}"
             (click)="app.onTopbarSearchItemClick($event)">
             <span class="md-inputfield">
-
-                <input type="text" pInputText placeholder="Search">
-                <i class="fa fa-search"></i>
+                <p-calendar [defaultDate]="jamSekarang" dateFormat="dd-mm-yy" [stepSecond]="1" [(ngModel)]="jamSekarang"
+                    [showIcon]="false" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
+                    [showTime]="true" [showSeconds]="true" [showButtonBar]="false"
+                    [style]="{'width':'300px','font-size':'15px'}">
+                </p-calendar>
+                <i class="fa fa-calendar"></i>
+                <!-- <input type="text" pInputText placeholder="Search"> 
+                    <i class="fa fa-search"></i> -->
             </span>
         </li>
         <li #notifications [ngClass]="{'active-topmenuitem':app.activeTopbarItem === notifications}">

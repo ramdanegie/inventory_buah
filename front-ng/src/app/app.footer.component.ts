@@ -4,7 +4,7 @@ import {Component} from '@angular/core';
     selector: 'app-footer',
     template: `
         <div class="footer clearfix">
-        <span>Copyright Egie Ramdan, 2019</span>
+        <span>Copyright Inhuman, 2019</span>
         <div class="footer-links">
             <a href="https://www.instagram.com/egieramdan/" class="first">Profile</a>
             <span class="link-divider">|</span>

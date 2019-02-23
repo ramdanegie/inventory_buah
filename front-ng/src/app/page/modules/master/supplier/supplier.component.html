@@ -1,0 +1,91 @@
+<p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle"></p-confirmDialog>
+<div class="card card-w-title">
+  <div class="card card-form-header">
+    <h1>Supplier</h1>
+  </div>
+  <form [formGroup]="formGroup">
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <p-fieldset legend="Daftar Supplier" [toggleable]="true">
+          <div class="ui-g-12">
+            <div style="text-align: left;margin-left: 10px" class="ng-star-inserted"><i class="fa fa-search"
+                style="margin:4px 4px 0px 0"></i><input pinputtext="" placeholder="Filter Data" size="50"
+                style="width:auto" type="text" #gs class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+            </div>
+          </div>
+          <div class="ui-g-12">
+            <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
+              [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected">
+              <p-column field="no" header="No" [style]="{'width':'30px'}">
+                <ng-template let-index="rowIndex+1" pTemplate="body">
+                  {{index}}
+                </ng-template>
+              </p-column>
+              <p-column field="namasupplier" header="Nama Supplier"></p-column>
+              <p-column field="notlp" header="No Telpon"></p-column>
+              <p-column field="nohp" header="No Hp"></p-column>
+              <p-column field="alamat" header="Alamat"></p-column>
+              <p-column field="kecamatan" header="Kecamatan"></p-column>
+              <p-column field="kota" header="Kota / Kabupaten"></p-column>
+              <p-column field="provinsi" header="Provinsi"></p-column>
+
+              <p-column [style]="{'width':'80px'}">
+                <ng-template let-h="rowData" pTemplate="body">
+                  <button pButton type="button" (click)="edit(h)" icon="fa-edit"></button>
+                  <button pButton type="button" (click)="hapus(h)" icon="fa-trash"></button>
+                </ng-template>
+              </p-column>
+            </p-dataTable>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="ui-g-12 ">
+        <div class="ui-g-1">
+          <button type="button" pButton icon="fa fa-plus" (click)="showDialogToAdd()" label="Tambah"></button>
+        </div>
+      </div>
+      <p-dialog header="Tambah" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
+        [width]="750" [minWidth]="100" [minHeight]="80" [baseZIndex]="8000" [positionTop]="80" appendTo="body">
+        <div class="ui-g-12">
+          <div class="ui-g ui-fluid">
+            <div class="ui-g-12">
+              <p-fieldset legend="Masukan Data" [toggleable]="true">
+                
+                <div class="ui-g-6">
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">Nama Supplier</label>
+                    <input type="text" pInputText formControlName="namaSupplier" />
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">Alamat</label>
+                    <p-dropdown formControlName="kdAlamat" [options]="listAlamat" [filter]="true" [autoWidth]="false">
+                      </p-dropdown>
+                  </div>
+                </div>
+                <div class="ui-g-6">
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">No Hp</label>
+                    <input type="number" pInputText formControlName="noHp" />
+                  </div>
+                  <div class="ui-g-12 ui-md-12">
+                    <label for="input">No Telpon</label>
+                    <input type="number" pInputText formControlName="noTlp" />
+                  </div>
+                </div>
+              </p-fieldset>
+            </div>
+            <div class="ui-g-12">
+              <div class="ui-g-3 ui-g-offset-6">
+                <button pButton type="submit" (click)="save()" label="Simpan" icon="fa fa-save"></button>
+              </div>
+              <div class="ui-g-3">
+                <button pButton type="button" (click)="displayDialog = false" label="Tutup"
+                  icon="fa fa-angle-left"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-dialog>
+    </div>
+  </form>
+</div>
