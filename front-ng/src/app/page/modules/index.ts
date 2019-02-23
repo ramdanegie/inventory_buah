@@ -1,4 +1,6 @@
 
+// home
+export * from './home/dashboard/dashboard.component';
 // not found
 export * from './404/not-found.component';
 // master

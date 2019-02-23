@@ -76,6 +76,11 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->post('kelompokuser/save-kelompokuser', 'Master\KelompokUserController@saveKelompokUser');
 		$app->post('kelompokuser/delete-kelompokuser', 'Master\KelompokUserController@deleteKelompokUser');
 
+		/** Map Satuan*/
+		$app->get('mapproduktosatuan/get', 'Master\MapProdukToSatuanController@getMapSatuan');
+		$app->post('mapproduktosatuan/save', 'Master\MapProdukToSatuanController@saveMapSatuan');
+		$app->post('mapproduktosatuan/delete', 'Master\MapProdukToSatuanController@deleteMapping');
+
 		/** PegawaiM*/
 		$app->get('pegawai/get-pegawai-by-nama/{nama}', 'Master\PegawaiController@getPegawaiByNama');
 

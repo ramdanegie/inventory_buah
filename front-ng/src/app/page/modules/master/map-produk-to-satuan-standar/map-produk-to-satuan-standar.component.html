@@ -3,9 +3,86 @@
   <div class="card card-form-header">
     <h1>Map Produk To Satuan Standar</h1>
   </div>
-  <!-- <form [formGroup]="formGroup"> -->
-  <div class="ui-g ui-fluid">
-    <div class="ui-g-6">
+  <form [formGroup]="formGroup">
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-6">
+        <p-fieldset legend="Tambah Mapping" [toggleable]="true">
+          <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-4">
+              <label class="label-web-profile" for="input">Nama Produk </label>
+              <p-dropdown formControlName="produk" [options]="listProduk" [filter]="true" [autoWidth]="false"
+              (onChange)="setValueKdSatuan()">
+              </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+              <label class="label-web-profile" for="input">Satuan Asal </label>
+              <p-dropdown formControlName="kdSatuanAsal" [options]="listSatuan" [filter]="true" [autoWidth]="false">
+              </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+              <label class="label-web-profile" for="input">Satuan Tujuan </label>
+              <p-dropdown formControlName="kdSatuanTujuan" [options]="listSatuan" [filter]="true" [autoWidth]="false">
+              </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+              <label class="label-web-profile" for="input">Hasil Konversi </label>
+              <input type="number" formControlName="hasilKonversi"  pKeyFilter="number" pInputText />
+            </div>
+          </div>
+          <div class="ui-g-12">
+            <div class="ui-g-2 ui-g-offset-8">
+              <button pButton type="submit" label="Simpan" icon="fa fa-fw fa-save" (click)="save()"></button>
+            </div>
+            <div class="ui-g-2">
+                <button pButton label="Batal" icon="fa fa-fw fa-refresh" (click)="resetForm()"></button>
+              </div>
+          </div>
+          <!-- <p-pickList [source]="sourceCars" [target]="targetCars" sourceHeader="Available" targetHeader="Selected"
+          [responsive]="true" filterBy="brand" dragdrop="true" sourceFilterPlaceholder="Search by brand"
+          targetFilterPlaceholder="Search by brand" [sourceStyle]="{'height':'300px'}"
+          [targetStyle]="{'height':'300px'}">
+          <ng-template let-car pTemplate="item">
+            <div class="ui-helper-clearfix">
+              <div style="font-size:14px;float:right;margin:15px 5px 0 0">{{car.brand}} - {{car.year}} - {{car.color}}
+              </div>
+            </div>
+          </ng-template>
+        </p-pickList> -->
+        </p-fieldset>
+      </div>
+      <div class="ui-g-6">
+        <p-fieldset legend="Daftar Mapping" [toggleable]="true">
+          <div class="ui-g-12">
+            <div style="text-align: left;margin-left: 10px" class="ng-star-inserted"><i class="fa fa-search"
+                style="margin:4px 4px 0px 0"></i><input pinputtext="" placeholder="Filter Data" size="50"
+                style="width:auto" type="text" #gs class="ui-inputtext ui-corner-all ui-state-default ui-widget">
+            </div>
+          </div>
+          <div class="ui-g-12">
+            <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
+              [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected"
+              loadingIcon="fa fa-spinner" scrollable="true" [loading]="loading"
+              (onRowSelect)="onRowSelect($event)">
+              <p-column field="no" header="No" [style]="{'width':'30px'}">
+                <ng-template let-index="rowIndex+1" pTemplate="body">
+                  {{index}}
+                </ng-template>
+              </p-column>
+              <p-column field="namaproduk" header="Nama Produk"></p-column>
+              <p-column field="satuanasal" header="Satuan Asal"></p-column>
+              <p-column field="satuantujuan" header="Satuan Tujuan"></p-column>
+              <p-column field="hasilkonversi" header="Hasil Konversi"></p-column>
+              <p-column [style]="{'width':'80px'}">
+                <ng-template let-h="rowData" pTemplate="body">
+                  <button pButton type="button" (click)="edit(h)" icon="fa-edit"></button>
+                  <button pButton type="button" (click)="hapus(h)" icon="fa-trash"></button>
+                </ng-template>
+              </p-column>
+            </p-dataTable>
+          </div>
+        </p-fieldset>
+      </div>
+      <!-- <div class="ui-g-6">
       <p-fieldset legend="Satuan Asal" [toggleable]="true">
         <div class="ui-g-12">
           <div style="text-align: left;margin-left: 10px" class="ng-star-inserted"><i class="fa fa-search"
@@ -62,13 +139,9 @@
           </p-dataTable>
         </div>
       </p-fieldset>
-    </div>
-    <!-- <div class="ui-g-12 ">
-        <div class="ui-g-1">
-          <button type="button" pButton icon="fa fa-plus" (click)="showDialogToAdd()" label="Tambah"></button>
-        </div>
-      </div> -->
+    </div> -->
 
-  </div>
-  <!-- </form> -->
+
+    </div>
+  </form>
 </div>

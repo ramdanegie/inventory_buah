@@ -6,8 +6,9 @@ import * as demo from '../../demo/index';
 let session = JSON.parse(localStorage.getItem('user.data'));
 export const pathMaster = [
 
-    { canActivate: [AuthGuard], path: '', redirectTo: localStorage.getItem('user.data') != null ? 'dashboard' : 'login', pathMatch: 'full' },
+    { canActivate: [AuthGuard], path: '', redirectTo: localStorage.getItem('user.data') != null ? 'dashboard-app' : 'login', pathMatch: 'full' },
     { canActivate: [AuthGuard], path: 'dashboard', component: demo.DashboardDemoComponent },
+    { canActivate: [AuthGuard], path: 'dashboard-app', component: pMaster.DashboardComponent },
     { canActivate: [AuthGuard], path: 'empty', component: demo.EmptyDemoComponent },
     // MASTER
     { canActivate: [AuthGuard], path: 'user-login', component: pMaster.UserLoginComponent },
