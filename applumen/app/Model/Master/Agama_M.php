@@ -10,7 +10,7 @@ namespace App\Model\Master;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Agama extends Model
+class Agama_M extends Model
 {
     protected $table = 'agama_m';
     public $timestamps = false;

@@ -15,7 +15,7 @@ return [
 
     'modul' => [
         'master'    => [
-            'agama'     => "Agama",
+            'agama'     => "AgamaM",
             'produk'    => "Barang",
             'chartofaccount'         => "Akun",
 
@@ -45,7 +45,7 @@ return [
         'kdprodukaset'  => 'Kode Produk Aset',
         'noregistrasiaset'  => 'No Registrasi Aset',
         'nopolisiaset'  => 'No Polisi Aset',
-        'objectpegawaifk'  => 'Pegawai',
+        'objectpegawaifk'  => 'PegawaiM',
         'namaaccount'         => "Nama Akun",
         'noaccount'         => "No Akun",
         'objectjenisaccountfk'  => 'Jenis Akun',

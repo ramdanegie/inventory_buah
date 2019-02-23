@@ -107,4 +107,47 @@ Trait GenerateCode
         $update_db = DB::update("Update SequenceTable_M set idTerakhir = idTerakhir + 1 where namaTable = '".$paramTable."' and KdProfile=".$KdProfile);
         return $update_db;
     }
+
+	protected function generateCode($table, $field, $length=8, $kodeDepan=''){
+		$result = $table->where($field, 'LIKE', $kodeDepan.'%')->max($field);
+		$prefixLen = strlen($kodeDepan);
+		$subPrefix = substr(trim($result),$prefixLen);
+		return $kodeDepan.(str_pad((int)$subPrefix+1, $length-$prefixLen, "0", STR_PAD_LEFT));
+	}
+	protected function generateCodeBySeqTable($objectModel, $atrribute, $length=8, $prefix=''){
+		DB::beginTransaction();
+		try {
+			$result = SeqNumber::where('seqnumber', 'LIKE', $prefix.'%')
+				->where('seqname',$atrribute)
+				->where('kdprofile',1)
+				->max('seqnumber');
+			$prefixLen = strlen($prefix);
+			$subPrefix = substr(trim($result),$prefixLen);
+			$SN = $prefix.(str_pad((int)$subPrefix+1, $length-$prefixLen, "0", STR_PAD_LEFT));
+
+			$newSN = new SeqNumber();
+			$newSN->kdprofile = 1;
+			$newSN->seqnumber = $SN;
+			$newSN->tgljamseq = date('Y-m-d H:i:s');;
+			$newSN->seqname = $atrribute;
+			$newSN->save();
+
+			$transStatus = 'true';
+		} catch (\Exception $e) {
+			$transStatus = 'false';
+		}
+
+		if ($transStatus == 'true') {
+			DB::commit();
+			return $SN;
+		} else {
+			DB::rollBack();
+			return '';
+		}
+
+		return $this->setStatusCode($result['status'])->respond($result, $transMessage);
+	}
+	protected function generateUid(){
+    	return substr(Uuid::generate(), 0, 32);
+	}
 }

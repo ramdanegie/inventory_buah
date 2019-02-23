@@ -2,17 +2,16 @@
 /**
  * Created by IntelliJ IDEA.
  * User: Egie Ramdan
- * Date: 18/02/2019
- * Time: 20.28
+ * Date: 23/02/2019
+ * Time: 10.31
  */
-
 namespace App\Model\Master;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Pegawai extends Model
+class SatuanStandar_M extends Model
 {
-	protected $table = 'pegawai_m';
+	protected $table = 'satuanstandard_m';
 	public $timestamps = false;
 	public $incrementing = false;
 	protected $primaryKey = 'id';
@@ -26,15 +25,16 @@ class Pegawai extends Model
 //		'statusenabled',
 //		'norec'
 //	];
-	public static function queryTable($request){
-		$table = 'pegawai_m';
-		$param['table_from']= $table;
-		$param['select']= array($table.'.*');
+	public static function queryTable($request)
+	{
+		$table = 'satuanstandard_m';
+		$param['table_from'] = $table;
+		$param['select'] = array($table . '.*');
 		$param['label'] = array();
 
-		$param['where'][0]['fieldname']= $table.'.statusenabled';
-		$param['where'][0]['operand']= '=';
-		$param['where'][0]['is']= true;
+		$param['where'][0]['fieldname'] = $table . '.statusenabled';
+		$param['where'][0]['operand'] = '=';
+		$param['where'][0]['is'] = true;
 
 		return $param;
 	}

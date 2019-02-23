@@ -41,6 +41,7 @@ export class HttpClient implements OnDestroy {
   superUserToken: string;
   isSuperUserReq: boolean = false;
 
+  listSucces = [200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210]
 
   constructor(private http: Http,
     private alert: AlertService,
@@ -224,7 +225,7 @@ export class HttpClient implements OnDestroy {
     console.log(JSON.stringify(data));
     return this.http.post(Configuration.get().apiBackend + url, data, options)
       .map((res: Response) => {
-        this.alert.success( 'Info', 'Sukses');
+        this.responseSuccess(res);
         if (callBack !== undefined && callBack !== null) {
           callBack(res.json());
         }
@@ -352,7 +353,7 @@ export class HttpClient implements OnDestroy {
 
   private handleError(error: Response | any) {
 
-    console.log(error);
+    // console.log(error);
     if (error.status == 0) {
       if (this.isSuperUserReq) {
         this.superUser.setInfo('Kesalahan : Maaf, koneksi ke server terputus, silahkan coba lagi.');
@@ -371,14 +372,14 @@ export class HttpClient implements OnDestroy {
         }
       } else {
         this.errorMessage = JSON.parse(error._body)
-        let errorText = '';
-        for (let i = 0; i < this.errorMessage.errors.length; i++) {
-          errorText += this.errorMessage.errors[i].error;
-        }
+        // let errorText = '';
+        // for (let i = 0; i < this.errorMessage.errors.length; i++) {
+        //   errorText += this.errorMessage.errors[i].error;
+        // }
         if (this.isSuperUserReq) {
-          this.superUser.setInfo('Kesalahan : ' + errorText);
+          this.superUser.setInfo('Kesalahan : ' + this.errorMessage.message );
         } else {
-          this.alert.warn('Kesalahan', errorText);
+          this.alert.warn('Kesalahan', this.errorMessage.message);
         }
       }
 
@@ -418,18 +419,31 @@ export class HttpClient implements OnDestroy {
       if (JSON.parse(error._body).batal !== undefined) {
         this.alert.warn('Error', JSON.parse(error._body).message);
       } else {
-        if (this.isSuperUserReq) {
-          this.superUser.setInfo('Maaf Data Sudah Ada');
-        } else {
-          this.alert.warn('Maaf', 'Data Sudah Ada');
-        }
+        // if (this.isSuperUserReq) {
+        //   this.superUser.setInfo('Maaf Data Sudah Ada');
+        // } else {
+        //   this.alert.warn('Maaf', 'Data Sudah Ada');
+        // }
+        this.alert.error('Error', JSON.parse(error._body).message);
       }
     }
     /* else {
      this.alert.error('Kesalahan', 'Maaf, ada kesalahan.');
      }*/
   }
+
+  private responseSuccess(res: Response | any) {
+    if (this.listSucces.includes(res.status)) {
+      let message = JSON.parse(res._body).message
+      if (message) {
+        this.alert.success('Sukses', message);
+      } else {
+        this.alert.success('Sukses', 'Data berhasil disimpan');
+      }
+    }
+  }
 }
+
 /// LIST ERROR
 // 401 Unauthorized
 // 403 Forbidden (session expired)

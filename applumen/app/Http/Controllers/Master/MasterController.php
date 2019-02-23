@@ -9,7 +9,8 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
-use App\Model\Master\Pegawai;
+use App\Model\Master\Pegawai_M;
+use App\Model\Master\PegawaiM;
 use App\Model\Standar\LoginUser_S;
 use App\Model\Standar\KelompokUser_S;
 use Illuminate\Http\Request;
@@ -60,7 +61,7 @@ class  MasterController extends Controller
 		$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Simpan Pegawai";
 			DB::commit();
 			$result = array(
 				'status' => 200,
@@ -99,13 +100,13 @@ class  MasterController extends Controller
 	{
 		DB::beginTransaction();
 		try{
-			$idMax = Pegawai::max('id') + 1;
+			$idMax = Pegawai_M::max('id') + 1;
 			if($request['idPegawai'] == null){
-				$log = new Pegawai();
+				$log = new Pegawai_M();
 				$log->id = $idMax;
 				$log->statusenabled = true;
 			}else{
-				$log = Pegawai::where('id',$request['idPegawai'])->first();
+				$log = Pegawai_M::where('id',$request['idPegawai'])->first();
 			}
 			$log->namalengkap= $request['namaLengkap'];
 			$log->namapanggilan= $request['namaPanggilan'];
@@ -165,7 +166,7 @@ class  MasterController extends Controller
 	{
 		DB::beginTransaction();
 		try{
-			Pegawai::where('id',$request['idPegawai'])->update(
+			Pegawai_M::where('id',$request['idPegawai'])->update(
 				[ 'statusenabled' =>  false]
 			);
 			$transStatus = 'true';
@@ -173,7 +174,7 @@ class  MasterController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Hapus Pegawai";
 			DB::commit();
 			$result = array(
 				'status' => 200,
