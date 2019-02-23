@@ -191,4 +191,27 @@ class  MasterController extends Controller
 		}
 		return response()->json($result,$result['status']);
 	}
+
+    public function getMasterProduk (Request $request)
+    {
+        $data = DB::table('produk_m as pr')
+            ->leftJoin('detailjenisproduk_m as djp', 'djp.id', '=', 'pr.detailjenisprodukfk')
+            ->leftJoin('satuanstandard_m as ss', 'ss.id', '=', 'pr.satuanstandardfk')
+            ->select('pr.*', 'djp.id as djpid', 'djp.detailjenisproduk', 'djp.jenisprodukfk')
+            ->where ('pr.statusenabled',true)
+            ->orderBy('id');
+        if (isset($request['namaproduk']) && $request['namaproduk']!="" && $request['namaproduk'] != "undefined"){
+            $data = $data->where('pr.namaproduk','>=', $request['namaproduk']);
+        }
+        if (isset($request['id']) && $request['id']!="" && $request['id'] != "undefined"){
+            $data = $data->where('pr.id','>=', $request['id']);
+        }
+        $data = $data->get();
+        $result = array(
+            'status' => 200,
+            'data' => $data,
+            'as' => "{ng-SitepuMan}"
+        );
+        return response()->json($result);
+    }
 }

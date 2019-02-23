@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
   providers: [ConfirmationService]
 })
 export class ProdukComponent implements OnInit {
+  formGroup:FormGroup
 
   constructor(private alertService: AlertService,
 		private InfoService: InfoService,
@@ -24,6 +25,17 @@ export class ProdukComponent implements OnInit {
 	) { }
 
   ngOnInit() {
+    this.formGroup = this.fb.group({
+      'idPegawai': new FormControl(null),
+      'namaLengkap': new FormControl(null),
+      'namaPanggilan': new FormControl(null),
+      'noHp': new FormControl(null),
+      'noTlp': new FormControl(null),
+      'kdJenisKelamin': new FormControl(null),
+      'kdAlamat': new FormControl(null),
+      'tglLahir': new FormControl(null),
+    });
+
   }
 
 }
