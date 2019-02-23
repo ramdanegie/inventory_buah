@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit {
       pathMatch: 'full'
     };
     this.router.resetConfig(routerConfig);
-    this.router.navigate(['dashboard']);
+    this.router.navigate(['dashboard-app']);
   }
 
   kembali() {
