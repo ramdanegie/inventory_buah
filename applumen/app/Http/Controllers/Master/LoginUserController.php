@@ -39,6 +39,10 @@ class  LoginUserController extends Controller
 
 		return response()->json($result);
 	}
+	protected function generateSHA1($pass)
+	{
+		return sha1($pass);
+	}
 	public function saveLoginUser (Request $request)
 	{
 		DB::beginTransaction();
@@ -52,7 +56,7 @@ class  LoginUserController extends Controller
 				$log = LoginUser_S::where('id',$request['idUser'])->first();
 			}
 			if(isset($request['kataSandi'])){
-				$log->katasandi= $request['kataSandi'];
+				$log->katasandi= $this->generateSHA1( $request['kataSandi']);
 			}
 			$log->namauser= $request['namaUser'];
 			$log->objectpegawaifk= $request['pegawai']['id'];
