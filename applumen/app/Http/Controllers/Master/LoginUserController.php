@@ -64,7 +64,7 @@ class  LoginUserController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Simpan Login User";
 			DB::commit();
 			$result = array(
 				'status' => 200,
@@ -96,7 +96,7 @@ class  LoginUserController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Hapus Login User";
 			DB::commit();
 			$result = array(
 				'status' => 200,

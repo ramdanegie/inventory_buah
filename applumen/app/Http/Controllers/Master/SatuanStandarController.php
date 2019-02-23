@@ -3,29 +3,33 @@
  * Created by IntelliJ IDEA.
  * User: Egie Ramdan
  * Date: 23/02/2019
- * Time: 05.01
+ * Time: 09.26
  */
 
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
-use App\Model\Master\Alamat_M;
+use App\Model\Master\DetailJenisProduk_M;
+use App\Model\Master\JenisKelamin_M;
+use App\Model\Master\JenisProduk_M;
+use App\Model\Master\JenisTransaksi_M;
+use App\Model\Master\SatuanStandar_M;
 use App\Model\Standar\KelompokUser_S;
 use Illuminate\Http\Request;
 use App\Traits\Core;
 use App\Traits\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
-class  AlamatController extends Controller
+class  SatuanStandarController extends Controller
 {
 	use JsonResponse;
 
-	public function getAlamat(Request $request)
+	public function get(Request $request)
 	{
-		$data = DB::table('alamat_m')
+		$data = DB::table('satuanstandard_m')
 			->select('*')
 			->where('statusenabled', true)
-			->orderBy('alamat')
+			->orderBy('satuanstandard')
 			->get();
 
 		$result['code'] = 200;
@@ -35,23 +39,20 @@ class  AlamatController extends Controller
 		return response()->json($result);
 	}
 
-	public function saveAlamat(Request $request)
+	public function save(Request $request)
 	{
 		DB::beginTransaction();
 		try {
-			$idMax = Alamat_M::max('id') + 1;
-			if ($request['idAlamat'] == null) {
-				$log = new Alamat_M();
+
+			$idMax = SatuanStandar_M::max('id') + 1;
+			if ($request['idSatuanStandar'] == null) {
+				$log = new SatuanStandar_M();
 				$log->id = $idMax;
 				$log->statusenabled = true;
 			} else {
-				$log = Alamat_M::where('id', $request['idAlamat'])->first();
+				$log = SatuanStandar_M::where('id', $request['idSatuanStandar'])->first();
 			}
-			$log->alamat = $request['alamat'];
-			$log->provinsi = $request['provinsi'];
-			$log->kota = $request['kota'];
-			$log->kabupaten = $request['kabupaten'];
-			$log->kecamatan = $request['kecamatan'];
+			$log->satuanstandard = $request['satuanStandar'];
 			$log->save();
 
 			$transStatus = 'true';
@@ -59,7 +60,7 @@ class  AlamatController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Simpan Alamat";
+			$transMessage = "Simpan Satuan";
 			DB::commit();
 			$result = array(
 				'status' => 200,
@@ -77,11 +78,12 @@ class  AlamatController extends Controller
 		}
 		return response()->json($result, $result['status']);
 	}
-	public function deleteAlamat(Request $request)
+
+	public function delete(Request $request)
 	{
 		DB::beginTransaction();
 		try {
-			Alamat_M::where('id', $request['idAlamat'])->update(
+			SatuanStandar_M::where('id', $request['idSatuanStandar'])->update(
 				['statusenabled' => false]
 			);
 
@@ -90,7 +92,7 @@ class  AlamatController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Hapus Alamat";
+			$transMessage = "Hapus Satuan";
 			DB::commit();
 			$result = array(
 				'status' => 200,
@@ -98,7 +100,7 @@ class  AlamatController extends Controller
 				'as' => 'ramdanegie',
 			);
 		} else {
-			$transMessage = "Terjadi Kesalahan saat menghapus data";
+			$transMessage = "Terjadi Kesalahan saat menyimpan data";
 			DB::rollBack();
 			$result = array(
 				'status' => 500,

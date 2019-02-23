@@ -61,7 +61,7 @@ class  MasterController extends Controller
 		$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Simpan Pegawai";
 			DB::commit();
 			$result = array(
 				'status' => 200,
@@ -174,7 +174,7 @@ class  MasterController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Hapus Pegawai";
 			DB::commit();
 			$result = array(
 				'status' => 200,

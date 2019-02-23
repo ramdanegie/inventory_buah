@@ -3,29 +3,31 @@
  * Created by IntelliJ IDEA.
  * User: Egie Ramdan
  * Date: 23/02/2019
- * Time: 05.01
+ * Time: 09.26
  */
 
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
-use App\Model\Master\Alamat_M;
+use App\Model\Master\DetailJenisProduk_M;
+use App\Model\Master\JenisProduk_M;
 use App\Model\Standar\KelompokUser_S;
 use Illuminate\Http\Request;
 use App\Traits\Core;
 use App\Traits\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
-class  AlamatController extends Controller
+class  JenisProdukController extends Controller
 {
 	use JsonResponse;
 
-	public function getAlamat(Request $request)
+	public function get(Request $request)
 	{
-		$data = DB::table('alamat_m')
-			->select('*')
-			->where('statusenabled', true)
-			->orderBy('alamat')
+		$data = DB::table('jenisproduk_m as djp')
+			->leftJoin('kelompokproduk_m as jp','jp.id','=','djp.kelompokprodukfk')
+			->select('djp.*','jp.kelompokproduk')
+			->where('djp.statusenabled', true)
+			->orderBy('djp.jenisproduk')
 			->get();
 
 		$result['code'] = 200;
@@ -35,23 +37,21 @@ class  AlamatController extends Controller
 		return response()->json($result);
 	}
 
-	public function saveAlamat(Request $request)
+	public function save(Request $request)
 	{
 		DB::beginTransaction();
 		try {
-			$idMax = Alamat_M::max('id') + 1;
-			if ($request['idAlamat'] == null) {
-				$log = new Alamat_M();
+
+			$idMax = JenisProduk_M::max('id') + 1;
+			if ($request['idJenisProduk'] == null) {
+				$log = new JenisProduk_M();
 				$log->id = $idMax;
 				$log->statusenabled = true;
 			} else {
-				$log = Alamat_M::where('id', $request['idAlamat'])->first();
+				$log = JenisProduk_M::where('id', $request['idJenisProduk'])->first();
 			}
-			$log->alamat = $request['alamat'];
-			$log->provinsi = $request['provinsi'];
-			$log->kota = $request['kota'];
-			$log->kabupaten = $request['kabupaten'];
-			$log->kecamatan = $request['kecamatan'];
+			$log->jenisproduk = $request['jenisProduk'];
+			$log->kelompokprodukfk = $request['kdKelompokProduk'];
 			$log->save();
 
 			$transStatus = 'true';
@@ -59,7 +59,7 @@ class  AlamatController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Simpan Alamat";
+			$transMessage = "Simpan Jenis Produk";
 			DB::commit();
 			$result = array(
 				'status' => 200,
@@ -77,11 +77,12 @@ class  AlamatController extends Controller
 		}
 		return response()->json($result, $result['status']);
 	}
-	public function deleteAlamat(Request $request)
+
+	public function delete(Request $request)
 	{
 		DB::beginTransaction();
 		try {
-			Alamat_M::where('id', $request['idAlamat'])->update(
+			JenisProduk_M::where('id', $request['idJenisProduk'])->update(
 				['statusenabled' => false]
 			);
 
@@ -90,7 +91,7 @@ class  AlamatController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Hapus Alamat";
+			$transMessage = "Hapus Jenis Produk";
 			DB::commit();
 			$result = array(
 				'status' => 200,
@@ -98,7 +99,7 @@ class  AlamatController extends Controller
 				'as' => 'ramdanegie',
 			);
 		} else {
-			$transMessage = "Terjadi Kesalahan saat menghapus data";
+			$transMessage = "Terjadi Kesalahan saat menyimpan data";
 			DB::rollBack();
 			$result = array(
 				'status' => 500,

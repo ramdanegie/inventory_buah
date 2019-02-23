@@ -62,7 +62,7 @@ class  KelompokUserController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Simpan Kelompok User";
 			DB::commit();
 			$result = array(
 				'status' => 200,
@@ -94,7 +94,7 @@ class  KelompokUserController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Hapus Kelompok User";
 			DB::commit();
 			$result = array(
 				'status' => 200,

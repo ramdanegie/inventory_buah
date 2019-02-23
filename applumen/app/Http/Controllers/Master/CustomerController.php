@@ -50,7 +50,6 @@ class  CustomerController extends Controller
 				$log->statusenabled = true;
 			} else {
 				$log = Customer_M::where('id', $request['idCustomer'])->first();
-				return $log;
 			}
 			$log->namacustomer = $request['namaCustomer'];
 			$log->alamatfk = $request['kdAlamat'];
@@ -63,7 +62,7 @@ class  CustomerController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Simpan Customer";
 			DB::commit();
 			$result = array(
 				'status' => 200,
@@ -95,7 +94,7 @@ class  CustomerController extends Controller
 			$transStatus = 'false';
 		}
 		if ($transStatus == 'true') {
-			$transMessage = "Sukses";
+			$transMessage = "Hapus Customer";
 			DB::commit();
 			$result = array(
 				'status' => 200,
