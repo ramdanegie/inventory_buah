@@ -1,35 +1,39 @@
 <p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425"></p-confirmDialog>
 <div class="card card-w-title">
   <div class="card card-form-header">
-    <h1>Master Pegawai</h1>
+    <h1>Master Produk</h1>
   </div>
 
   <form [formGroup]="formGroup">
     <div class="ui-g ui-fluid">
       <div class="ui-g-6">
         <div class="ui-g-12 ui-md-12">
-          <label class="label-web-profile" for="input">Nama Lengkap </label>
-          <input type="text" formControlName="namaLengkap" pInputText />
+          <label class="label-web-profile" for="input">Nama Produk </label>
+          <input type="text"  pInputText />
         </div>
         <div class="ui-g-12 ui-md-12">
-          <label class="label-web-profile" for="input">Nama Panggilan </label>
-          <input id="input" type="password" formControlName="namaPanggilan" pInputText [disabled]="disabled" />
+          <label class="label-web-profile" for="input">Kode External </label>
+          <input id="input" type="password"  pInputText [disabled]="disabled" />
         </div>
         <div class="ui-g-12 ui-md-12">
-            <label class="label-web-profile" for="input">Jenis Kelamin </label>
-            <p-dropdown formControlName="jenisKelamin" [options]="listJenisKElamin" [filter]="true" [autoWidth]="false">
+            <label class="label-web-profile" for="input">Detail Jenis Produk </label>
+            <p-dropdown  [options]="listJenisKElamin" [filter]="true" [autoWidth]="false">
             </p-dropdown>
           </div>
       </div>
       <div class="ui-g-6">
         <div class="ui-g-12 ui-md-12">
             <label class="label-web-profile" for="input">No Telepon </label>
-            <input type="text" formControlName="noTlp" pInputText />
+            <input type="text"  pInputText />
           </div>
         <div class="ui-g-12 ui-md-12">
-          <label class="label-web-profile" for="input">No Telepon </label>
-          <input type="text" formControlName="noTlp" pInputText />
+          <label class="label-web-profile" for="input">No Handphone </label>
+          <input type="text"  pInputText />
         </div>
+        <div class="ui-g-12 ui-md-12">
+            <label class="label-web-profile" for="input">No Handphone </label>
+            <input type="text"  pInputText />
+          </div>
       </div>
       <div class="ui-g-12">
         <div class="ui-g-1 ui-g-offset-9">
