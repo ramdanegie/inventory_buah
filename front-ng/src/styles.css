@@ -166,3 +166,35 @@ body .ui-progressbar {
   height: 6px;
  }
 
+ .profilekiri{
+  padding: 15px;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.15);
+  }
+  /* .profile-image img{
+    width: 20px;
+    height: 45px;
+    float: right;
+    margin-left: 4px;
+  }*/
+  .profile-name {
+    display: block;
+    /* color: #212529; */
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 4px;
+    margin-left: 52px;
+  } 
+  .profile-role {
+    display: block;
+    min-width: 45px;
+    text-align: left;
+    font-size: 12px;
+    float: left;
+    margin-left: 10px;
+    color: #dfd2d2;
+  }
+ 

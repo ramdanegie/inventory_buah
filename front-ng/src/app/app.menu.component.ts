@@ -22,11 +22,13 @@ export class AppMenuComponent implements OnInit {
     core: {}
     dashboard: {};
     setting: {};
+    profile: {}
     constructor(public app: AppComponent,
         private http: HttpClient
     ) { }
 
     ngOnInit() {
+
         this.dashboard = [{ label: 'Dashboard', icon: 'fa fa-fw fa-home', routerLink: ['/'] }];
         // this.setting = [{ label: 'Tes Page', icon: 'fa fa-fw fa-sitemap', routerLink: ['/empty'] }];
         this.core = [

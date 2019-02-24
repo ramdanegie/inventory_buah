@@ -1,55 +1,60 @@
+<p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle" 
+acceptLabel="Yes" rejectLabel="No"></p-confirmDialog>
+
 <div class="layout-sidebar" [ngStyle]="{'overflow':app.sidebarActive ? 'hidden' : 'visible'}"
     (click)="app.onSidebarClick($event)">
     <div class="layout-tabmenu">
-        <!-- <ul class="layout-tabmenu-nav"> -->
-            <!-- <li [ngClass]="{'active-item':app.activeTabIndex === 0}">
-                <a href="#" class="tabmenuitem-link" (click)="app.onTabClick($event, 0)">
-                    <i class="fa fa-folder-open">
 
-                    </i></a>
-                <div class="layout-tabmenu-tooltip">
-                    <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Home</div>
-                </div>
-            </li>
-            <li [ngClass]="{'active-item':app.activeTabIndex === 1}">
-                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 1)">
-
-                    <i class=" fa fa-fw fa-wrench"></i>
-
-                </a>
-                <div class="layout-tabmenu-tooltip">
-                    <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Setting</div>
-                </div>
-            </li> -->
-            <!-- <li [ngClass]="{'active-item':app.activeTabIndex === 2}">
-                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 2)"><i class="fa fa-calendar"></i></a>
-                <div class="layout-tabmenu-tooltip">
-                    <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Calendar</div>
-                </div>
-            </li>
-            <li [ngClass]="{'active-item':app.activeTabIndex === 3}">
-                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 3)"><i class="fa fa-image"></i></a>
-                <div class="layout-tabmenu-tooltip">
-                    <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Projects</div>
-                </div>
-            </li>
-            <li [ngClass]="{'active-item':app.activeTabIndex === 4}">
-                <a href="#" class="ripplelink tabmenuitem-link" (click)="app.onTabClick($event, 4)"><i class="fa fa-language"></i></a>
-                <div class="layout-tabmenu-tooltip">
-                    <div class="layout-tabmenu-tooltip-arrow"></div>
-                    <div class="layout-tabmenu-tooltip-text">Updates</div>
-                </div>
-            </li> -->
-        <!-- </ul> -->
         <div class="layout-tabmenu-contents">
-            <div class="layout-tabmenu-content" [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 0}">
-                <!-- <div class="layout-submenu-title clearfix">
-                    <span>HOME</span>
-                </div> -->
+            <div class="layout-tabmenu-content "
+                [ngClass]="{'layout-tabmenu-content-active': app.activeTabIndex === 0}">
+
+                <div #profile class="profilekiri" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
+                    <a href="#" (click)="logout($event)">
+                        <!-- <div class="profile-image"> -->
+                        <img style="width: 45px; float: left;
+                            margin-bottom: 10px;" src="assets/layout/images/profile-image.png">
+                        <!-- </div> -->
+                        <span class="profile-name">{{namaPegawai}}</span>
+                        <span class="profile-role">Logout</span>
+                        <i class="fa fa-fw fa-sign-out"></i>
+                        <!-- <p-panelMenu [model]="items" [style]="{'width':'300px'}"></p-panelMenu> -->
+                    </a>
+
+                    <!-- <ul class="fadeInDown">
+                            <li role="menuitem">
+                                <a href="#" (click)="app.onTopbarSubItemClick($event)">
+                                    <i class="fa fa-fw fa-user"></i>
+                                    <span>Profile</span>
+                                    <span class="topbar-submenuitem-badge">5</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#" (click)="app.onTopbarSubItemClick($event)">
+                                    <i class="fa fa-fw fa-user-secret"></i>
+                                    <span>Privacy</span>
+                                    <span class="topbar-submenuitem-badge">2</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#" (click)="app.onTopbarSubItemClick($event)">
+                                    <i class="fa fa-fw fa-cog"></i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#" (click)="logout($event)">
+                                    <i class="fa fa-fw fa-sign-out"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul> -->
+
+                </div>
+
+                <div class="layout-submenu-title clearfix">
+                    <!-- <span>HOME</span> -->
+                </div>
                 <app-sidebarTabContent>
                     <app-menu></app-menu>
                 </app-sidebarTabContent>
