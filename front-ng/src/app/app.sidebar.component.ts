@@ -35,7 +35,7 @@ export class AppSideBarComponent implements OnInit {
         if (user.pegawai.namalengkap) {
             this.namaPegawai = user.pegawai.namalengkap
             let forInitial = this.namaPegawai.split(' ')
-            console.log(forInitial)
+            // console.log(forInitial)
             if (forInitial.length > 1) {
                 let a = forInitial[0].substring(0, 1).toUpperCase()
                 let b = forInitial[1].substring(0, 1).toUpperCase()
