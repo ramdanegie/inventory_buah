@@ -11,6 +11,7 @@ import { MenuItem, ConfirmationService } from 'primeng/primeng';
 export class AppSideBarComponent implements OnInit {
     profile: any[]
     namaPegawai: any
+    initial: any;
     constructor(public app: AppComponent,
         private auth: Authentication,
         private authGuard: AuthGuard,
@@ -31,10 +32,23 @@ export class AppSideBarComponent implements OnInit {
     ngOnInit() {
 
         let user = this.authGuard.getUserDto()
-        if (user.pegawai.namalengkap)
+        if (user.pegawai.namalengkap) {
             this.namaPegawai = user.pegawai.namalengkap
-        else
+            let forInitial = this.namaPegawai.split(' ')
+            console.log(forInitial)
+            if (forInitial.length > 1) {
+                let a = forInitial[0].substring(0, 1).toUpperCase()
+                let b = forInitial[1].substring(0, 1).toUpperCase()
+                this.initial = a + b
+            } else if (forInitial.length == 1) {
+                let a = forInitial[0].substring(0, 1).toUpperCase()
+                this.initial = a
+            }
+        } else {
             this.namaPegawai = 'Adminitrator'
+            this.initial = this.namaPegawai.substring(0, 1).toUpperCase()
+        }
+
         this.profile = [
             { label: 'Profile', icon: 'fa fa-fw fa-user', command: () => this.app.changeToOverlayMenu() },
             { label: 'Privacy', icon: 'fa fa-fw fa-user-secret', command: () => this.app.changeToOverlayMenu() },

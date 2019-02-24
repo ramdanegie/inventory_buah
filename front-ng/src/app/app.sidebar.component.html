@@ -11,10 +11,11 @@ acceptLabel="Yes" rejectLabel="No"></p-confirmDialog>
 
                 <div #profile class="profilekiri" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
                     <a href="#" (click)="logout($event)">
-                        <!-- <div class="profile-image"> -->
-                        <img style="width: 45px; float: left;
-                            margin-bottom: 10px;" src="assets/layout/images/profile-image.png">
-                        <!-- </div> -->
+                        <div class="profile-user-login">
+                        <!-- <img style="width: 45px; float: left;
+                            margin-bottom: 10px;" src="assets/layout/images/profile-image.png"> -->
+                        <span>{{initial}}</span>
+                        </div>
                         <span class="profile-name">{{namaPegawai}}</span>
                         <span class="profile-role">Logout</span>
                         <i class="fa fa-fw fa-sign-out"></i>
