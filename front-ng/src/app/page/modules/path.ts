@@ -32,7 +32,7 @@ export const pathMaster = [
     // TRANSAKSI
     { canActivate: [AuthGuard], path: 'penerimaan-barang-supplier', component: pMaster.PenerimaanBarangSupplierComponent },
     { canActivate: [AuthGuard], path: 'daftar-penerimaan-barang-supplier', component: pMaster.DaftarPenerimaanBarangSupplierComponent },
-    // END TRANSAKSI
+    { canActivate: [AuthGuard], path: 'transaksi-penjualan', component: pMaster.TransaksiPenjualanComponent },
     // END TRANSAKSI
     { canActivate: [AuthGuard], path: '404', component: pMaster.NotFoundComponent },
     { canActivate: [AuthGuard], path: '**', redirectTo: '/404' },

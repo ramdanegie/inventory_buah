@@ -1,0 +1,147 @@
+<p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle"></p-confirmDialog>
+<div class="card card-w-title">
+  <div class="card card-form-header">
+    <h1>Transaksi Penjualan</h1>
+  </div>
+  <form [formGroup]="formGroup">
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <p-fieldset legend="Data Penjualan" [toggleable]="true">
+          <div class="ui-g-4">
+            <div class="ui-g-12 ui-md-12">
+              <label class="label-web-profile" for="input">No Transaksi </label>
+              <input type="text" formControlName="noTransaksi" pInputText disabled />
+            </div>
+            <div class="ui-g-12 ui-md-12">
+              <label class="label-web-profile" for="input">No Terima </label>
+              <input type="text" formControlName="noTerima" pInputText disabled />
+            </div>
+          </div>
+          <div class="ui-g-4">
+            <div class="ui-g-12 ui-md-12">
+              <label class="label-web-profile" for="input">Tgl Transaksi </label>
+              <p-calendar dataType="string" formControlName="tglTransaksi" dateFormat="dd/mm/yy" [defaultDate]="now"
+                [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
+                [showTime]="true"></p-calendar>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+              <label class="label-web-profile" for="input">Toko Transaksi </label>
+              <p-dropdown formControlName="kdToko" [options]="listToko" [filter]="true" [autoWidth]="false">
+              </p-dropdown>
+            </div>
+          </div>
+          <div class="ui-g-4">
+            <div class="ui-g-12 ui-md-12">
+              <label class="label-web-profile" for="input">Customer </label>
+              <p-dropdown formControlName="kdCustomer" [options]="listCustomer" [filter]="true" [autoWidth]="false">
+              </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+              <label class="label-web-profile" for="input">Pegawai Penerima </label>
+              <p-dropdown formControlName="kdPegawai" [options]="listPegawai" [filter]="true" [autoWidth]="false">
+              </p-dropdown>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="ui-g-12">
+        <p-fieldset legend="Produk" [toggleable]="true">
+          <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-4">
+              <label class="label-web-profile" for="input">Produk </label>
+              <p-dropdown formControlName="produk" [options]="listProduk" [filter]="true" [autoWidth]="false"
+                (onChange)="setValueKdSatuan()">
+              </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-1">
+              <label class="label-web-profile" for="input">Stok </label>
+              <input type="number" formControlName="stok" pInputText disabled>
+            </div>
+            <div class="ui-g-12 ui-md-1">
+              <label class="label-web-profile" for="input">Qty Produk </label>
+              <input type="number" formControlName="qtyProduk" pInputText (input)="onChangeQty($event.target.value)" />
+            </div>
+            <div class="ui-g-12 ui-md-2">
+              <label class="label-web-profile" for="input">Satuan </label>
+              <p-dropdown formControlName="kdSatuan" [options]="listSatuan" [filter]="true" [autoWidth]="false">
+              </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+              <label class="label-web-profile" for="input">Konversi </label>
+              <input type="number" formControlName="konversi" pInputText disabled />
+            </div>
+            <div class="ui-g-12 ui-md-2">
+              <label class="label-web-profile" for="input">Harga Jual </label>
+              <input type="number" formControlName="hargaJual" pInputText
+                (input)="onChangeHargaSatuan($event.target.value)" />
+            </div>
+            <div class="ui-g-12 ui-md-2">
+              <label class="label-web-profile" for="input">Harga Diskon </label>
+              <input type="number" formControlName="hargaDiskon" pInputText
+                (input)="OnChangeDiskon($event.target.value)" />
+            </div>
+            <div class="ui-g-12 ui-md-2">
+              <label class="label-web-profile" for="input">SubTotal </label>
+              <input type="number" formControlName="total" pInputText disabled />
+            </div>
+          </div>
+          <div class="ui-g-12">
+            <div class="ui-g-1 ui-g-offset-9">
+              <button pButton type="submit" label="Tambah" icon="fa-edit" (click)="tambah()"></button>
+            </div>
+            <div class="ui-g-1">
+              <button pButton type="button" label="Hapus" icon="fa-trash" (click)="hapus()"></button>
+            </div>
+            <div class="ui-g-1">
+              <button pButton type="button" label="Batal" icon="fa-refresh" (click)="resetPart()"></button>
+            </div>
+          </div>
+          <div class="ui-g-12">
+            <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true"
+              [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected" [immutable]="false"
+              (onRowSelect)="onRowSelect($event)">
+              <p-column field="no" header="No" [style]="{'width':'30px'}"></p-column>
+              <p-column field="kdProduk" header="Kode Produk"></p-column>
+              <p-column field="namaProduk" header="Nama Produk"></p-column>
+              <p-column field="namaSatuan" header="Satuan"></p-column>
+              <p-column field="qtyProduk" header="Qty Produk"></p-column>
+              <p-column field="hargaSatuan" header="Harga Satuan"></p-column>
+              <p-column field="hargaJual" header="Harga Jual"></p-column>
+              <p-column field="total" header="SubTotal"></p-column>
+              <p-footerColumnGroup>
+                <p-row>
+                  <p-column footer="" colspan="6"></p-column>
+                  <p-column footer="Total:"></p-column>
+                  <p-column footer="{{subTotal}}"></p-column>
+                </p-row>
+              </p-footerColumnGroup>
+            </p-dataTable>
+          </div>
+        </p-fieldset>
+
+      </div>
+
+      <div class="ui-g-12">
+        <div class="ui-g-1 ui-g-offset-10">
+          <button pButton type="submit" label="Simpan" icon="fa-save" (click)="simpan()"></button>
+        </div>
+        <!-- <div class="ui-g-1">
+                    <button pButton type="button" label="Edit" icon="fa-flash" (click)="edit()"></button>
+                </div> -->
+        <!-- <div class="ui-g-1">
+          <button pButton type="button" label="Hapus" icon="fa-trash" (click)="hapus()"></button>
+        </div> -->
+        <div class="ui-g-1">
+          <button pButton type="button" label="Batal" icon="fa-refresh" (click)="resetAll()"></button>
+        </div>
+        <!-- <div class="ui-g-1">
+                <button pButton type="button" label="Cetak" icon="fa-print" (click)="print()"></button>
+            </div>
+            <div class="ui-g-1">
+                <p-splitButton label="Export" icon="fa-external-link"></p-splitButton>
+            </div> -->
+      </div>
+
+    </div>
+  </form>
+</div>

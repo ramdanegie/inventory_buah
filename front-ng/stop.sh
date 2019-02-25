@@ -1,2 +1,2 @@
 #!/bin/sh
-kill $(lsof -t -i:7777)
+kill $(lsof -t -i:4200)

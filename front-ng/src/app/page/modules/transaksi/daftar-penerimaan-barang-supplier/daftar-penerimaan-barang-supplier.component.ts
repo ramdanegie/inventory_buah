@@ -126,6 +126,7 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 			} else {
 				this.loading = false
 				this.alertService.info('Informasi', 'Data tidak ada')
+				this.dataSource = []
 			}
 		})
 
