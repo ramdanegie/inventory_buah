@@ -1,7 +1,8 @@
 <?php
 namespace App\Traits;
 
-use DB;
+use App\Model\Master\KodeGenerate;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Http\Request;
@@ -114,24 +115,21 @@ Trait GenerateCode
 		$subPrefix = substr(trim($result),$prefixLen);
 		return $kodeDepan.(str_pad((int)$subPrefix+1, $length-$prefixLen, "0", STR_PAD_LEFT));
 	}
-	protected function generateCodeBySeqTable($objectModel, $atrribute, $length=8, $prefix=''){
+	protected function getNewCode( $jeniskode, $length=8, $format=''){
 		DB::beginTransaction();
 		try {
-			$result = SeqNumber::where('seqnumber', 'LIKE', $prefix.'%')
-				->where('seqname',$atrribute)
-				->where('kdprofile',1)
-				->max('seqnumber');
-			$prefixLen = strlen($prefix);
-			$subPrefix = substr(trim($result),$prefixLen);
-			$SN = $prefix.(str_pad((int)$subPrefix+1, $length-$prefixLen, "0", STR_PAD_LEFT));
+			$result = KodeGenerate::where('format', 'LIKE', $format.'%')
+				->where('jeniskode',$jeniskode)
+				->max('format');
+			$formatLen = strlen($format);
+			$subFormat = substr(trim($result),$formatLen);
+			$SN = $format.(str_pad((int)$subFormat+1, $length-$formatLen, "0", STR_PAD_LEFT));
 
-			$newSN = new SeqNumber();
-			$newSN->kdprofile = 1;
-			$newSN->seqnumber = $SN;
-			$newSN->tgljamseq = date('Y-m-d H:i:s');;
-			$newSN->seqname = $atrribute;
+			$newSN = new KodeGenerate();
+			$newSN->id = KodeGenerate::max('id')+ 1;
+			$newSN->format = $SN;
+			$newSN->jeniskode = $jeniskode;
 			$newSN->save();
-
 			$transStatus = 'true';
 		} catch (\Exception $e) {
 			$transStatus = 'false';
@@ -145,7 +143,6 @@ Trait GenerateCode
 			return '';
 		}
 
-		return $this->setStatusCode($result['status'])->respond($result, $transMessage);
 	}
 	protected function generateUid(){
     	return substr(Uuid::generate(), 0, 32);

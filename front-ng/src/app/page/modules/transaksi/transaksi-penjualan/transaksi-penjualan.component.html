@@ -50,7 +50,7 @@
             <div class="ui-g-12 ui-md-4">
               <label class="label-web-profile" for="input">Produk </label>
               <p-dropdown formControlName="produk" [options]="listProduk" [filter]="true" [autoWidth]="false"
-                (onChange)="setValueKdSatuan()">
+                (onChange)="setValueKdSatuan()" >
               </p-dropdown>
             </div>
             <div class="ui-g-12 ui-md-1">
@@ -105,8 +105,8 @@
               <p-column field="namaProduk" header="Nama Produk"></p-column>
               <p-column field="namaSatuan" header="Satuan"></p-column>
               <p-column field="qtyProduk" header="Qty Produk"></p-column>
-              <p-column field="hargaSatuan" header="Harga Satuan"></p-column>
               <p-column field="hargaJual" header="Harga Jual"></p-column>
+              <p-column field="hargaDiskon" header="Harga Diskon"></p-column>
               <p-column field="total" header="SubTotal"></p-column>
               <p-footerColumnGroup>
                 <p-row>

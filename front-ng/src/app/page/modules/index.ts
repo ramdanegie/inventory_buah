@@ -24,7 +24,7 @@ export * from './master/map-produk-to-satuan-standar/map-produk-to-satuan-standa
 export * from './transaksi/penerimaan-barang-supplier/penerimaan-barang-supplier.component';
 export * from './transaksi/daftar-penerimaan-barang-supplier/daftar-penerimaan-barang-supplier.component';
 export * from './transaksi/transaksi-penjualan/transaksi-penjualan.component';
-
+export * from './transaksi/daftar-penjualan/daftar-penjualan.component';
 
 import * as component from './';
 var Cmp = [];

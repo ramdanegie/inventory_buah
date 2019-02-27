@@ -116,7 +116,7 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 
 	});
 
-	$app->group(['prefix' => 'transaksi/'/*, 'middleware' => 'auth2'*/], function ($app) {
+	$app->group(['prefix' => 'transaksi/', 'middleware' => 'authentication'], function ($app) {
 		/** Penerimaan Barang */
 		$app->get('penerimaan/get-list-data', 'Transaksi\PenerimaanBarangController@getListCombo');
 		$app->post('penerimaan/save-penerimaan', 'Transaksi\PenerimaanBarangController@savePenerimaan');
@@ -125,10 +125,13 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 
 		/** Penjualan*/
 		$app->get('penjualan/get-stok-produk', 'Transaksi\PenjualanController@getStokProduk');
+		$app->post('penjualan/save-penjualan', 'Transaksi\PenjualanController@savePenjualan');
+		$app->get('penjualan/get-penjualan', 'Transaksi\PenjualanController@getDaftarPenjualan');
+		$app->post('penjualan/delete-penjualan', 'Transaksi\PenjualanController@hapusPenjualan');
 	});
 
 	/* Master */
-	$app->group(['prefix' => 'setting/','middleware' => 'auth2'], function ($app) {
+	$app->group(['prefix' => 'setting/','middleware' => 'authentication'], function ($app) {
 		$app->get('menu','Core\MenuController@getMenu');
 		$app->get('profile/{KdProfile}','Core\MenuController@profile');
 	});

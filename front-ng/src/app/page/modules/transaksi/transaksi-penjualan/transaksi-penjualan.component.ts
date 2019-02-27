@@ -28,6 +28,8 @@ export class TransaksiPenjualanComponent implements OnInit {
   nomor: any = undefined;
   subTotal: any = 0
   dataProdukDetail: any
+  noRecTerima: any = ''
+  hargaJual: any
   constructor(private alertService: AlertService,
     private InfoService: InfoService,
     private httpService: HttpClient,
@@ -57,23 +59,22 @@ export class TransaksiPenjualanComponent implements OnInit {
       'total': new FormControl(0),
       'konversi': new FormControl(null),
     });
-    let cache = this.cacheHelper.get('cacheUbahPenerimaanSupplier')
+    let cache = this.cacheHelper.get('cacheUbahTransaksiPenjualan')
     if (cache != undefined) {
       this.loadFromEdit(cache)
-      this.cacheHelper.set('cacheUbahPenerimaanSupplier', undefined);
+      this.cacheHelper.set('cacheUbahTransaksiPenjualan', undefined);
     }
 
   }
   loadFromEdit(data) {
-    this.httpService.get('transaksi/penerimaan/get-daftar-penerimaan?norec=' + data[0]
+    this.httpService.get('transaksi/penjualan/get-penjualan?norec=' + data[0]
     ).subscribe(res => {
       let result = res.data[0]
       this.formGroup.get('noRec').setValue(result.norec)
-      this.formGroup.get('noPenerimaan').setValue(result.nopenerimaan)
-      this.formGroup.get('noFaktur').setValue(result.nofaktur)
-      this.formGroup.get('tglPenerimaan').setValue(new Date(result.tgltransaksi))
+      this.formGroup.get('noTransaksi').setValue(result.notransaksi)
+      this.formGroup.get('kdCustomer').setValue(result.customerfk)
+      this.formGroup.get('tglTransaksi').setValue(new Date(result.tgltransaksi))
       this.formGroup.get('kdToko').setValue(result.tokofk)
-      this.formGroup.get('kdSupplier').setValue(result.supplierfk)
       this.formGroup.get('kdPegawai').setValue(result.pegawaifk)
       for (let i = 0; i < result.details.length; i++) {
         const element = result.details[i]
@@ -81,16 +82,23 @@ export class TransaksiPenjualanComponent implements OnInit {
           'no': i + 1,
           'kdProduk': element.produkfk,
           'namaProduk': element.namaproduk,
-          'qtyProduk': element.qtypenerimaan,
+          'qtyProduk': element.qty,
           'namaSatuan': element.satuanstandard,
           'kdSatuan': element.satuanfk,
           'hargaJual': element.hargajual,
-          'hargaSatuan': element.hargapenerimaan,
-          'total': element.totalpenerimaan,
+          'hargaDiskon': element.hargadiskon,
+          'total': element.total,
+          'konversi': element.nilaikonversi,
+          'strukpenerimaanfk': element.penerimaanfk,
         }
         this.tempDataGrid.push(data)
       }
       this.dataSource = this.tempDataGrid
+      let subTotal: any = 0;
+      for (let i = this.tempDataGrid.length - 1; i >= 0; i--) {
+        subTotal = subTotal + parseFloat(this.tempDataGrid[i].total)
+      }
+      this.subTotal = parseFloat(subTotal).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
     }, error => {
 
     })
@@ -150,31 +158,34 @@ export class TransaksiPenjualanComponent implements OnInit {
   resetAll() {
     this.formGroup.reset()
     this.formGroup.get('qtyProduk').setValue(0);
-    this.formGroup.get('hargaSatuan').setValue(0);
     this.formGroup.get('hargaJual').setValue(0);
     this.formGroup.get('total').setValue(0);
-    this.formGroup.get('tglPenerimaan').setValue(this.now);
-    this.dataSource = []
+    this.formGroup.get('stok').setValue(0);
+    this.formGroup.get('hargaDiskon').setValue(0);
+    this.formGroup.get('tglTransaksi').setValue(this.now);
     this.tempDataGrid = []
+    this.dataSource =  this.tempDataGrid 
+    this.subTotal = 0
   }
   resetPart() {
-    this.formGroup.get('kdProduk').reset();
-    this.formGroup.get('namaProduk').reset();
+    this.formGroup.get('produk').reset();
     this.formGroup.get('qtyProduk').setValue(0);
     this.formGroup.get('kdSatuan').reset();
-    this.formGroup.get('hargaSatuan').setValue(0);
     this.formGroup.get('hargaJual').setValue(0);
     this.formGroup.get('total').setValue(0);
+    this.formGroup.get('hargaDiskon').setValue(0);
+    this.formGroup.get('stok').setValue(0);
+    this.formGroup.get('konversi').setValue(0);
   }
 
   tambah() {
     let produk = this.formGroup.get('produk').value;
     let kdSatuan = this.formGroup.get('kdSatuan').value;
     let qtyProduk = this.formGroup.get('qtyProduk').value;
-    // let hargaSatuan = this.formGroup.get('hargaSatuan').value;
+    let konversi = this.formGroup.get('konversi').value;
     let hargaJual = this.formGroup.get('hargaJual').value;
     let total = this.formGroup.get('total').value;
-    let kdProduk = this.formGroup.get('kdProduk').value;
+    let hargaDiskon = this.formGroup.get('hargaDiskon').value;
     if (!produk) {
       this.alertService.warn("Peringatan", "Nama Produk harus di isi !")
       return
@@ -209,49 +220,67 @@ export class TransaksiPenjualanComponent implements OnInit {
           data.namaSatuan = produk.namaSatuan
           data.kdSatuan = produk.kdSatuan
           data.hargaJual = hargaJual
-          // data.hargaSatuan = hargaSatuan
+          data.hargaDiskon = hargaDiskon
           data.total = total
+          data.konversi = konversi
+          data.strukpenerimaanfk = this.noRecTerima
 
           this.tempDataGrid[i] = data;
           this.dataSource = this.tempDataGrid
+          let subTotal: any = 0;
+          for (let i = this.tempDataGrid.length - 1; i >= 0; i--) {
+            subTotal = subTotal + parseFloat(this.tempDataGrid[i].total)
+          }
+          this.subTotal = parseFloat(subTotal).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
         }
       }
     } else {
       data = {
         'no': nomor,
-        'kdProduk': kdProduk,
+        'kdProduk': produk.kdProduk,
         'namaProduk': produk.namaProduk,
         'qtyProduk': qtyProduk,
         'namaSatuan': produk.namaSatuan,
         'kdSatuan': produk.kdSatuan,
         'hargaJual': hargaJual,
-        // 'hargaSatuan': hargaSatuan,
-        'total': total
+        'hargaDiskon': hargaDiskon,
+        'total': total,
+        'konversi': konversi,
+        'strukpenerimaanfk': this.noRecTerima
       }
       this.tempDataGrid.push(data)
       this.dataSource = this.tempDataGrid
-      this.resetPart()
+      let subTotal: any = 0;
+      for (let i = this.tempDataGrid.length - 1; i >= 0; i--) {
+        subTotal = subTotal + parseFloat(this.tempDataGrid[i].total)
+      }
+      this.subTotal = parseFloat(subTotal).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
     }
+    this.resetPart()
   }
   hapus() {
-    let formControl = this.formGroup.value
-    if (formControl.nomor == undefined) {
+    if (this.nomor == undefined) {
       this.alertService.warn('Peringatan', 'Pilih data dulu')
       return
     }
-    var data: any = {};
-    if (formControl.nomor != undefined) {
-      for (var i = this.tempDataGrid.length - 1; i >= 0; i--) {
-        if (this.tempDataGrid[i].no == formControl.nomor) {
-          this.tempDataGrid.splice(i, 1);
-          for (var i = this.tempDataGrid.length - 1; i >= 0; i--) {
-            this.tempDataGrid[i].no = i + 1
-          }
-          this.dataSource = this.tempDataGrid
+
+    for (var i = this.tempDataGrid.length - 1; i >= 0; i--) {
+      if (this.tempDataGrid[i].no == this.nomor) {
+        this.tempDataGrid.splice(i, 1);
+        for (var i = this.tempDataGrid.length - 1; i >= 0; i--) {
+          this.tempDataGrid[i].no = i + 1
         }
+        this.dataSource = this.tempDataGrid
       }
     }
+    let subTotal: any = 0;
+    for (let i = this.tempDataGrid.length - 1; i >= 0; i--) {
+      subTotal = subTotal + parseFloat(this.tempDataGrid[i].total)
+    }
+    this.subTotal = parseFloat(subTotal).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
+
     this.resetPart()
+    this.nomor = undefined
   }
   batal() {
     this.resetPart()
@@ -270,11 +299,55 @@ export class TransaksiPenjualanComponent implements OnInit {
       this.formGroup.get('qtyProduk').setValue(0)
       return
     }
-    let hargaSatuan = this.formGroup.get('hargaJual').value
-    let diskon = this.formGroup.get('hargaDiskon').value
-    let total = (hargaSatuan * value) - diskon
-    this.formGroup.get('total').setValue(total)
+    // let hargaSatuan = this.formGroup.get('hargaJual').value
+    // let diskon = this.formGroup.get('hargaDiskon').value
+    // let total = (hargaSatuan * value) - diskon
+    // this.formGroup.get('total').setValue(total)
+
+    let qtyProduk: any = this.formGroup.get('qtyProduk').value
+    let ada = false;
+    for (let i = 0; i < this.dataProdukDetail.length; i++) {
+      ada = false
+      if ((qtyProduk * parseFloat(this.formGroup.get('konversi').value))
+        <= parseFloat(this.dataProdukDetail[i].qtyproduk)) {
+        this.hargaJual = Math.round(parseFloat(this.dataProdukDetail[i].hargajual) * parseFloat(this.formGroup.get('konversi').value))
+
+        this.formGroup.get('hargaJual').setValue(this.hargaJual)
+        this.formGroup.get('total').setValue(value * parseFloat(this.hargaJual))
+        this.noRecTerima = this.dataProdukDetail[i].norec_terima
+        ada = true;
+        break;
+      }
+    }
+    if (ada == false) {
+      this.formGroup.get('hargaJual').setValue(0);
+      this.formGroup.get('total').setValue(0);
+      this.formGroup.get('hargaDiskon').setValue(0);
+
+      this.noRecTerima = ''
+      if (this.dataProdukDetail.length > 1) {
+        let stt = 'false'
+        this.confirmationService.confirm({
+          message: 'Yakin mau menyimpan data?',
+          accept: () => {
+            let objSave =
+            {
+              'produkfk': this.formGroup.get('produk').value.kdProduk,
+            }
+            this.httpService.post('', objSave).subscribe(res => {
+
+              this.resetPart()
+            }
+            )
+          }
+        })
+      }
+    }
+    if (this.formGroup.get('qtyProduk').value == 0) {
+      this.formGroup.get('hargaJual').setValue(0);
+    }
   }
+
   OnChangeDiskon(value: number) {
     let harga = this.formGroup.get('hargaJual').value
     let jml = this.formGroup.get('qtyProduk').value
@@ -283,6 +356,7 @@ export class TransaksiPenjualanComponent implements OnInit {
     // console.log(total);
   }
   setValueKdSatuan() {
+    // console.log(e)
     // this.formGroup.get('kdProduk').setValue(this.formGroup.get('produk').value.kdProduk)
     this.formGroup.get('kdSatuan').setValue(this.formGroup.get('produk').value.kdSatuan)
     this.getKonversi()
@@ -291,15 +365,17 @@ export class TransaksiPenjualanComponent implements OnInit {
   onRowSelect(event) {
     let e = event.data
     this.nomor = e.no
-    this.formGroup.get('kdProduk').setValue(e.kdProduk);
-    this.formGroup.get('namaProduk').setValue({
+    this.formGroup.get('produk').setValue({
       namaProduk: e.namaProduk, kdProduk: e.kdProduk,
       kdSatuan: e.kdSatuan, namaSatuan: e.namaSatuan
     });
+    this.getKonversi()
     this.formGroup.get('kdSatuan').setValue(e.kdSatuan);
     this.formGroup.get('qtyProduk').setValue(e.qtyProduk);
-    this.formGroup.get('hargaSatuan').setValue(e.hargaSatuan);
     this.formGroup.get('hargaJual').setValue(e.hargaJual);
+    this.formGroup.get('hargaDiskon').setValue(e.hargaDiskon);
+    this.formGroup.get('konversi').setValue(e.konversi);
+    this.noRecTerima = e.strukpenerimaanfk
     this.formGroup.get('total').setValue(e.total);
 
   }
@@ -312,8 +388,8 @@ export class TransaksiPenjualanComponent implements OnInit {
       this.alertService.warn('Peringatan', 'Pilih Pegawai terlebih dahulu !')
       return
     }
-    if (!this.formGroup.get('kdSupplier').value) {
-      this.alertService.warn('Peringatan', 'Pilih Supplier terlebih dahulu !')
+    if (!this.formGroup.get('kdCustomer').value) {
+      this.alertService.warn('Peringatan', 'Pilih Customer terlebih dahulu !')
       return
     }
     if (this.tempDataGrid.length == 0) {
@@ -322,23 +398,24 @@ export class TransaksiPenjualanComponent implements OnInit {
     }
 
     let jsonSave = {
-      'penerimaan': this.formGroup.value,
-      'details': this.tempDataGrid
+      'penjualan': this.formGroup.value,
+      'detail' : this.tempDataGrid,
     }
     this.confirmationService.confirm({
       message: 'Yakin mau menyimpan data?',
       accept: () => {
-        this.httpService.post('transaksi/penerimaan/save-penerimaan', jsonSave).subscribe(res => {
-          this.formGroup.reset()
-
+        this.httpService.post('transaksi/penjualan/save-penjualan', jsonSave).subscribe(res => {
+          this.resetAll()
+          
         }, error => {
 
         })
       }
     })
-  }
 
+  }
   getKonversi() {
+    // debugger
     this.formGroup.get('konversi').setValue(1)
     let produk = this.formGroup.get('produk').value;
     this.httpService.get("transaksi/penjualan/get-stok-produk?" +

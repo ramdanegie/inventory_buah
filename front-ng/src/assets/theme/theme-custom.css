@@ -263,10 +263,15 @@ body .ui-inputtext {
     transition: background-color 0.3s;
     padding: 2px 0; }
     body .ui-button:enabled:hover {
-      background-color: #574278; }
+      background-color: #8d46dd; }
     body .ui-button:enabled:focus {
-      outline: 0 none;
-      background-color: #574278; }
+      border: 1px solid #C9A8FD;
+      outline: 0;
+      -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      -moz-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      /* outline: 0 none; */
+      background-color: #985edb; }
     body .ui-button:enabled:active {
       background-color: #3e3e3d; }
     body .ui-button.ui-button-text-only .ui-button-text {
