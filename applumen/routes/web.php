@@ -91,6 +91,8 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 
         /** Produk*/
         $app->get('produk/get-master-produk', 'Master\MasterController@getMasterProduk');
+        $app->post('produk/save-master-produk', 'Master\MasterController@saveMasterProduk');
+        $app->post('produk/delete-master-produk', 'Master\MasterController@deleteProduk');
 
 		/** Master*/
 		$app->get('pegawai/get-daftar-pegawai', 'Master\MasterController@getDaftarPegawai');

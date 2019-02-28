@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Model\Master\Pegawai_M;
 use App\Model\Master\PegawaiM;
 use App\Model\Standar\LoginUser_S;
-use App\Model\Standar\KelompokUser_S;
+use App\Model\Master\Produk_M;
 use Illuminate\Http\Request;
 use App\Traits\Core;
 use App\Traits\JsonResponse;
@@ -198,7 +198,7 @@ class  MasterController extends Controller
         $data = DB::table('produk_m as pr')
             ->leftJoin('detailjenisproduk_m as djp', 'djp.id', '=', 'pr.detailjenisprodukfk')
             ->leftJoin('satuanstandard_m as ss', 'ss.id', '=', 'pr.satuanstandardfk')
-            ->select('pr.*', 'djp.id as djpid', 'djp.detailjenisproduk', 'djp.jenisprodukfk')
+            ->select('pr.*', 'djp.id as djpid', 'djp.detailjenisproduk', 'djp.jenisprodukfk', 'ss.id as ssis', 'ss.satuanstandard')
             ->where ('pr.statusenabled',true)
             ->orderBy('id');
         if (isset($request['namaproduk']) && $request['namaproduk']!="" && $request['namaproduk'] != "undefined"){
@@ -214,5 +214,77 @@ class  MasterController extends Controller
             'as' => "{ng-SitepuMan}"
         );
         return response()->json($result);
+    }
+    public function saveMasterProduk (Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            $idMax = Produk_M ::max('id') + 1;
+            if($request['id'] == null){
+                $log = new Produk_M();
+                $log->id = $idMax;
+                $log->statusenabled = true;
+            }else{
+                $log = Produk_m::where('id',$request['id'])->first();
+            }
+            $log->namaproduk= $request['namaProduk'];
+            $log->kdexternal= $request['kdExternal'];
+            $log->detailjenisprodukfk= $request['detailJenisProduk'];
+            $log->satuanstandardfk= $request['satuanStandard'];
+            $log->statusenabled= $request['statusEnabled'];
+            $log->save();
+
+            $transStatus = 'true';
+        } catch (\Exception $e) {
+            $transStatus = 'false';
+        }
+        if ($transStatus == 'true') {
+            $transMessage = "Sukses";
+            DB::commit();
+            $result = array(
+                'status' => 200,
+                'message' => $transMessage,
+                'as' => '{ng-SitepuMan}',
+            );
+        } else {
+            $transMessage = "Terjadi Kesalahan saat menyimpan data";
+            DB::rollBack();
+            $result = array(
+                'status' => 500,
+                'message'  => $transMessage,
+                'as' => '{ng-SitepuMan}',
+            );
+        }
+        return response()->json($result,$result['status']);
+    }
+    public function deleteProduk (Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            Produk_M::where('id',$request['id'])->update(
+                [ 'statusenabled' =>  false]
+            );
+            $transStatus = 'true';
+        } catch (\Exception $e) {
+            $transStatus = 'false';
+        }
+        if ($transStatus == 'true') {
+            $transMessage = "Hapus Produk";
+            DB::commit();
+            $result = array(
+                'status' => 200,
+                'message' => $transMessage,
+                'as' => '{ng-SitepuMan}',
+            );
+        } else {
+            $transMessage = "Terjadi Kesalahan";
+            DB::rollBack();
+            $result = array(
+                'status' => 500,
+                'message'  => $transMessage,
+                'as' => '{ng-SitepuMan}',
+            );
+        }
+        return response()->json($result,$result['status']);
     }
 }
