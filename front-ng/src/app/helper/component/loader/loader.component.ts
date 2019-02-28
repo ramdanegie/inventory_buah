@@ -12,7 +12,10 @@ import { LoaderService, LoaderState } from '../../';
 
 @Component({
     selector: 'app-loader',
-    template: '<p-progressBar mode="indeterminate" *ngIf="show" ></p-progressBar>'  
+    template: '<p-progressBar mode="indeterminate" *ngIf="show" class="indexxx"></p-progressBar>'  ,
+    styles: ['.indexxx {' +
+    ' z-index: 4000;  '
+    + '}']
 })
 
 export class LoaderComp implements OnInit, OnDestroy {
@@ -24,6 +27,7 @@ export class LoaderComp implements OnInit, OnDestroy {
     constructor(private loaderService: LoaderService) { }
 
     ngOnInit() { 
+        
         this.subscription = this.loaderService.getState().subscribe(state => {
             this.show = state.show;
         });

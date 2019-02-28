@@ -36,6 +36,7 @@ export class MapProdukToSatuanStandarComponent implements OnInit {
       'kdSatuanAsal': new FormControl(null),
       'kdSatuanTujuan': new FormControl(null),
       'hasilKonversi': new FormControl(null),
+      // 'asalKonversi': new FormControl(1)
     });
     this.getList()
     this.loadData()

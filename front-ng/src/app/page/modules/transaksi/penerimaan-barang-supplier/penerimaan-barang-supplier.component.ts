@@ -53,6 +53,10 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 			'hargaJual': new FormControl(0),
 			'total': new FormControl(0),
 			'kdSupplier': new FormControl(null),
+			'konversi': new FormControl(0),
+			'isAutoNoTerima': new FormControl(false),
+			'isAutoNoFaktur': new FormControl(false),
+			'satuan': new FormControl(null),
 		});
 		let cache = this.cacheHelper.get('cacheUbahPenerimaanSupplier')
 		if (cache != undefined) {
@@ -60,6 +64,12 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 			this.cacheHelper.set('cacheUbahPenerimaanSupplier', undefined);
 		}
 
+	}
+	autoNoTerima() {
+		this.formGroup.get('noPenerimaan')[this.formGroup.get('isAutoNoTerima').value ? 'disable' : 'enable']();
+	}
+	autoNoFaktur() {
+		this.formGroup.get('noFaktur')[this.formGroup.get('isAutoNoFaktur').value ? 'disable' : 'enable']();
 	}
 	loadFromEdit(data) {
 		this.httpService.get('transaksi/penerimaan/get-daftar-penerimaan?norec=' + data[0]
@@ -79,11 +89,13 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 					'kdProduk': element.produkfk,
 					'namaProduk': element.namaproduk,
 					'qtyProduk': element.qtypenerimaan,
-					'namaSatuan': element.satuanstandard,
+					'namaSatuan': element.satuanterima,
 					'kdSatuan': element.satuanfk,
 					'hargaJual': element.hargajual,
 					'hargaSatuan': element.hargapenerimaan,
 					'total': element.totalpenerimaan,
+					'satuanterimafk': element.satuanterimafk,
+					'konversi': element.konversi,
 				}
 				this.tempDataGrid.push(data)
 			}
@@ -120,11 +132,6 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 				});
 			});
 
-			this.listSatuan = [];
-			this.listSatuan.push({ label: '--Pilih Satuan--', value: null });
-			getData.satuan.forEach(response => {
-				this.listSatuan.push({ label: response.satuanstandard, value: response.id });
-			});
 
 			this.listSupplier = [];
 			this.listSupplier.push({ label: '--Pilih Supplier--', value: null });
@@ -148,6 +155,7 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 		this.formGroup.get('tglPenerimaan').setValue(this.now);
 		this.dataSource = []
 		this.tempDataGrid = []
+		this.nomor = undefined
 	}
 	resetPart() {
 		this.formGroup.get('kdProduk').reset();
@@ -157,6 +165,9 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 		this.formGroup.get('hargaSatuan').setValue(0);
 		this.formGroup.get('hargaJual').setValue(0);
 		this.formGroup.get('total').setValue(0);
+		this.formGroup.get('satuan').reset();
+		this.formGroup.get('konversi').setValue(0);
+		this.nomor = undefined
 	}
 
 	tambah() {
@@ -167,11 +178,13 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 		let hargaJual = this.formGroup.get('hargaJual').value;
 		let total = this.formGroup.get('total').value;
 		let kdProduk = this.formGroup.get('kdProduk').value;
+		let konversi = this.formGroup.get('konversi').value;
+		let satuan = this.formGroup.get('satuan').value;
 		if (!namaProduk) {
 			this.alertService.warn("Peringatan", "Nama Produk harus di isi !")
 			return
 		}
-		if (!kdSatuan) {
+		if (!satuan) {
 			this.alertService.warn("Peringatan", "Satuan harus di isi !")
 			return
 		}
@@ -198,12 +211,13 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 					data.kdProduk = namaProduk.kdProduk
 					data.namaProduk = namaProduk.namaProduk
 					data.qtyProduk = qtyProduk
-					data.namaSatuan = namaProduk.namaSatuan
-					data.kdSatuan = namaProduk.kdSatuan
+					data.namaSatuan = satuan.namaSatuan
+					data.kdSatuan = satuan.id
 					data.hargaJual = hargaJual
 					data.hargaSatuan = hargaSatuan
 					data.total = total
-
+					data.konversi = konversi
+					data.satuanterimafk = satuan.id
 					this.tempDataGrid[i] = data;
 					this.dataSource = this.tempDataGrid
 				}
@@ -214,11 +228,13 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 				'kdProduk': kdProduk,
 				'namaProduk': namaProduk.namaProduk,
 				'qtyProduk': qtyProduk,
-				'namaSatuan': namaProduk.namaSatuan,
-				'kdSatuan': namaProduk.kdSatuan,
+				'namaSatuan': satuan.namaSatuan,
+				'kdSatuan': satuan.id,
 				'hargaJual': hargaJual,
 				'hargaSatuan': hargaSatuan,
-				'total': total
+				'total': total,
+				'satuanterimafk': satuan.id,
+				'konversi': konversi,
 			}
 			this.tempDataGrid.push(data)
 			this.dataSource = this.tempDataGrid
@@ -244,6 +260,7 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 			}
 		}
 		this.resetPart()
+		this.nomor = undefined
 	}
 	batal() {
 		this.resetPart()
@@ -255,16 +272,108 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 		// console.log(total);
 	}
 	onChangeQty(value: number) {
+		let kdProduk = this.formGroup.get('namaProduk').value.kdProduk
+		let kdSatuan = this.formGroup.get('satuan').value.id
+		if (kdSatuan) {
+			this.httpService.get('master/mapproduktosatuan/get?produkfk=' + kdProduk
+				+ '&satuantujuanfk=' + kdSatuan).subscribe(res => {
+					if (res.data.length > 0) {
+						this.formGroup.get('konversi').setValue(parseFloat(this.formGroup.get('qtyProduk').value) * parseFloat(res.data[0].hasilkonversi))
+					} else {
+						this.formGroup.get('konversi').setValue(1)
+					}
+				}, error => {
+
+				})
+		}
+
 		let hargaSatuan = this.formGroup.get('hargaSatuan').value
 		let total = hargaSatuan * value
 		this.formGroup.get('total').setValue(total)
+
 		// console.log(total);
+	}
+	changeSatuan(e) {
+		let kdProduk = this.formGroup.get('namaProduk').value.kdProduk
+		let kdSatuan = this.formGroup.get('satuan').value.id
+		this.getMapSatuan(kdSatuan, kdProduk)
+		// this.httpService.get('master/mapproduktosatuan/get?produkfk=' + kdProduk
+		// 	+ '&satuantujuanfk=' + kdSatuan).subscribe(res => {
+		// 		if (res.data.length > 0) {
+
+		// 			this.formGroup.get('konversi').setValue(parseFloat(this.formGroup.get('qtyProduk').value) * parseFloat(res.data[0].hasilkonversi))
+		// 		} else {
+		// 			this.formGroup.get('konversi').setValue(1)
+		// 		}
+		// 	}, error => {
+
+		// 	})
 	}
 	setValueKdSatuan() {
 		this.formGroup.get('kdProduk').setValue(this.formGroup.get('namaProduk').value.kdProduk)
-		this.formGroup.get('kdSatuan').setValue(this.formGroup.get('namaProduk').value.kdSatuan)
-	}
+		this.formGroup.get('satuan').setValue({
+			id: this.formGroup.get('namaProduk').value.kdSatuan,
+			namaSatuan: this.formGroup.get('namaProduk').value.namaSatuan
+		})
+		this.getMapSatuan(null, this.formGroup.get('namaProduk').value.kdProduk)
+		// this.httpService.get('master/mapproduktosatuan/get?produkfk=' + this.formGroup.get('namaProduk').value.kdProduk).subscribe(res => {
+		// 	if (res.data.length > 0) {
+		// 		this.listSatuan = [];
+		// 		this.listSatuan.push({ label: '--Pilih Satuan--', value: null });
+		// 		res.data.forEach(response => {
+		// 			this.listSatuan.push({ label: response.satuantujuan, value: response.satuantujuanfk });
+		// 		});
+		// 		this.formGroup.get('konversi').setValue(parseFloat(this.formGroup.get('qtyProduk').value) * parseFloat(res.data[0].hasilkonversi))
+		// 	} else {
+		// 		this.listSatuan = [];
+		// 		this.listSatuan.push({ label: '--Pilih Satuan--', value: null });
+		// 		this.formGroup.get('konversi').setValue(1)
+		// 	}
+		// }, error => {
 
+		// })
+
+
+
+	}
+	getMapSatuan(kdSatuan, kdProduk) {
+		if (!kdSatuan)
+			kdSatuan = ''
+		if (!kdProduk)
+			kdProduk = ''
+		this.httpService.get('master/mapproduktosatuan/get?produkfk=' + kdProduk
+			+ '&satuantujuanfk=' + kdSatuan).subscribe(res => {
+				if (res.data.length > 0) {
+					this.listSatuan = [];
+					this.listSatuan.push({ label: '--Pilih Satuan--', value: null });
+					res.data.forEach(response => {
+						this.listSatuan.push({
+							label: response.satuantujuan, value: {
+								id: response.satuantujuanfk,
+								namaSatuan: response.satuantujuan
+							}
+						});
+
+					});
+					for (let i = 0; i < res.data.length; i++) {
+						const element = res.data[i];
+						if (this.formGroup.get('satuan').value.id &&
+							element.satuantujuanfk == this.formGroup.get('satuan').value.id) {
+							this.formGroup.get('konversi').setValue(
+								parseFloat(this.formGroup.get('qtyProduk').value) * parseFloat(element.hasilkonversi)
+							)
+							break
+						}
+					}
+				} else {
+					this.listSatuan = [];
+					this.listSatuan.push({ label: '--Pilih Satuan--', value: null });
+					this.formGroup.get('konversi').setValue(1)
+				}
+			}, error => {
+
+			})
+	}
 	onRowSelect(event) {
 		let e = event.data
 		this.nomor = e.no
@@ -273,7 +382,12 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 			namaProduk: e.namaProduk, kdProduk: e.kdProduk,
 			kdSatuan: e.kdSatuan, namaSatuan: e.namaSatuan
 		});
-		this.formGroup.get('kdSatuan').setValue(e.kdSatuan);
+		this.getMapSatuan(null, e.kdProduk)
+
+		this.formGroup.get('satuan').setValue({
+			id: e.satuanterimafk,
+			namaSatuan: e.namaSatuan,
+		});
 		this.formGroup.get('qtyProduk').setValue(e.qtyProduk);
 		this.formGroup.get('hargaSatuan').setValue(e.hargaSatuan);
 		this.formGroup.get('hargaJual').setValue(e.hargaJual);
@@ -299,6 +413,8 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 		}
 
 		let jsonSave = {
+			'isAutoNoTerima': this.formGroup.get('isAutoNoTerima').value,
+			'isAutoNoFaktur': this.formGroup.get('isAutoNoFaktur').value,
 			'penerimaan': this.formGroup.value,
 			'details': this.tempDataGrid
 		}

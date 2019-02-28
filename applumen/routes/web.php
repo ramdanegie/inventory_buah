@@ -116,7 +116,7 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 
 	});
 
-	$app->group(['prefix' => 'transaksi/', 'middleware' => 'authentication'], function ($app) {
+	$app->group(['prefix' => 'transaksi/'/*, 'middleware' => 'authentication']*/],function ($app) {
 		/** Penerimaan Barang */
 		$app->get('penerimaan/get-list-data', 'Transaksi\PenerimaanBarangController@getListCombo');
 		$app->post('penerimaan/save-penerimaan', 'Transaksi\PenerimaanBarangController@savePenerimaan');

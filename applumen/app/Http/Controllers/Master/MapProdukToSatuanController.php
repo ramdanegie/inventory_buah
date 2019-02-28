@@ -28,8 +28,15 @@ class  MapProdukToSatuanController extends Controller
 			->leftjoin('satuanstandard_m as ss','ss.id','=','prd.satuanstandardfk')
 			->select('mp.*','sa.satuanstandard as satuanasal','st.satuanstandard as satuantujuan',
 				'prd.namaproduk','ss.id as satuanprodukfk','ss.satuanstandard as satuanproduk')
-			->where('mp.statusenabled',true)
-			->get();
+			->where('mp.statusenabled',true);
+		if(isset($request['produkfk']) && $request['produkfk']!= ''){
+			$data = $data->where('prd.id','=',$request['produkfk']);
+		}
+		if(isset($request['satuantujuanfk']) && $request['satuantujuanfk']!= ''){
+			$data = $data->where('st.id','=',$request['satuantujuanfk']);
+		}
+
+		$data = $data->get();
 		$result['data'] = $data;
 		$result['status'] = 200;
 		$result['as'] = "ramdanegie";

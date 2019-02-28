@@ -10,13 +10,21 @@
       <div class="ui-g-12">
         <p-fieldset legend="Data Penerimaan" [toggleable]="true">
           <div class="ui-g-4">
-            <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-9">
               <label class="label-web-profile" for="input">No Penerimaan </label>
               <input type="text" formControlName="noPenerimaan" pInputText />
             </div>
-            <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-3" style="margin-top:20px">
+              <p-checkbox formControlName="isAutoNoTerima" (click)="autoNoTerima()" binary="true" label="Otomatis">
+              </p-checkbox>
+            </div>
+            <div class="ui-g-12 ui-md-9">
               <label class="label-web-profile" for="input">No Faktur </label>
               <input type="text" formControlName="noFaktur" pInputText />
+            </div>
+            <div class="ui-g-12 ui-md-3" style="margin-top:20px">
+              <p-checkbox formControlName="isAutoNoFaktur" (click)="autoNoFaktur()" binary="true" label="Otomatis">
+              </p-checkbox>
             </div>
           </div>
           <div class="ui-g-4">
@@ -51,7 +59,7 @@
       <div class="ui-g-12">
         <p-fieldset legend="Produk" [toggleable]="true">
           <div class="ui-g-12">
-            <div class="ui-g-12 ui-md-1">
+            <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Kode Produk </label>
               <input type="text" formControlName="kdProduk" pInputText disabled />
             </div>
@@ -67,8 +75,13 @@
             </div>
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Satuan </label>
-              <p-dropdown formControlName="kdSatuan" [options]="listSatuan" [filter]="true" [autoWidth]="false">
+              <p-dropdown formControlName="satuan" [options]="listSatuan" [filter]="true" [autoWidth]="false"
+                (onChange)="changeSatuan(kdSatuan)">
               </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-1">
+              <label class=" label-web-profile" for="input">Konversi </label>
+              <input type="number" formControlName="konversi" pInputText disabled="true" />
             </div>
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Harga Satuan </label>
@@ -102,8 +115,8 @@
               <p-column field="no" header="No" [style]="{'width':'30px'}"></p-column>
               <p-column field="kdProduk" header="Kode Produk"></p-column>
               <p-column field="namaProduk" header="Nama Produk"></p-column>
-              <p-column field="namaSatuan" header="Satuan"></p-column>
               <p-column field="qtyProduk" header="Qty Produk"></p-column>
+              <p-column field="namaSatuan" header="Satuan"></p-column>
               <p-column field="hargaSatuan" header="Harga Satuan"></p-column>
               <p-column field="hargaJual" header="Harga Jual"></p-column>
               <p-column field="total" header="Total"></p-column>

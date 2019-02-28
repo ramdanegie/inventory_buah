@@ -14,16 +14,23 @@
               (onChange)="setValueKdSatuan()">
               </p-dropdown>
             </div>
-            <div class="ui-g-12 ui-md-3">
-              <label class="label-web-profile" for="input">Satuan Asal </label>
-              <p-dropdown formControlName="kdSatuanAsal" [options]="listSatuan" [filter]="true" [autoWidth]="false">
-              </p-dropdown>
-            </div>
+          
             <div class="ui-g-12 ui-md-3">
               <label class="label-web-profile" for="input">Satuan Tujuan </label>
               <p-dropdown formControlName="kdSatuanTujuan" [options]="listSatuan" [filter]="true" [autoWidth]="false">
               </p-dropdown>
             </div>
+            <!-- <div class="ui-g-12 ui-md-1">
+              <label class="label-web-profile" for="input">Jml </label>
+              <input type="number" formControlName="asalKonversi"  pKeyFilter="number" pInputText disabled="true"/>
+            </div> -->
+            <div class="ui-g-12 ui-md-3">
+              <label class="label-web-profile" for="input">Satuan Asal  </label>
+              <p-dropdown formControlName="kdSatuanAsal" [options]="listSatuan" [filter]="true" [autoWidth]="false" disabled="true">
+              </p-dropdown>
+            </div>
+         
+           
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Hasil Konversi </label>
               <input type="number" formControlName="hasilKonversi"  pKeyFilter="number" pInputText />
