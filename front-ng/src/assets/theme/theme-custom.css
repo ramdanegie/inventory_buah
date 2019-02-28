@@ -263,10 +263,15 @@ body .ui-inputtext {
     transition: background-color 0.3s;
     padding: 2px 0; }
     body .ui-button:enabled:hover {
-      background-color: #574278; }
+      background-color: #8d46dd; }
     body .ui-button:enabled:focus {
-      outline: 0 none;
-      background-color: #574278; }
+      border: 1px solid #C9A8FD;
+      outline: 0;
+      -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      -moz-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      /* outline: 0 none; */
+      background-color: #985edb; }
     body .ui-button:enabled:active {
       background-color: #3e3e3d; }
     body .ui-button.ui-button-text-only .ui-button-text {
@@ -1453,16 +1458,19 @@ body .ui-datatable .ui-datatable-thead > tr > th {
   font-family: 'Source Sans Pro','Helvetica Neue','sans-serif';
 }
 body .ui-datatable .ui-datatable-tfoot > tr > td {
-  background-color: #f00;
+  background-color: #ffffff;
   padding: 1px 2px 3px 3px !important;
-  color: #000000 !important;
+  /* color: #000000 !important; */
+  color: #3e3e3d;
   border-right: 0;
   border-top: 0;
-  border-bottom: 1px solid #a0a0a0;
+  border-bottom: 1px solid white;
   border-left: 0;
   text-align: left;
-  font-size: 12px;
-  font-family: 'gadugibold';
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0.5em 1em;
+  font-family: 'Source Sans Pro','Helvetica Neue','sans-serif';
 }
   body .ui-datatable .ui-datatable-thead > tr > th.ui-sortable-column:not(.ui-state-active):hover {
     background-color: #d1d1d1; }
@@ -1476,11 +1484,12 @@ body .ui-datatable .ui-datatable-tfoot > tr > td {
       background-color: #ea6153; }
   body .ui-datatable .ui-datatable-thead > tr > th .ui-column-title {
     font-weight: 700; }
-body .ui-datatable .ui-datatable-tfoot > tr > td {
-  background-color: #ffffff;
-  padding: 0.5em 1em;
+/* body .ui-datatable .ui-datatable-tfoot > tr > td { */
+  /* background-color: #ffffff; */
+  /* padding: 0.5em 1em; */
   /*border-color: #eaeaea;*/
-  color: red; }
+  /* color: red;  */
+/* } */
 body .ui-datatable .ui-datatable-data tr.ui-datatable-even {
   background-color: #ffffff;
   border-right: 1px solid #ffffff;

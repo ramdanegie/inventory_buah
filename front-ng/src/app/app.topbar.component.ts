@@ -61,6 +61,6 @@ export class AppTopBarComponent {
         var el: HTMLElement = document.getElementById('timer');
 
         this.jamSekarang = new Date()//tgl + ' ' + jam
-        console.log(this.jamSekarang)
+        // console.log(this.jamSekarang)
     }
 }

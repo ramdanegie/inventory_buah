@@ -22,11 +22,13 @@ export class AppMenuComponent implements OnInit {
     core: {}
     dashboard: {};
     setting: {};
+    profile: {}
     constructor(public app: AppComponent,
         private http: HttpClient
     ) { }
 
     ngOnInit() {
+
         this.dashboard = [{ label: 'Dashboard', icon: 'fa fa-fw fa-home', routerLink: ['/'] }];
         // this.setting = [{ label: 'Tes Page', icon: 'fa fa-fw fa-sitemap', routerLink: ['/empty'] }];
         this.core = [
@@ -53,8 +55,11 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Transaksi', icon: 'fa fa-fw fa-gg',
                 items: [
-                    { label: 'Penerimaan Barang Supplier', icon: 'fa fa-fw fa-table', routerLink: ['/penerimaan-barang-supplier'] },
+                    { label: 'Penerimaan Barang Supplier', icon: 'fa fa-fw fa-gift', routerLink: ['/penerimaan-barang-supplier'] },
                     { label: 'Daftar Penerimaan', icon: 'fa fa-fw fa-table', routerLink: ['/daftar-penerimaan-barang-supplier'] },
+                    { label: 'Transaksi Penjualan', icon: 'fa fa-fw fa-shopping-cart', routerLink: ['/transaksi-penjualan'] },
+                    { label: 'Daftar Penjualan', icon: 'fa fa-fw fa-first-order', routerLink: ['/daftar-penjualan'] },
+           
                 ]
             },
             {

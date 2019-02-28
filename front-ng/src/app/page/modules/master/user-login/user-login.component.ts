@@ -16,7 +16,6 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 	providers: [ConfirmationService]
 })
 export class UserLoginComponent implements OnInit {
-	show:boolean;
 	// item: UserLogin = new InisialUserLogin();
 	item: any = {};
 	formGroup: FormGroup;
@@ -37,8 +36,7 @@ export class UserLoginComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-		this.show = true
-		this.httpService.showLoader()
+		// this.httpService.showLoader()
 		
 		this.formGroup = this.fb.group({
 			'idUser': new FormControl(null),

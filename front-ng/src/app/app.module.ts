@@ -40,7 +40,6 @@ import { pagesAuth } from './page/auth';
 import { ComponentMaster, ServiceMaster } from './page/modules';
 import { ProdukComponent } from './page/modules/master/produk/produk.component';
 
-
 // import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 @NgModule({
     imports: [
@@ -68,6 +67,7 @@ import { ProdukComponent } from './page/modules/master/produk/produk.component';
         // ...globalComps,
         ...pagesAuth,
         ProdukComponent,
+
   
         // ...pagesMaster,
         // ...demos,

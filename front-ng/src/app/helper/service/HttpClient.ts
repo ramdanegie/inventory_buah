@@ -184,7 +184,7 @@ export class HttpClient implements OnDestroy {
 
   capitalizeContentJSON(data) {
     for (var key in data) {
-      console.log(key);
+      // console.log(key);
       if (data.hasOwnProperty(key)) {
         if (data[key] == null || data[key] == '') {
           // DO NOTHING
@@ -222,7 +222,7 @@ export class HttpClient implements OnDestroy {
     const headers = new Headers();
     this.createAuthorizationHeader(headers, tokenSuper);
     const options = new RequestOptions({ headers: headers, withCredentials: false });
-    console.log(JSON.stringify(data));
+    // console.log(JSON.stringify(data));
     return this.http.post(Configuration.get().apiBackend + url, data, options)
       .map((res: Response) => {
         this.responseSuccess(res);
@@ -251,7 +251,7 @@ export class HttpClient implements OnDestroy {
     const headers = new Headers();
     this.createAuthorizationHeader(headers, tokenSuper);
     const options = new RequestOptions({ headers: headers, withCredentials: false });
-    console.log(JSON.stringify(data));
+    // console.log(JSON.stringify(data));
     return this.http.put(Configuration.get().apiBackend + url, data, options)
       .map((res: Response) => {
         // debugger;
