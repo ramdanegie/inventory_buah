@@ -52,13 +52,13 @@
               {{index}}
             </ng-template>
           </p-column>
-          <p-column field="nopenerimaan" header="No Penerimaan"></p-column>
-          <p-column field="nofaktur" header="Nomor Faktur"></p-column>
-          <p-column field="tgltransaksi" header="Tgl Penerimaan"></p-column>
-          <p-column field="jenistransaksi" header="Jenis Transaksi"></p-column>
-          <p-column field="namasupplier" header="Nama Supplier"></p-column>
-          <p-column field="namapenerima" header="Pegawai Penerima"></p-column>
-          <p-column field="total" header="Total" [style]="{'text-align':'right'}"></p-column>
+          <p-column field="nopenerimaan" header="No Penerimaan" [sortable]="true"></p-column>
+          <p-column field="nofaktur" header="Nomor Faktur" [sortable]="true"></p-column>
+          <p-column field="tgltransaksi" header="Tgl Penerimaan" [sortable]="true"></p-column>
+          <p-column field="jenistransaksi" header="Jenis Transaksi" [sortable]="true"></p-column>
+          <p-column field="namasupplier" header="Nama Supplier" [sortable]="true"></p-column>
+          <p-column field="namapenerima" header="Pegawai Penerima" [sortable]="true"></p-column>
+          <p-column field="total" header="Total" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
           <ng-template let-abc pTemplate="rowexpansion">
             <p-dataTable [value]="abc.details" scrollable="true">
               <p-column field="namaproduk" header="Produk" [style]="{'text-align':'left'}"></p-column>

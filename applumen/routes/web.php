@@ -124,12 +124,14 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->post('penerimaan/save-penerimaan', 'Transaksi\PenerimaanBarangController@savePenerimaan');
 		$app->get('penerimaan/get-daftar-penerimaan', 'Transaksi\PenerimaanBarangController@getDaftarPenerimaanSuplier');
 		$app->post('penerimaan/delete-penerimaan', 'Transaksi\PenerimaanBarangController@hapusPenerimaan');
+		$app->get('penerimaan/get-penerimaan-ada-stok', 'Transaksi\PenerimaanBarangController@getPenerimaanAvailableStok');
 
 		/** Penjualan*/
 		$app->get('penjualan/get-stok-produk', 'Transaksi\PenjualanController@getStokProduk');
 		$app->post('penjualan/save-penjualan', 'Transaksi\PenjualanController@savePenjualan');
 		$app->get('penjualan/get-penjualan', 'Transaksi\PenjualanController@getDaftarPenjualan');
 		$app->post('penjualan/delete-penjualan', 'Transaksi\PenjualanController@hapusPenjualan');
+		$app->get('penjualan/get-stok-produk-by-noterima', 'Transaksi\PenjualanController@getStokByNoterima');
 	});
 
 	/* Master */

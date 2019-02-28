@@ -22,6 +22,7 @@ export class TransaksiPenjualanComponent implements OnInit {
   listPegawai: SelectItem[];
   listSatuan: SelectItem[];
   listCustomer: SelectItem[];
+  listNoTerima: SelectItem[]
   now: any = new Date;
   tempDataGrid: any = [];
   dataSource: any[];
@@ -45,7 +46,7 @@ export class TransaksiPenjualanComponent implements OnInit {
     this.formGroup = this.fb.group({
       'noRec': new FormControl(null),
       'noTransaksi': new FormControl(null),
-      'noTerima': new FormControl(null),
+      'noRecTerima': new FormControl(null),
       'tglTransaksi': new FormControl(this.now),
       'kdToko': new FormControl(null),
       'kdPegawai': new FormControl(null),
@@ -83,8 +84,8 @@ export class TransaksiPenjualanComponent implements OnInit {
           'kdProduk': element.produkfk,
           'namaProduk': element.namaproduk,
           'qtyProduk': element.qty,
-          'namaSatuan': element.satuanstandard,
-          'kdSatuan': element.satuanfk,
+          'namaSatuan': element.satuanjual,
+          'kdSatuan': element.satuanjualfk,
           'hargaJual': element.hargajual,
           'hargaDiskon': element.hargadiskon,
           'total': element.total,
@@ -131,12 +132,6 @@ export class TransaksiPenjualanComponent implements OnInit {
         });
       });
 
-      this.listSatuan = [];
-      this.listSatuan.push({ label: '--Pilih Satuan--', value: null });
-      getData.satuan.forEach(response => {
-        this.listSatuan.push({ label: response.satuanstandard, value: response.id });
-      });
-
 
     }, error => {
       this.alertService.error('Error', 'Terjadi kesalahan saat loading data');
@@ -164,8 +159,9 @@ export class TransaksiPenjualanComponent implements OnInit {
     this.formGroup.get('hargaDiskon').setValue(0);
     this.formGroup.get('tglTransaksi').setValue(this.now);
     this.tempDataGrid = []
-    this.dataSource =  this.tempDataGrid 
+    this.dataSource = this.tempDataGrid
     this.subTotal = 0
+    this.nomor = undefined
   }
   resetPart() {
     this.formGroup.get('produk').reset();
@@ -176,6 +172,7 @@ export class TransaksiPenjualanComponent implements OnInit {
     this.formGroup.get('hargaDiskon').setValue(0);
     this.formGroup.get('stok').setValue(0);
     this.formGroup.get('konversi').setValue(0);
+    this.nomor = undefined
   }
 
   tambah() {
@@ -217,13 +214,13 @@ export class TransaksiPenjualanComponent implements OnInit {
           data.kdProduk = produk.kdProduk
           data.namaProduk = produk.namaProduk
           data.qtyProduk = qtyProduk
-          data.namaSatuan = produk.namaSatuan
-          data.kdSatuan = produk.kdSatuan
+          data.namaSatuan = kdSatuan.namaSatuan
+          data.kdSatuan = kdSatuan.id
           data.hargaJual = hargaJual
           data.hargaDiskon = hargaDiskon
           data.total = total
           data.konversi = konversi
-          data.strukpenerimaanfk = this.noRecTerima
+          data.strukpenerimaanfk = this.formGroup.get('noRecTerima').value
 
           this.tempDataGrid[i] = data;
           this.dataSource = this.tempDataGrid
@@ -240,13 +237,13 @@ export class TransaksiPenjualanComponent implements OnInit {
         'kdProduk': produk.kdProduk,
         'namaProduk': produk.namaProduk,
         'qtyProduk': qtyProduk,
-        'namaSatuan': produk.namaSatuan,
-        'kdSatuan': produk.kdSatuan,
+        'namaSatuan': kdSatuan.namaSatuan,
+        'kdSatuan': kdSatuan.id,
         'hargaJual': hargaJual,
         'hargaDiskon': hargaDiskon,
         'total': total,
         'konversi': konversi,
-        'strukpenerimaanfk': this.noRecTerima
+        'strukpenerimaanfk': this.formGroup.get('noRecTerima').value
       }
       this.tempDataGrid.push(data)
       this.dataSource = this.tempDataGrid
@@ -299,55 +296,46 @@ export class TransaksiPenjualanComponent implements OnInit {
       this.formGroup.get('qtyProduk').setValue(0)
       return
     }
-    // let hargaSatuan = this.formGroup.get('hargaJual').value
-    // let diskon = this.formGroup.get('hargaDiskon').value
-    // let total = (hargaSatuan * value) - diskon
-    // this.formGroup.get('total').setValue(total)
-
-    let qtyProduk: any = this.formGroup.get('qtyProduk').value
-    let ada = false;
-    for (let i = 0; i < this.dataProdukDetail.length; i++) {
-      ada = false
-      if ((qtyProduk * parseFloat(this.formGroup.get('konversi').value))
-        <= parseFloat(this.dataProdukDetail[i].qtyproduk)) {
-        this.hargaJual = Math.round(parseFloat(this.dataProdukDetail[i].hargajual) * parseFloat(this.formGroup.get('konversi').value))
-
-        this.formGroup.get('hargaJual').setValue(this.hargaJual)
-        this.formGroup.get('total').setValue(value * parseFloat(this.hargaJual))
-        this.noRecTerima = this.dataProdukDetail[i].norec_terima
-        ada = true;
-        break;
-      }
-    }
-    if (ada == false) {
-      this.formGroup.get('hargaJual').setValue(0);
-      this.formGroup.get('total').setValue(0);
-      this.formGroup.get('hargaDiskon').setValue(0);
-
-      this.noRecTerima = ''
-      if (this.dataProdukDetail.length > 1) {
-        let stt = 'false'
-        this.confirmationService.confirm({
-          message: 'Yakin mau menyimpan data?',
-          accept: () => {
-            let objSave =
-            {
-              'produkfk': this.formGroup.get('produk').value.kdProduk,
-            }
-            this.httpService.post('', objSave).subscribe(res => {
-
-              this.resetPart()
-            }
-            )
+    let kdProduk = this.formGroup.get('produk').value.kdProduk
+    let kdSatuan = this.formGroup.get('kdSatuan').value.id
+    if (kdSatuan) {
+      this.httpService.get('master/mapproduktosatuan/get?produkfk=' + kdProduk
+        + '&satuantujuanfk=' + kdSatuan).subscribe(res => {
+          if (res.data.length > 0) {
+            this.formGroup.get('konversi').setValue(parseFloat(this.formGroup.get('qtyProduk').value) * parseFloat(res.data[0].hasilkonversi))
+          } else {
+            this.formGroup.get('konversi').setValue(1)
           }
-        })
-      }
-    }
-    if (this.formGroup.get('qtyProduk').value == 0) {
-      this.formGroup.get('hargaJual').setValue(0);
-    }
-  }
+        }, error => {
 
+        })
+    }
+    let hargaSatuan = this.formGroup.get('hargaJual').value
+    let diskon = this.formGroup.get('hargaDiskon').value
+    let total = (hargaSatuan * value) - diskon
+    this.formGroup.get('total').setValue(total)
+
+  }
+  onChangeSatuan(value) {
+    let kdProduk = this.formGroup.get('produk').value.kdProduk
+    let kdSatuan = this.formGroup.get('kdSatuan').value.id
+    if (kdSatuan) {
+      this.httpService.get('master/mapproduktosatuan/get?produkfk=' + kdProduk
+        + '&satuantujuanfk=' + kdSatuan).subscribe(res => {
+          if (res.data.length > 0) {
+            this.formGroup.get('konversi').setValue(parseFloat(this.formGroup.get('qtyProduk').value) * parseFloat(res.data[0].hasilkonversi))
+          } else {
+            this.formGroup.get('konversi').setValue(1)
+          }
+        }, error => {
+
+        })
+    }
+    let hargaSatuan = this.formGroup.get('hargaJual').value
+    let diskon = this.formGroup.get('hargaDiskon').value
+    let total = (hargaSatuan * this.formGroup.get('qtyProduk').value) - diskon
+    this.formGroup.get('total').setValue(total)
+  }
   OnChangeDiskon(value: number) {
     let harga = this.formGroup.get('hargaJual').value
     let jml = this.formGroup.get('qtyProduk').value
@@ -355,13 +343,99 @@ export class TransaksiPenjualanComponent implements OnInit {
     this.formGroup.get('total').setValue(total)
     // console.log(total);
   }
-  setValueKdSatuan() {
-    // console.log(e)
-    // this.formGroup.get('kdProduk').setValue(this.formGroup.get('produk').value.kdProduk)
-    this.formGroup.get('kdSatuan').setValue(this.formGroup.get('produk').value.kdSatuan)
-    this.getKonversi()
+  getPenerimaan() {
+
+    let produk = this.formGroup.get('produk').value;
+    let norec = ''//this.formGroup.get('noRecTerima').value;
+    this.httpService.get("transaksi/penerimaan/get-penerimaan-ada-stok?" +
+      "produkfk=" + produk.kdProduk
+      + "&norecTerima="
+    ).subscribe(res => {
+      // this.dataProdukDetail = res.data
+      this.listNoTerima = [];
+      this.listNoTerima.push({ label: '--Pilih No Terima --', value: null });
+      res.data.forEach(response => {
+        this.listNoTerima.push({ label: response.nopenerimaan, value: response.norec });
+      });
+
+      // this.formGroup.get('stok').setValue(parseFloat(res.jmlstok))
+      // if (this.dataProdukDetail.length > 0) {
+      //   this.formGroup.get('noRecTerima').setValue(this.dataProdukDetail[0].nopenerimaan)
+      //   this.formGroup.get('hargaJual').setValue(parseFloat(this.dataProdukDetail[0].hargajual))
+      // }
+      this.getStok()
+    }, error => {
+      this.listNoTerima = [];
+      this.listNoTerima.push({ label: '--Data tidak ada --', value: null });
+    })
+
+    this.getMapSatuan(null, produk.kdProduk)
+
   }
 
+  getMapSatuan(kdSatuan, kdProduk) {
+    if (!kdSatuan)
+      kdSatuan = ''
+    if (!kdProduk)
+      kdProduk = ''
+    this.httpService.get('master/mapproduktosatuan/get?produkfk=' + kdProduk
+      + '&satuantujuanfk=' + kdSatuan).subscribe(res => {
+        if (res.data.length > 0) {
+          this.listSatuan = [];
+          this.listSatuan.push({ label: '--Pilih Satuan--', value: null });
+          res.data.forEach(response => {
+            this.listSatuan.push({
+              label: response.satuantujuan, value: {
+                id: response.satuantujuanfk,
+                namaSatuan: response.satuantujuan
+              }
+            });
+
+          });
+          this.formGroup.get('kdSatuan').setValue(
+            {
+              id: this.formGroup.get('produk').value.kdSatuan,
+              namaSatuan: this.formGroup.get('produk').value.namaSatuan,
+            }
+          )
+          for (let i = 0; i < res.data.length; i++) {
+            const element = res.data[i];
+            if (this.formGroup.get('kdSatuan').value.id &&
+              element.satuantujuanfk == this.formGroup.get('kdSatuan').value.id) {
+              this.formGroup.get('konversi').setValue(
+                parseFloat(this.formGroup.get('qtyProduk').value) * parseFloat(element.hasilkonversi)
+              )
+              break
+            }
+          }
+        } else {
+          this.listSatuan = [];
+          this.listSatuan.push({ label: '--Pilih Satuan--', value: null });
+          this.formGroup.get('konversi').setValue(1)
+        }
+      }, error => {
+
+      })
+  }
+  getStok() {
+
+    // this.formGroup.get('kdSatuan').setValue(this.formGroup.get('produk').value.kdSatuan)
+    let produk = this.formGroup.get('produk').value;
+    let norec = this.formGroup.get('noRecTerima').value;
+    this.httpService.get("transaksi/penerimaan/get-penerimaan-ada-stok?" +
+      "produkfk=" + produk.kdProduk
+      + "&norecTerima=" + norec
+    ).subscribe(res => {
+      this.dataProdukDetail = res.data
+      this.formGroup.get('stok').setValue(parseFloat(res.stok))
+      if (this.dataProdukDetail.length > 0) {
+        // this.formGroup.get('noRecTerima').setValue(this.dataProdukDetail[0].nopenerimaan)
+        this.formGroup.get('hargaJual').setValue(parseFloat(this.dataProdukDetail[0].hargajual))
+      }
+    }, error => {
+
+    })
+  }
   onRowSelect(event) {
     let e = event.data
     this.nomor = e.no
@@ -369,13 +443,23 @@ export class TransaksiPenjualanComponent implements OnInit {
       namaProduk: e.namaProduk, kdProduk: e.kdProduk,
       kdSatuan: e.kdSatuan, namaSatuan: e.namaSatuan
     });
-    this.getKonversi()
-    this.formGroup.get('kdSatuan').setValue(e.kdSatuan);
+    this.getMapSatuan(null, e.kdProduk)
+    this.getPenerimaan()
+
+    // this.formGroup.get('satuan').setValue({
+    // 	id: e.satuanterimafk,
+    // 	namaSatuan: e.namaSatuan,
+    // });
+    this.formGroup.get('kdSatuan').setValue({
+      id: e.kdSatuan,
+      namaSatuan: e.namaSatuan
+    });
     this.formGroup.get('qtyProduk').setValue(e.qtyProduk);
     this.formGroup.get('hargaJual').setValue(e.hargaJual);
     this.formGroup.get('hargaDiskon').setValue(e.hargaDiskon);
     this.formGroup.get('konversi').setValue(e.konversi);
-    this.noRecTerima = e.strukpenerimaanfk
+    // this.noRecTerima =
+    this.formGroup.get('noRecTerima').setValue(e.strukpenerimaanfk)
     this.formGroup.get('total').setValue(e.total);
 
   }
@@ -399,14 +483,14 @@ export class TransaksiPenjualanComponent implements OnInit {
 
     let jsonSave = {
       'penjualan': this.formGroup.value,
-      'detail' : this.tempDataGrid,
+      'detail': this.tempDataGrid,
     }
     this.confirmationService.confirm({
       message: 'Yakin mau menyimpan data?',
       accept: () => {
         this.httpService.post('transaksi/penjualan/save-penjualan', jsonSave).subscribe(res => {
           this.resetAll()
-          
+
         }, error => {
 
         })
@@ -414,23 +498,22 @@ export class TransaksiPenjualanComponent implements OnInit {
     })
 
   }
-  getKonversi() {
-    // debugger
-    this.formGroup.get('konversi').setValue(1)
-    let produk = this.formGroup.get('produk').value;
-    this.httpService.get("transaksi/penjualan/get-stok-produk?" +
-      "produkfk=" + produk.kdProduk).subscribe(res => {
-        this.dataProdukDetail = res.detail
-        this.formGroup.get('stok').setValue(parseFloat(res.jmlstok))
-        if (this.dataProdukDetail.length > 0) {
-          this.formGroup.get('noTerima').setValue(this.dataProdukDetail[0].nopenerimaan)
-          this.formGroup.get('hargaJual').setValue(parseFloat(this.dataProdukDetail[0].hargajual))
-        }
-      }, error => {
+  // getKonversi() {
+  //   this.formGroup.get('konversi').setValue(1)
+  //   let produk = this.formGroup.get('produk').value;
+  //   this.httpService.get("transaksi/penjualan/get-stok-produk?" +
+  //     "produkfk=" + produk.kdProduk).subscribe(res => {
+  //       this.dataProdukDetail = res.detail
+  //       this.formGroup.get('stok').setValue(parseFloat(res.jmlstok))
+  //       if (this.dataProdukDetail.length > 0) {
+  //         this.formGroup.get('noRecTerima').setValue(this.dataProdukDetail[0].nopenerimaan)
+  //         this.formGroup.get('hargaJual').setValue(parseFloat(this.dataProdukDetail[0].hargajual))
+  //       }
+  //     }, error => {
 
-      })
+  //     })
 
-  }
+  // }
 
 }
 

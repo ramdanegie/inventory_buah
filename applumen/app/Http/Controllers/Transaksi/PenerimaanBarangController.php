@@ -74,7 +74,7 @@ class  PenerimaanBarangController extends Controller
 			$isAutoNoTerima =  $request['isAutoNoTerima'];
 			$isAutoNoFaktur =  $request['isAutoNoFaktur'];
 			if($isAutoNoFaktur == true){
-				$maxNoFaktur = $this->getNewCode( 'nofaktur', 12, 'FS'.date('ym'));
+				$maxNoFaktur = $this->getNewCode( 'nofaktur', 12, 'FK'.date('ym'));
 				if ($maxNoFaktur == ''){
 					DB::rollBack();
 					$result = array(
@@ -90,7 +90,7 @@ class  PenerimaanBarangController extends Controller
 				$noFaktur = $req['noFaktur'];
 			}
 			if($isAutoNoTerima == true){
-				$maxNoTerima = $this->getNewCode( 'nopenerimaan', 12, 'FS'.date('ym'));
+				$maxNoTerima = $this->getNewCode( 'nopenerimaan', 12, 'TR'.date('ym'));
 				if ($maxNoTerima == ''){
 					DB::rollBack();
 					$result = array(
@@ -240,7 +240,8 @@ class  PenerimaanBarangController extends Controller
 			->LEFTJOIN('pegawai_m as pg', 'pg.id', '=', 'sp.pegawaifk')
 			->select('sp.norec','sp.tgltransaksi', 'sp.nopenerimaan', 'sp.nofaktur','jt.id as jenistransaksifk', 'jt.jenistransaksi', 'sp.tokofk', 'tk.namatoko',
 				'sp.supplierfk', 'sup.namasupplier','sp.pegawaifk', 'pg.namalengkap as namapenerima')
-			->where('sp.statusenabled',true);
+			->where('sp.statusenabled',true)
+			->orderBy('sp.tgltransaksi','desc');
 
 		if (isset($request['tglAwal']) && $request['tglAwal'] != "" && $request['tglAwal'] != "undefined") {
 			$data = $data->where('sp.tgltransaksi', '>=', $request['tglAwal']);
@@ -353,6 +354,48 @@ class  PenerimaanBarangController extends Controller
 		$result['data'] = $data;
 		$result['as'] = "ramdanegie";
 
+		return response()->json($result);
+	}
+
+	public function getPenerimaanAvailableStok (Request $request)
+	{
+		$kdProduk = $request['produkfk'];
+		$norecTerima = $request['norecTerima'];
+		if($norecTerima != '' ){
+			$details = DB::select(DB::raw("select sp.norec, sp.nopenerimaan,spt.norec as norec_stok,spt.produkfk,
+				pr.namaproduk,
+				spt.qty,spt.hargapenerimaan,spt.hargajual,spt.qtypenerimaan,
+				 spt.satuanterimafk,sss.satuanstandard as satuanterima,spt.konversi
+ 				from stokproduk_t as spt
+				join strukpenerimaan_t as sp on sp.norec= spt.strukpenerimaanfk
+				join produk_m as pr on pr.id= spt.produkfk
+				left join satuanstandard_m as sss on sss.id= spt.satuanterimafk
+				where spt.qty  > 0
+				and pr.id=$kdProduk
+				and sp.norec ='$norecTerima'
+		"));
+		}else{
+			$details = DB::select(DB::raw("select sp.norec, sp.nopenerimaan,spt.norec as norec_stok,spt.produkfk,
+				pr.namaproduk,
+				spt.qty,spt.hargapenerimaan,spt.hargajual,spt.qtypenerimaan,
+				 spt.satuanterimafk,sss.satuanstandard as satuanterima,spt.konversi
+ 				from stokproduk_t as spt
+				join strukpenerimaan_t as sp on sp.norec= spt.strukpenerimaanfk
+				join produk_m as pr on pr.id= spt.produkfk
+				left join satuanstandard_m as sss on sss.id= spt.satuanterimafk
+				where spt.qty  > 0
+				and pr.id=$kdProduk "));
+		}
+
+		$jmlstok =0;
+		foreach ($details as $item){
+			$jmlstok = $jmlstok + (float)$item->qty;
+		}
+		$result = array(
+			'stok' => $jmlstok,
+			'data' => $details,
+			'as' => 'ramdanegie'
+		);
 		return response()->json($result);
 	}
 }
