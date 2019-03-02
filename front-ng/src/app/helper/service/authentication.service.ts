@@ -38,7 +38,8 @@ export class Authentication {
       idPegawai: iKdPegawai,
       kdPegawai: iKdPegawai,
       pegawai: user.pegawai,
-      namaPerusahaan: ''
+      namaPerusahaan: '',
+      kelompokUser: user.kelompokUser
     };
     return userDTO;
   }

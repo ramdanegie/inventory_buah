@@ -4,7 +4,11 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/primeng';
 import { AppComponent } from './app.component';
-import { HttpClient } from './helper';
+import { HttpClient, AuthGuard } from './helper';
+import { Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 
 @Component({
     selector: 'app-menu',
@@ -24,57 +28,66 @@ export class AppMenuComponent implements OnInit {
     setting: {};
     profile: {}
     constructor(public app: AppComponent,
-        private http: HttpClient
-    ) { }
+        private http: HttpClient,
+        private service: Http,
+        private authGuard: AuthGuard,
+    ) {
+    }
+    public getJSON(): Observable<any> {
+        return this.service.get("assets/sidemenu/" + this.authGuard.getUserDto().kelompokUser + ".json")
+            .map(response => response.json())
+            .catch(e => { console.log(e); return Observable.of(e); })
+
+    }
 
     ngOnInit() {
-
+        this.getJSON().subscribe(data => this.core = data);
         this.dashboard = [{ label: 'Dashboard', icon: 'fa fa-fw fa-home', routerLink: ['/'] }];
         // this.setting = [{ label: 'Tes Page', icon: 'fa fa-fw fa-sitemap', routerLink: ['/empty'] }];
-        this.core = [
-            {
-                label: 'Master', icon: 'fa fa-fw fa-bars',
-                items: [
-                    { label: 'Alamat', icon: 'fa fa-fw fa-columns', routerLink: ['/alamat'] },
-                    { label: 'Customer', icon: 'fa fa-fw fa-code', routerLink: ['/customer'] },
-                    { label: 'Detail Jenis Produk', icon: 'fa fa-fw fa-table', routerLink: ['/detail-jenis-produk'] },
-                    { label: 'Jenis Kelamin', icon: 'fa fa-fw fa-list-alt', routerLink: ['/jenis-kelamin'] },
-                    { label: 'Jenis Produk', icon: 'fa fa-fw fa-square', routerLink: ['/jenis-produk'] },
-                    { label: 'Jenis Transaksi', icon: 'fa fa-fw fa-minus-square-o', routerLink: ['/jenis-transaksi'] },
-                    { label: 'Kelompok Produk', icon: 'fa fa-fw fa-circle-o-notch', routerLink: ['/kelompok-produk'] },
-                    { label: 'Kode Generate', icon: 'fa fa-fw fa-area-chart', routerLink: ['/kode-generate'] },
-                    { label: 'Map Produk To Satuan Standar', icon: 'fa fa-fw fa-arrow-circle-o-up', routerLink: ['/map-produk-to-satuan-standar'] },
-                    { label: 'Pegawai', icon: 'fa fa-fw fa-user-secret', routerLink: ['/pegawai'] },
-                    { label: 'Produk', icon: 'fa fa-fw fa-square-o', routerLink: ['/produk'] },
-                    { label: 'Satuan Standar', icon: 'fa fa-fw fa-sign-in', routerLink: ['/satuan-standar'] },
-                    // { label: 'Satuan Standar', icon: 'fa fa-fw fa-sign-in', url: 'assets/pages/login.html', target: '_blank' },
-                    { label: 'Supplier', icon: 'fa fa-fw fa-exclamation-circle', routerLink: ['/supplier'] },
-                    { label: 'Toko', icon: 'fa fa-fw fa-times', routerLink: ['/toko'] },
-                ]
-            },
-            {
-                label: 'Transaksi', icon: 'fa fa-fw fa-gg',
-                items: [
-                    { label: 'Penerimaan Barang Supplier', icon: 'fa fa-fw fa-gift', routerLink: ['/penerimaan-barang-supplier'] },
-                    { label: 'Daftar Penerimaan', icon: 'fa fa-fw fa-table', routerLink: ['/daftar-penerimaan-barang-supplier'] },
-                    { label: 'Transaksi Penjualan', icon: 'fa fa-fw fa-shopping-cart', routerLink: ['/transaksi-penjualan'] },
-                    { label: 'Daftar Penjualan', icon: 'fa fa-fw fa-first-order', routerLink: ['/daftar-penjualan'] },
-           
-                ]
-            },
-            {
-                label: 'Pengaturan', icon: 'fa fa-fw fa-wrench',
-                items: [
-                    {
-                        label: 'User', icon: 'fa fa-fw fa-user', items: [
-                            { label: 'Pegawai', icon: 'fa fa-fw fa-sign-in', routerLink: ['/pegawai'] },
-                            { label: 'Login', icon: 'fa fa-fw fa-key', routerLink: ['/user-login'] },
-                            { label: 'Kelompok User', icon: 'fa fa-fw fa-users', routerLink: ['/kelompok-user'] },
-                        ]
-                    },
-                    { label: 'Profile', icon: 'fa fa-fw fa-user-circle-o', routerLink: ['/profile'] },
-                ]
-            }];
+        // this.core = [
+        //     {
+        //         label: 'Master', icon: 'fa fa-fw fa-bars',
+        //         items: [
+        //             { label: 'Alamat', icon: 'fa fa-fw fa-columns', routerLink: ['/alamat'] },
+        //             { label: 'Customer', icon: 'fa fa-fw fa-code', routerLink: ['/customer'] },
+        //             { label: 'Detail Jenis Produk', icon: 'fa fa-fw fa-table', routerLink: ['/detail-jenis-produk'] },
+        //             { label: 'Jenis Kelamin', icon: 'fa fa-fw fa-list-alt', routerLink: ['/jenis-kelamin'] },
+        //             { label: 'Jenis Produk', icon: 'fa fa-fw fa-square', routerLink: ['/jenis-produk'] },
+        //             { label: 'Jenis Transaksi', icon: 'fa fa-fw fa-minus-square-o', routerLink: ['/jenis-transaksi'] },
+        //             { label: 'Kelompok Produk', icon: 'fa fa-fw fa-circle-o-notch', routerLink: ['/kelompok-produk'] },
+        //             { label: 'Kode Generate', icon: 'fa fa-fw fa-area-chart', routerLink: ['/kode-generate'] },
+        //             { label: 'Map Produk To Satuan Standar', icon: 'fa fa-fw fa-arrow-circle-o-up', routerLink: ['/map-produk-to-satuan-standar'] },
+        //             { label: 'Pegawai', icon: 'fa fa-fw fa-user-secret', routerLink: ['/pegawai'] },
+        //             { label: 'Produk', icon: 'fa fa-fw fa-square-o', routerLink: ['/produk'] },
+        //             { label: 'Satuan Standar', icon: 'fa fa-fw fa-sign-in', routerLink: ['/satuan-standar'] },
+        //             // { label: 'Satuan Standar', icon: 'fa fa-fw fa-sign-in', url: 'assets/pages/login.html', target: '_blank' },
+        //             { label: 'Supplier', icon: 'fa fa-fw fa-exclamation-circle', routerLink: ['/supplier'] },
+        //             { label: 'Toko', icon: 'fa fa-fw fa-times', routerLink: ['/toko'] },
+        //         ]    
+        //     },
+        //     {
+        //         label: 'Transaksi', icon: 'fa fa-fw fa-gg',
+        //         items: [
+        //             { label: 'Penerimaan Barang Supplier', icon: 'fa fa-fw fa-gift', routerLink: ['/penerimaan-barang-supplier'] },
+        //             { label: 'Daftar Penerimaan', icon: 'fa fa-fw fa-table', routerLink: ['/daftar-penerimaan-barang-supplier'] },
+        //             { label: 'Transaksi Penjualan', icon: 'fa fa-fw fa-shopping-cart', routerLink: ['/transaksi-penjualan'] },
+        //             { label: 'Daftar Penjualan', icon: 'fa fa-fw fa-first-order', routerLink: ['/daftar-penjualan'] },
+
+        //         ]
+        //     },
+        //     {
+        //         label: 'Pengaturan', icon: 'fa fa-fw fa-wrench',
+        //         items: [
+        //             {
+        //                 label: 'User', icon: 'fa fa-fw fa-user', items: [
+        //                     { label: 'Pegawai', icon: 'fa fa-fw fa-sign-in', routerLink: ['/pegawai'] },
+        //                     { label: 'Login', icon: 'fa fa-fw fa-key', routerLink: ['/user-login'] },
+        //                     { label: 'Kelompok User', icon: 'fa fa-fw fa-users', routerLink: ['/kelompok-user'] },
+        //                 ]
+        //             },
+        //             { label: 'Profile', icon: 'fa fa-fw fa-user-circle-o', routerLink: ['/profile'] },
+        //         ]
+        //     }];
         this.model = [
             { label: 'Dashboard', icon: 'fa fa-fw fa-home', routerLink: ['/'] },
             {

@@ -1,8 +1,7 @@
 
 // home
 export * from './home/dashboard/dashboard.component';
-// not found
-export * from './404/not-found.component';
+
 // master
 export * from './master/user-login/user-login.component';
 export * from './master/kelompok-user/kelompok-user.component';
@@ -26,6 +25,8 @@ export * from './transaksi/daftar-penerimaan-barang-supplier/daftar-penerimaan-b
 export * from './transaksi/transaksi-penjualan/transaksi-penjualan.component';
 export * from './transaksi/daftar-penjualan/daftar-penjualan.component';
 
+// not found
+export * from './404/not-found.component';
 import * as component from './';
 var Cmp = [];
 for (var key in component) {

@@ -39,10 +39,11 @@ class  LoginController extends Controller
 		$loginUser = $loginUser->get();
 		if($loginUser->count() > 0){
 			$idPegawai = $loginUser[0]->objectpegawaifk;
-			$result['kdUser'] = $loginUser[0]->id;;
-			$result['namaUser'] = $namaUser = $request->input('namaUser');;
-			$result['kataSandi'] = $password = $this->generateSHA1($request->input('kataSandi'));;
+			$result['kdUser'] = $loginUser[0]->id;
+			$result['namaUser'] = $namaUser = $request->input('namaUser');
+			$result['kataSandi'] = $password = $this->generateSHA1($request->input('kataSandi'));
 			$result['pegawai'] = $this->getPegawai($idPegawai,null);
+			$result['kelompokUser'] = $this->getKelompokUser($idPegawai, null);
 			$result['code'] = 200;
 			$result['token'] = $this->createToken($result['kdUser'], $result['namaUser'], $idPegawai).'';
 			$result['as'] = "ramdanegie";
@@ -133,6 +134,16 @@ class  LoginController extends Controller
 		}
 		return $this->setStatusCode($result['status'])->respond($result, $transMessage);
 	}
-
+	public function getKelompokUser($idPegawai, $kdProfile = null){
+		$kelompokuser = DB::table('kelompokuser_s as kl')
+			->join('loginuser_s as log','log.objectkelompokuserfk','=','kl.id')
+			->select('kl.*')
+			->where('log.objectpegawaifk','=',$idPegawai);
+		if($kdProfile){
+			$kelompokuser->where('kl.kdprofile','=', $kdProfile);
+		}
+		$kelompokuser = $kelompokuser->first();
+		return $kelompokuser->kelompokuser;
+	}
 
 }
