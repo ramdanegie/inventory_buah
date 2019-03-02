@@ -39,6 +39,7 @@ import { Http, HttpModule } from '@angular/http';
 import { pagesAuth } from './page/auth';
 import { ComponentMaster, ServiceMaster } from './page/modules';
 import { ProdukComponent } from './page/modules/master/produk/produk.component';
+import { PenerimaanBarangFixComponent } from './page/modules/transaksi/penerimaan-barang-fix/penerimaan-barang-fix.component';
 
 // import { LoadingPageModule, MaterialBarModule } from 'angular-loading-page';
 @NgModule({
@@ -67,6 +68,7 @@ import { ProdukComponent } from './page/modules/master/produk/produk.component';
         // ...globalComps,
         ...pagesAuth,
         ProdukComponent,
+        PenerimaanBarangFixComponent,
 
   
         // ...pagesMaster,
