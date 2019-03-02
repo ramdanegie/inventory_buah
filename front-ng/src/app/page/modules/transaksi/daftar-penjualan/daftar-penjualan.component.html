@@ -29,7 +29,7 @@
           </div>
           <div class="ui-g-12 ui-md-2">
             <label class="label-web-profile" for="input">Periode Awal </label>
-            <p-calendar formControlName="tglAwal" [defaultDate]="now" [showIcon]="true" [monthNavigator]="false"
+            <p-calendar formControlName="tglAwal" [showIcon]="true" [monthNavigator]="false"
               [yearNavigator]="false" yearRange="2000:2030" [showTime]="true">
             </p-calendar>
           </div>
@@ -68,8 +68,8 @@
           <ng-template let-abc pTemplate="rowexpansion">
             <p-dataTable [value]="abc.details" scrollable="true">
               <p-column field="namaproduk" header="Produk" [style]="{'text-align':'left'}"></p-column>
-              <p-column field="satuanstandard" header="Satuan" [style]="{'text-align':'left'}"></p-column>
               <p-column field="qty" header="Jumlah" [style]="{ 'text-align':'right'}"></p-column>
+              <p-column field="satuanstandard" header="Satuan" [style]="{'text-align':'left'}"></p-column>
               <p-column field="hargajual" header="Harga" [style]="{ 'text-align':'right'}"></p-column>
               <p-column field="hargadiskon" header="Diskon" [style]="{'text-align':'right'}"></p-column>
               <p-column field="total" header="Total" [style]="{ 'text-align':'right'}"></p-column>

@@ -100,7 +100,21 @@ class  PenjualanController extends Controller
 				$detail->hargadiskon = $item['hargaDiskon'];
 				$detail->tgltransaksi = date('Y-m-d H:i:s');
 				$detail->nilaikonversi = $item['konversi'];
+				$detail->satuanjualfk = $item['kdSatuan'];
+
 				$detail->save();
+
+				//region Pengurangan Stok
+
+				$stokProduk = StokProduk_T::where('strukpenerimaanfk',$item['strukpenerimaanfk'])
+					->first();
+
+				$jmlStok = (float) $stokProduk->qty - (float)$item['konversi'];
+				StokProduk_T::where('strukpenerimaanfk',$item['strukpenerimaanfk'])
+					->update([
+						'qty' => $jmlStok
+					]);
+				//endregion
 			}
 
 			$transStatus = 'true';
@@ -137,7 +151,8 @@ class  PenjualanController extends Controller
 			->LEFTJOIN('pegawai_m as pg', 'pg.id', '=', 'sp.pegawaifk')
 			->select('sp.norec','sp.tgltransaksi', 'sp.notransaksi','jt.id as jenistransaksifk', 'jt.jenistransaksi', 'sp.tokofk', 'tk.namatoko',
 				'sp.customerfk', 'cus.namacustomer','cus.notlp','cus.nohp','sp.pegawaifk', 'pg.namalengkap')
-			->where('sp.statusenabled',true);
+			->where('sp.statusenabled',true)
+			->orderBy('sp.tgltransaksi','desc');
 
 		if (isset($request['tglAwal']) && $request['tglAwal'] != "" && $request['tglAwal'] != "undefined") {
 			$data = $data->where('sp.tgltransaksi', '>=', $request['tglAwal']);
@@ -170,12 +185,13 @@ class  PenjualanController extends Controller
 					select tt.norec as norec_detail,tt.produkfk,
 					pr.namaproduk,ss.id as satuanfk,ss.satuanstandard,
 					tt.qty,tt.hargajual, COALESCE(tt.hargadiskon ,0) as hargadiskon,
-					tt.nilaikonversi,
+					tt.nilaikonversi,tt.satuanjualfk, sss.satuanstandard as satuanjual,
 					tt.penerimaanfk,(tt.hargajual *tt.qty) -  COALESCE(tt.hargadiskon ,0)as total
 					from transaksi_t as tt
 					join struk_t as s on s.norec= tt.strukfk
 					join produk_m as pr on pr.id= tt.produkfk
 					left join satuanstandard_m as ss on ss.id= pr.satuanstandardfk
+						left join satuanstandard_m as sss on sss.id= tt.satuanjualfk
 					where tt.strukfk = '$norec'
 			"));
 			$qty = 0;
@@ -240,5 +256,34 @@ class  PenjualanController extends Controller
 			);
 		}
 		return response()->json($result,$result['status']);
+	}
+	public function getStokByNoterima(Request $request)
+	{
+		$results = DB::select(DB::raw("select spt.norec as norec_terima,spt.nopenerimaan, sp.produkfk,spt.tgltransaksi, sp.hargajual,
+				sum(sp.qty) as qtyproduk
+				from stokproduk_t as sp
+				INNER JOIN strukpenerimaan_t as spt on spt.norec=sp.strukpenerimaanfk
+				where sp.produkfk =:produkId
+				and spt.norec= :norecTerima
+				and sp.qty > 0
+				GROUP  by spt.norec,sp.produkfk,spt.tgltransaksi, sp.hargajual
+				order by spt.tgltransaksi desc;
+				"),
+			array(
+				'produkId' => $request['produkfk'],
+				'norecTerima' => $request['norecTerima'],
+			)
+		);
+		$jmlstok =0;
+		foreach ($results as $item){
+			$jmlstok = $jmlstok+$item->qtyproduk;
+		}
+		$result= array(
+			'code'=> 200,
+			'jmlstok'=> $jmlstok,
+			'detail' => $results,
+			'message' => 'ramdanegoe',
+		);
+		return response()->json($result);;
 	}
 }

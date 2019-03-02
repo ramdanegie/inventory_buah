@@ -13,29 +13,27 @@
               <input type="text" formControlName="noTransaksi" pInputText disabled />
             </div>
             <div class="ui-g-12 ui-md-12">
-              <label class="label-web-profile" for="input">No Terima </label>
-              <input type="text" formControlName="noTerima" pInputText disabled />
-            </div>
+                <label class="label-web-profile" for="input">Tgl Transaksi </label>
+                <p-calendar dataType="string" formControlName="tglTransaksi" dateFormat="dd/mm/yy" [defaultDate]="now"
+                  [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
+                  [showTime]="true"></p-calendar>
+              </div>
           </div>
           <div class="ui-g-4">
-            <div class="ui-g-12 ui-md-12">
-              <label class="label-web-profile" for="input">Tgl Transaksi </label>
-              <p-calendar dataType="string" formControlName="tglTransaksi" dateFormat="dd/mm/yy" [defaultDate]="now"
-                [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
-                [showTime]="true"></p-calendar>
-            </div>
+           
             <div class="ui-g-12 ui-md-12">
               <label class="label-web-profile" for="input">Toko Transaksi </label>
               <p-dropdown formControlName="kdToko" [options]="listToko" [filter]="true" [autoWidth]="false">
               </p-dropdown>
             </div>
+            <div class="ui-g-12 ui-md-12">
+                <label class="label-web-profile" for="input">Customer </label>
+                <p-dropdown formControlName="kdCustomer" [options]="listCustomer" [filter]="true" [autoWidth]="false">
+                </p-dropdown>
+              </div>
           </div>
           <div class="ui-g-4">
-            <div class="ui-g-12 ui-md-12">
-              <label class="label-web-profile" for="input">Customer </label>
-              <p-dropdown formControlName="kdCustomer" [options]="listCustomer" [filter]="true" [autoWidth]="false">
-              </p-dropdown>
-            </div>
+        
             <div class="ui-g-12 ui-md-12">
               <label class="label-web-profile" for="input">Pegawai Penerima </label>
               <p-dropdown formControlName="kdPegawai" [options]="listPegawai" [filter]="true" [autoWidth]="false">
@@ -50,7 +48,13 @@
             <div class="ui-g-12 ui-md-4">
               <label class="label-web-profile" for="input">Produk </label>
               <p-dropdown formControlName="produk" [options]="listProduk" [filter]="true" [autoWidth]="false"
-                (onChange)="setValueKdSatuan()" >
+                (onChange)="getPenerimaan()">
+              </p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+              <label class="label-web-profile" for="input">No Terima </label>
+              <p-dropdown formControlName="noRecTerima" [options]="listNoTerima" [filter]="true" [autoWidth]="false"
+              (onChange)="getStok()">
               </p-dropdown>
             </div>
             <div class="ui-g-12 ui-md-1">
@@ -63,7 +67,8 @@
             </div>
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Satuan </label>
-              <p-dropdown formControlName="kdSatuan" [options]="listSatuan" [filter]="true" [autoWidth]="false">
+              <p-dropdown formControlName="kdSatuan" [options]="listSatuan" [filter]="true" [autoWidth]="false"
+               (input)="onChangeSatuan($event.target.value)">
               </p-dropdown>
             </div>
             <div class="ui-g-12 ui-md-2">
