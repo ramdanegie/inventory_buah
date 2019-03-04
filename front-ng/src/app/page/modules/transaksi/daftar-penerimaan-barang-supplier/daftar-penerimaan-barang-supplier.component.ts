@@ -167,6 +167,19 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 		this.cacheHelper.set('cacheUbahPenerimaanSupplier', cache);
 		this.router.navigate(['/penerimaan-barang-supplier'])
 	}
+	penerimaanFix() {
+		if (this.selectedItem == undefined) {
+			this.alertService.warn('Peringatan', 'Pilih data dulu')
+			return
+		}
+		var cache = {
+			0: this.selectedItem.norec,
+			1: 'EditTerima',
+		}
+
+		this.cacheHelper.set('cacheUbahPenerimaanSupplier', cache);
+		this.router.navigate(['/penerimaan-barang-supplier'])
+	}
 	hapusPenerimaan() {
 		if (this.selectedItem == undefined) {
 			this.alertService.warn('Peringatan', 'Pilih data dulu')
