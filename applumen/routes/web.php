@@ -132,6 +132,11 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->get('penjualan/get-penjualan', 'Transaksi\PenjualanController@getDaftarPenjualan');
 		$app->post('penjualan/delete-penjualan', 'Transaksi\PenjualanController@hapusPenjualan');
 		$app->get('penjualan/get-stok-produk-by-noterima', 'Transaksi\PenjualanController@getStokByNoterima');
+
+		/** Stok Produk*/
+		$app->get('stokproduk/get-combo', 'Transaksi\StokProdukController@getCombo');
+		$app->get('stokproduk/get-stok', 'Transaksi\StokProdukController@getStokProduk');
+		$app->post('stokproduk/update-harga', 'Transaksi\StokProdukController@updateHarga');
 	});
 
 	/* Master */

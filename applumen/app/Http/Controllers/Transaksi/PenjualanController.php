@@ -78,6 +78,21 @@ class  PenjualanController extends Controller
 				$SP = Struk_T::where('norec', $req['noRec'])->first();
 				Transaksi_T::where('strukfk', $req['noRec'])->delete();
 				$noTransaksi = $SP->notransaksi;
+				foreach ($request['detail'] as $item) {
+					//region Penambahan Stok
+
+					$stokProduk = StokProduk_T::where('strukpenerimaanfk',$item['strukpenerimaanfk'])
+						->where('produkfk',$item['kdProduk'])
+						->first();
+
+					$jmlStok = (float) $stokProduk->qty + (float)$item['konversi'];
+					StokProduk_T::where('strukpenerimaanfk',$item['strukpenerimaanfk'])
+						->where('produkfk',$item['kdProduk'])
+						->update([
+							'qty' => $jmlStok
+						]);
+					//endregion
+				}
 			}
 			$SP->notransaksi = $noTransaksi;
 			$SP->customerfk = $req['kdCustomer'];
@@ -107,10 +122,12 @@ class  PenjualanController extends Controller
 				//region Pengurangan Stok
 
 				$stokProduk = StokProduk_T::where('strukpenerimaanfk',$item['strukpenerimaanfk'])
+					->where('produkfk',$item['kdProduk'])
 					->first();
 
 				$jmlStok = (float) $stokProduk->qty - (float)$item['konversi'];
 				StokProduk_T::where('strukpenerimaanfk',$item['strukpenerimaanfk'])
+					->where('produkfk',$item['kdProduk'])
 					->update([
 						'qty' => $jmlStok
 					]);
@@ -229,10 +246,30 @@ class  PenjualanController extends Controller
 
 		DB::beginTransaction();
 		try {
-//			Transaksi_T::where('strukfk',$request['noRec'])->delete();
-			Struk_T::where('norec', $request['noRec'])->update(
-				[ 'statusenabled' => false]
-			);
+			$trans = Transaksi_T::where('strukfk', $request['noRec'])
+				->get();
+
+			foreach ($trans as $item){
+				//region Penambahan Stok
+
+				$stokProduk = StokProduk_T::where('strukpenerimaanfk',$item->penerimaanfk)
+					->where('produkfk',$item->produkfk)
+					->first();
+
+				$jmlStok = (float) $stokProduk->qty + (float)$item->qty;
+//				return $jmlStok;
+				StokProduk_T::where('strukpenerimaanfk',$item['strukpenerimaanfk'])
+					->where('produkfk',$item->produkfk)
+					->update([
+						'qty' => $jmlStok
+					]);
+				//endregion
+			}
+
+
+			 Struk_T::where('norec', $request['noRec'])->update(
+				 [ 'statusenabled' => false]
+			 );
 			$transStatus = 'true';
 		} catch (\Exception $e) {
 			$transStatus = 'false';

@@ -13,27 +13,27 @@
               <input type="text" formControlName="noTransaksi" pInputText disabled />
             </div>
             <div class="ui-g-12 ui-md-12">
-                <label class="label-web-profile" for="input">Tgl Transaksi </label>
-                <p-calendar dataType="string" formControlName="tglTransaksi" dateFormat="dd/mm/yy" [defaultDate]="now"
-                  [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
-                  [showTime]="true"></p-calendar>
-              </div>
+              <label class="label-web-profile" for="input">Tgl Transaksi </label>
+              <p-calendar dataType="string" formControlName="tglTransaksi" dateFormat="dd/mm/yy" [defaultDate]="now"
+                [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
+                [showTime]="true"></p-calendar>
+            </div>
           </div>
           <div class="ui-g-4">
-           
+
             <div class="ui-g-12 ui-md-12">
               <label class="label-web-profile" for="input">Toko Transaksi </label>
               <p-dropdown formControlName="kdToko" [options]="listToko" [filter]="true" [autoWidth]="false">
               </p-dropdown>
             </div>
             <div class="ui-g-12 ui-md-12">
-                <label class="label-web-profile" for="input">Customer </label>
-                <p-dropdown formControlName="kdCustomer" [options]="listCustomer" [filter]="true" [autoWidth]="false">
-                </p-dropdown>
-              </div>
+              <label class="label-web-profile" for="input">Customer </label>
+              <p-dropdown formControlName="kdCustomer" [options]="listCustomer" [filter]="true" [autoWidth]="false">
+              </p-dropdown>
+            </div>
           </div>
           <div class="ui-g-4">
-        
+
             <div class="ui-g-12 ui-md-12">
               <label class="label-web-profile" for="input">Pegawai Penerima </label>
               <p-dropdown formControlName="kdPegawai" [options]="listPegawai" [filter]="true" [autoWidth]="false">
@@ -48,13 +48,13 @@
             <div class="ui-g-12 ui-md-4">
               <label class="label-web-profile" for="input">Produk </label>
               <p-dropdown formControlName="produk" [options]="listProduk" [filter]="true" [autoWidth]="false"
-                (onChange)="getPenerimaan()">
+                (onChange)="getPenerimaan()" [disabled]="isEdit">
               </p-dropdown>
             </div>
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">No Terima </label>
               <p-dropdown formControlName="noRecTerima" [options]="listNoTerima" [filter]="true" [autoWidth]="false"
-              (onChange)="getStok()">
+                (onChange)="getStok()" [disabled]="isEdit">
               </p-dropdown>
             </div>
             <div class="ui-g-12 ui-md-1">
@@ -63,12 +63,13 @@
             </div>
             <div class="ui-g-12 ui-md-1">
               <label class="label-web-profile" for="input">Qty Produk </label>
-              <input type="number" formControlName="qtyProduk" pInputText (input)="onChangeQty($event.target.value)" />
+              <input type="number" formControlName="qtyProduk" pInputText (input)="onChangeQty($event.target.value)"
+                [disabled]="isEdit" />
             </div>
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Satuan </label>
               <p-dropdown formControlName="kdSatuan" [options]="listSatuan" [filter]="true" [autoWidth]="false"
-               (input)="onChangeSatuan($event.target.value)">
+                (input)="onChangeSatuan($event.target.value)" [disabled]="isEdit">
               </p-dropdown>
             </div>
             <div class="ui-g-12 ui-md-2">
@@ -77,13 +78,13 @@
             </div>
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Harga Jual </label>
-              <input type="number" formControlName="hargaJual" pInputText
-                (input)="onChangeHargaSatuan($event.target.value)" />
+              <input id="disabled-input" type="number" formControlName="hargaJual" pInputText
+                (input)="onChangeHargaSatuan($event.target.value)" [disabled]="isEdit" />
             </div>
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Harga Diskon </label>
               <input type="number" formControlName="hargaDiskon" pInputText
-                (input)="OnChangeDiskon($event.target.value)" />
+                (input)="OnChangeDiskon($event.target.value)" [disabled]="isEdit" />
             </div>
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">SubTotal </label>
@@ -92,13 +93,16 @@
           </div>
           <div class="ui-g-12">
             <div class="ui-g-1 ui-g-offset-9">
-              <button pButton type="submit" label="Tambah" icon="fa-edit" (click)="tambah()"></button>
+              <button pButton type="submit" label="Tambah" icon="fa-edit" (click)="tambah()"
+                [disabled]="isEdit"></button>
             </div>
             <div class="ui-g-1">
-              <button pButton type="button" label="Hapus" icon="fa-trash" (click)="hapus()"></button>
+              <button pButton type="button" label="Hapus" icon="fa-trash" (click)="hapus()"
+                [disabled]="isEdit"></button>
             </div>
             <div class="ui-g-1">
-              <button pButton type="button" label="Batal" icon="fa-refresh" (click)="resetPart()"></button>
+              <button pButton type="button" label="Batal" icon="fa-refresh" (click)="resetPart()"
+                [disabled]="isEdit"></button>
             </div>
           </div>
           <div class="ui-g-12">

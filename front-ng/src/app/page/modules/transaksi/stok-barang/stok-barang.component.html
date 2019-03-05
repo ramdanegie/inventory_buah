@@ -1,0 +1,105 @@
+<p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle"></p-confirmDialog>
+<div class="card card-w-title">
+  <div class="card card-form-header">
+    <h1>Data Stok Barang</h1>
+  </div>
+
+  <form [formGroup]="formGroup">
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <p-fieldset legend="Pencarian" [toggleable]="true">
+
+          <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">Kelompok Produk </label>
+            <p-dropdown formControlName="kdKelompokProduk" [options]="listKelompokProduk" [filter]="true"
+              [autoWidth]="false" (onChange)="getJenisProduk($event)">
+            </p-dropdown>
+          </div>
+          <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">Jenis Produk </label>
+            <p-dropdown formControlName="kdJenisProduk" [options]="listJenisProduk" [filter]="true" [autoWidth]="false"
+              (onChange)="getDetai($event)">
+            </p-dropdown>
+          </div>
+          <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">Detail Jenis Produk </label>
+            <p-dropdown formControlName="kdDetailJenis" [options]="listDetailJenisProduk" [filter]="true"
+              [autoWidth]="false">
+            </p-dropdown>
+          </div>
+          <div class="ui-g-12 ui-md-3">
+            <label class="label-web-profile" for="input">Nama Produk </label>
+            <input type="text" formControlName="namaProduk" pInputText />
+          </div>
+          <div class="ui-g-12 ui-md-1">
+            <label class="label-web-profile" for="input">Jml Rows </label>
+            <input type="text" formControlName="row" pInputText />
+          </div>
+
+
+          <div class="ui-g-12 ui-md-1" style="margin-top:15px">
+            <button pButton type="submit" label="Cari" icon="fa-search" (click)="cari()"></button>
+          </div>
+          <div class="ui-g-12 ui-md-1" style="margin-top:15px">
+            <button pButton type="submit" label="Clear" icon="fa-refresh" (click)="clear()"></button>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="ui-g-12">
+        <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
+          [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected" [loading]="loading"
+          loadingIcon="fa fa-spinner" (onRowSelect)="onRowSelect($event)" scrollable="true" expandableRows="true">
+          <!-- <p-column expander="true" styleClass="col-icon" [style]="{'width':'40px', 'text-align':'left'}"></p-column> -->
+          <p-column header="No" [style]="{'width':'40px'}">
+            <ng-template let-index="rowIndex+1" pTemplate="body">
+              {{index}}
+            </ng-template>
+          </p-column>
+          <p-column field="nopenerimaan" header="No Penerimaan" [sortable]="true"></p-column>
+          <p-column field="tgltransaksi" header="Tgl Transaksi" [sortable]="true"></p-column>
+          <p-column field="produkfk" header="Kode Produk" [sortable]="true"></p-column>
+          <p-column field="namaproduk" header="Nama Produk" [sortable]="true"></p-column>
+          <p-column field="stok" header="Stok" [sortable]="true"></p-column>
+          <p-column field="satuanstandard" header="Satuan" [sortable]="true"></p-column>
+          <p-column field="hargajual" header="Harga" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+          <!-- <p-column field="nofaktur" header="No Faktur"></p-column> -->
+          <!-- <ng-template let-abc pTemplate="rowexpansion">
+            <p-dataTable [value]="abc.details" scrollable="true">
+              <p-column field="namaproduk" header="Produk" [style]="{'text-align':'left'}"></p-column>
+              <p-column field="qty" header="Jumlah" [style]="{ 'text-align':'right'}"></p-column>
+              <p-column field="satuanstandard" header="Satuan" [style]="{'text-align':'left'}"></p-column>
+              <p-column field="hargajual" header="Harga" [style]="{ 'text-align':'right'}"></p-column>
+              <p-column field="hargadiskon" header="Diskon" [style]="{'text-align':'right'}"></p-column>
+              <p-column field="total" header="Total" [style]="{ 'text-align':'right'}"></p-column>
+            </p-dataTable>
+          </ng-template> -->
+        </p-dataTable>
+      </div>
+      <div class="ui-g-12 ">
+        <div class="ui-g-3">
+          <div class="ui-g-12 ui-md-3" *ngIf="isUbah">
+            <label class="label-web-profile" for="input">Harga </label>
+          </div>
+          <div class="ui-g-12 ui-md-9" *ngIf="isUbah">
+            <input type="text" formControlName="harga" pInputText />
+          </div>
+        </div>
+        <div class="ui-g-1" style="margin-top:5px">
+          <button type="button" pButton icon="fa fa-save" (click)="simpan()" label="Simpan" *ngIf="isUbah"></button>
+        </div>
+        <div class="ui-g-1" style="margin-top:5px">
+          <button type="button" pButton icon="fa fa-refresh" (click)="batal()" label="Tutup" *ngIf="isUbah"></button>
+        </div>
+        <div class="ui-g-1 ui-g-offset-4">
+          <button type="button" pButton icon="fa fa-edit" (click)="ubah()" label="Ubah"></button>
+        </div>
+        <div class="ui-g-1">
+          <button type="button" pButton icon="fa fa-print" (click)="cetak()" label="Cetak"></button>
+        </div>
+        <div class="ui-g-1">
+          <p-splitButton label="Export" icon="fa fa-external-link" [model]="items"></p-splitButton>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

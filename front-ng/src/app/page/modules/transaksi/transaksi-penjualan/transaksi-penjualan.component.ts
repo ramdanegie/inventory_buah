@@ -31,6 +31,9 @@ export class TransaksiPenjualanComponent implements OnInit {
   dataProdukDetail: any
   noRecTerima: any = ''
   hargaJual: any
+  listPenerimaan: any[]
+  isEdit: boolean = false
+  
   constructor(private alertService: AlertService,
     private InfoService: InfoService,
     private httpService: HttpClient,
@@ -68,6 +71,7 @@ export class TransaksiPenjualanComponent implements OnInit {
 
   }
   loadFromEdit(data) {
+    this.isEdit = true
     this.httpService.get('transaksi/penjualan/get-penjualan?norec=' + data[0]
     ).subscribe(res => {
       let result = res.data[0]
@@ -93,6 +97,8 @@ export class TransaksiPenjualanComponent implements OnInit {
           'strukpenerimaanfk': element.penerimaanfk,
         }
         this.tempDataGrid.push(data)
+
+
       }
       this.dataSource = this.tempDataGrid
       let subTotal: any = 0;
@@ -354,8 +360,11 @@ export class TransaksiPenjualanComponent implements OnInit {
     ).subscribe(res => {
       // this.dataProdukDetail = res.data
       this.listNoTerima = [];
+      this.listPenerimaan = []
+
       this.listNoTerima.push({ label: '--Pilih No Terima --', value: null });
       res.data.forEach(response => {
+        this.listPenerimaan.push(response)
         this.listNoTerima.push({ label: response.nopenerimaan, value: response.norec });
       });
 
@@ -364,8 +373,9 @@ export class TransaksiPenjualanComponent implements OnInit {
       //   this.formGroup.get('noRecTerima').setValue(this.dataProdukDetail[0].nopenerimaan)
       //   this.formGroup.get('hargaJual').setValue(parseFloat(this.dataProdukDetail[0].hargajual))
       // }
-      this.getStok()
+      // this.getStok()
     }, error => {
+      this.listPenerimaan = []
       this.listNoTerima = [];
       this.listNoTerima.push({ label: '--Data tidak ada --', value: null });
     })
@@ -419,23 +429,32 @@ export class TransaksiPenjualanComponent implements OnInit {
       })
   }
   getStok() {
-
-    // this.formGroup.get('kdSatuan').setValue(this.formGroup.get('produk').value.kdSatuan)
-    let produk = this.formGroup.get('produk').value;
-    let norec = this.formGroup.get('noRecTerima').value;
-    this.httpService.get("transaksi/penerimaan/get-penerimaan-ada-stok?" +
-      "produkfk=" + produk.kdProduk
-      + "&norecTerima=" + norec
-    ).subscribe(res => {
-      this.dataProdukDetail = res.data
-      this.formGroup.get('stok').setValue(parseFloat(res.stok))
-      if (this.dataProdukDetail.length > 0) {
-        // this.formGroup.get('noRecTerima').setValue(this.dataProdukDetail[0].nopenerimaan)
-        this.formGroup.get('hargaJual').setValue(parseFloat(this.dataProdukDetail[0].hargajual))
+    let noRecTerima = this.formGroup.get('noRecTerima').value
+    for (let i = 0; i < this.listPenerimaan.length; i++) {
+      const element = this.listPenerimaan[i];
+      if (element.norec == noRecTerima) {
+        this.formGroup.get('stok').setValue(parseFloat(element.qty))
+        this.formGroup.get('hargaJual').setValue(parseFloat(element.hargajual))
+        break
       }
-    }, error => {
 
-    })
+    }
+    // this.formGroup.get('kdSatuan').setValue(this.formGroup.get('produk').value.kdSatuan)
+    // let produk = this.formGroup.get('produk').value;
+    // let norec = this.formGroup.get('noRecTerima').value;
+    // this.httpService.get("transaksi/penerimaan/get-penerimaan-ada-stok?" +
+    //   "produkfk=" + produk.kdProduk
+    //   + "&norecTerima=" + norec
+    // ).subscribe(res => {
+    //   this.dataProdukDetail = res.data
+    //   this.formGroup.get('stok').setValue(parseFloat(res.stok))
+    //   if (this.dataProdukDetail.length > 0) {
+    //     // this.formGroup.get('noRecTerima').setValue(this.dataProdukDetail[0].nopenerimaan)
+    //     this.formGroup.get('hargaJual').setValue(parseFloat(this.dataProdukDetail[0].hargajual))
+    //   }
+    // }, error => {
+
+    // })
   }
   onRowSelect(event) {
     let e = event.data
@@ -461,6 +480,7 @@ export class TransaksiPenjualanComponent implements OnInit {
     this.formGroup.get('konversi').setValue(e.konversi);
     // this.noRecTerima =
     this.formGroup.get('noRecTerima').setValue(e.strukpenerimaanfk)
+    this.getStok()
     this.formGroup.get('total').setValue(e.total);
 
   }
