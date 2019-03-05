@@ -11,5 +11,5 @@ export interface UserDto {
 	kdPegawai;
 	pegawai;
 	namaPerusahaan;
-	
+	kelompokUser;
 }

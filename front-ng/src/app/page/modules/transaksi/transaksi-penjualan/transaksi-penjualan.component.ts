@@ -172,6 +172,7 @@ export class TransaksiPenjualanComponent implements OnInit {
     this.formGroup.get('hargaDiskon').setValue(0);
     this.formGroup.get('stok').setValue(0);
     this.formGroup.get('konversi').setValue(0);
+    this.formGroup.get('noRecTerima').reset()
     this.nomor = undefined
   }
 

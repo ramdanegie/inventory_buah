@@ -1,0 +1,180 @@
+[
+    {
+        "label": "Master",
+        "icon": "fa fa-fw fa-bars",
+        "items": [
+            {
+                "label": "Alamat",
+                "icon": "fa fa-fw fa-columns",
+                "routerLink": [
+                    "/alamat"
+                ]
+            },
+            {
+                "label": "Customer",
+                "icon": "fa fa-fw fa-code",
+                "routerLink": [
+                    "/customer"
+                ]
+            },
+            {
+                "label": "Detail Jenis Produk",
+                "icon": "fa fa-fw fa-table",
+                "routerLink": [
+                    "/detail-jenis-produk"
+                ]
+            },
+            {
+                "label": "Jenis Kelamin",
+                "icon": "fa fa-fw fa-list-alt",
+                "routerLink": [
+                    "/jenis-kelamin"
+                ]
+            },
+            {
+                "label": "Jenis Produk",
+                "icon": "fa fa-fw fa-square",
+                "routerLink": [
+                    "/jenis-produk"
+                ]
+            },
+            {
+                "label": "Jenis Transaksi",
+                "icon": "fa fa-fw fa-minus-square-o",
+                "routerLink": [
+                    "/jenis-transaksi"
+                ]
+            },
+            {
+                "label": "Kelompok Produk",
+                "icon": "fa fa-fw fa-circle-o-notch",
+                "routerLink": [
+                    "/kelompok-produk"
+                ]
+            },
+            {
+                "label": "Kode Generate",
+                "icon": "fa fa-fw fa-area-chart",
+                "routerLink": [
+                    "/kode-generate"
+                ]
+            },
+            {
+                "label": "Map Produk To Satuan Standar",
+                "icon": "fa fa-fw fa-arrow-circle-o-up",
+                "routerLink": [
+                    "/map-produk-to-satuan-standar"
+                ]
+            },
+            {
+                "label": "Pegawai",
+                "icon": "fa fa-fw fa-user-secret",
+                "routerLink": [
+                    "/pegawai"
+                ]
+            },
+            {
+                "label": "Produk",
+                "icon": "fa fa-fw fa-square-o",
+                "routerLink": [
+                    "/produk"
+                ]
+            },
+            {
+                "label": "Satuan Standar",
+                "icon": "fa fa-fw fa-sign-in",
+                "routerLink": [
+                    "/satuan-standar"
+                ]
+            },
+            {
+                "label": "Supplier",
+                "icon": "fa fa-fw fa-exclamation-circle",
+                "routerLink": [
+                    "/supplier"
+                ]
+            },
+            {
+                "label": "Toko",
+                "icon": "fa fa-fw fa-times",
+                "routerLink": [
+                    "/toko"
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Transaksi",
+        "icon": "fa fa-fw fa-gg",
+        "items": [
+            {
+                "label": "Penerimaan Barang Supplier",
+                "icon": "fa fa-fw fa-gift",
+                "routerLink": [
+                    "/penerimaan-barang-supplier"
+                ]
+            },
+            {
+                "label": "Daftar Penerimaan",
+                "icon": "fa fa-fw fa-table",
+                "routerLink": [
+                    "/daftar-penerimaan-barang-supplier"
+                ]
+            },
+            {
+                "label": "Transaksi Penjualan",
+                "icon": "fa fa-fw fa-shopping-cart",
+                "routerLink": [
+                    "/transaksi-penjualan"
+                ]
+            },
+            {
+                "label": "Daftar Penjualan",
+                "icon": "fa fa-fw fa-first-order",
+                "routerLink": [
+                    "/daftar-penjualan"
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Pengaturan",
+        "icon": "fa fa-fw fa-wrench",
+        "items": [
+            {
+                "label": "User",
+                "icon": "fa fa-fw fa-user",
+                "items": [
+                    {
+                        "label": "Pegawai",
+                        "icon": "fa fa-fw fa-sign-in",
+                        "routerLink": [
+                            "/pegawai"
+                        ]
+                    },
+                    {
+                        "label": "Login",
+                        "icon": "fa fa-fw fa-key",
+                        "routerLink": [
+                            "/user-login"
+                        ]
+                    },
+                    {
+                        "label": "Kelompok User",
+                        "icon": "fa fa-fw fa-users",
+                        "routerLink": [
+                            "/kelompok-user"
+                        ]
+                    }
+                ]
+            },
+            {
+                "label": "Profile",
+                "icon": "fa fa-fw fa-user-circle-o",
+                "routerLink": [
+                    "/profile"
+                ]
+            }
+        ]
+    }
+]

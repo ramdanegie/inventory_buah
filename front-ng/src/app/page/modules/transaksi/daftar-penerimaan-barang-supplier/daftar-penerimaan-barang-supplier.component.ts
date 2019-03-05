@@ -178,7 +178,7 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 		}
 
 		this.cacheHelper.set('cacheUbahPenerimaanSupplier', cache);
-		this.router.navigate(['/penerimaan-barang-supplier'])
+		this.router.navigate(['/penerimaan-barang-fix'])
 	}
 	hapusPenerimaan() {
 		if (this.selectedItem == undefined) {

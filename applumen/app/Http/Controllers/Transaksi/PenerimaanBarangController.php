@@ -398,4 +398,20 @@ class  PenerimaanBarangController extends Controller
 		);
 		return response()->json($result);
 	}
+
+    public function getTtlTransaksi (Request $request)
+    {
+        $data = DB::table('transaksi_t')
+            ->select('produkfk',
+                DB::raw("sum(qty) as ttlTransaksi"))
+            ->groupBy('produkfk')
+            ->where('produkfk', '=', $request['produkfk'])
+            ->where('penerimaanfk', '=', $request['penerimaanfk'])
+            ->get();
+        $result['code'] = 200;
+        $result['data'] = $data;
+        $result['as'] = "ramdanegie";
+
+        return response()->json($result);
+    }
 }

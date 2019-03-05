@@ -125,6 +125,7 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->get('penerimaan/get-daftar-penerimaan', 'Transaksi\PenerimaanBarangController@getDaftarPenerimaanSuplier');
 		$app->post('penerimaan/delete-penerimaan', 'Transaksi\PenerimaanBarangController@hapusPenerimaan');
 		$app->get('penerimaan/get-penerimaan-ada-stok', 'Transaksi\PenerimaanBarangController@getPenerimaanAvailableStok');
+        $app->get('penerimaan/get-ttl-penerimaan', 'Transaksi\PenerimaanBarangController@getTtlTransaksi');
 
 		/** Penjualan*/
 		$app->get('penjualan/get-stok-produk', 'Transaksi\PenjualanController@getStokProduk');

@@ -7,7 +7,7 @@ let session = JSON.parse(localStorage.getItem('user.data'));
 export const pathMaster = [
 
     { canActivate: [AuthGuard], path: '', redirectTo: localStorage.getItem('user.data') != null ? 'dashboard-app' : 'login', pathMatch: 'full' },
-    { canActivate: [AuthGuard], path: 'dashboard', component: demo.DashboardDemoComponent },
+    // { canActivate: [AuthGuard], path: 'dashboard', component: demo.DashboardDemoComponent },
     { canActivate: [AuthGuard], path: 'dashboard-app', component: pMaster.DashboardComponent },
     { canActivate: [AuthGuard], path: 'empty', component: demo.EmptyDemoComponent },
     // MASTER
@@ -34,6 +34,7 @@ export const pathMaster = [
     { canActivate: [AuthGuard], path: 'daftar-penerimaan-barang-supplier', component: pMaster.DaftarPenerimaanBarangSupplierComponent },
     { canActivate: [AuthGuard], path: 'transaksi-penjualan', component: pMaster.TransaksiPenjualanComponent },
     { canActivate: [AuthGuard], path: 'daftar-penjualan', component: pMaster.DaftarPenjualanComponent },
+    { canActivate: [AuthGuard], path: 'penerimaan-barang-fix', component: pMaster.PenerimaanBarangFixComponent },
  
     
     // END TRANSAKSI
