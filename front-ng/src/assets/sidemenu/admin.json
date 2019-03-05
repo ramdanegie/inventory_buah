@@ -108,6 +108,13 @@
         "icon": "fa fa-fw fa-gg",
         "items": [
             {
+                "label": "Data Stok Barang",
+                "icon": "fa fa-fw fa-houzz",
+                "routerLink": [
+                    "/stok-barang"
+                ]
+            },
+            {
                 "label": "Penerimaan Barang Supplier",
                 "icon": "fa fa-fw fa-gift",
                 "routerLink": [

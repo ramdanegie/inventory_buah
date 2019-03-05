@@ -89,7 +89,7 @@ export const PrimeNgModule = [
      prime.TreeTableModule,
      prime.InplaceModule,
      prime.DataScrollerModule,
-     prime.ProgressSpinnerModule
+     prime.ProgressSpinnerModule,
 ];
 
 export const materialModule = [

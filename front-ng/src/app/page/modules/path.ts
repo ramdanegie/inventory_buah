@@ -34,6 +34,7 @@ export const pathMaster = [
     { canActivate: [AuthGuard], path: 'daftar-penerimaan-barang-supplier', component: pMaster.DaftarPenerimaanBarangSupplierComponent },
     { canActivate: [AuthGuard], path: 'transaksi-penjualan', component: pMaster.TransaksiPenjualanComponent },
     { canActivate: [AuthGuard], path: 'daftar-penjualan', component: pMaster.DaftarPenjualanComponent },
+    { canActivate: [AuthGuard], path: 'stok-barang', component: pMaster.StokBarangComponent },
     { canActivate: [AuthGuard], path: 'penerimaan-barang-fix', component: pMaster.PenerimaanBarangFixComponent },
  
     

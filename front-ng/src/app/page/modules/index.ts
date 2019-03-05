@@ -24,6 +24,7 @@ export * from './transaksi/penerimaan-barang-supplier/penerimaan-barang-supplier
 export * from './transaksi/daftar-penerimaan-barang-supplier/daftar-penerimaan-barang-supplier.component';
 export * from './transaksi/transaksi-penjualan/transaksi-penjualan.component';
 export * from './transaksi/daftar-penjualan/daftar-penjualan.component';
+export * from './transaksi/stok-barang/stok-barang.component';
 export * from './transaksi/penerimaan-barang-fix/penerimaan-barang-fix.component';
 
 // not found
