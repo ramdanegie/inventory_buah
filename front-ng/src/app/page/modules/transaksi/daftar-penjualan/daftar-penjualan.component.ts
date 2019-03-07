@@ -67,15 +67,15 @@ export class DaftarPenjualanComponent implements OnInit {
     this.loadGrid()
   }
   downloadPdf() {
-    this.confirmationService.confirm({
-      message: 'Preview Pdf File ?',
-      accept: () => {
+    // this.confirmationService.confirm({
+    //   message: 'Preview Pdf File ?',
+    //   accept: () => {
         this.isPreview = true
-      },
-      reject: () => {
-        this.isPreview = false
-      }
-    });
+    //   },
+    //   reject: () => {
+    //     this.isPreview = false
+    //   }
+    // });
   }
   downloadExcel() {
 

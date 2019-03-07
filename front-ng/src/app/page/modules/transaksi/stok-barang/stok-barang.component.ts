@@ -4,7 +4,7 @@ import { DataHandler } from '../../../../helper/handler/DataHandler';
 import { TableHandler } from '../../../../helper/handler/TableHandler';
 import { Observable } from 'rxjs/Rx';
 import { LazyLoadEvent, Message, ConfirmDialogModule, ConfirmationService, SelectItem } from 'primeng/primeng';
-import { AlertService, InfoService, Configuration, LoaderService, CacheService } from '../../../../helper';
+import { AlertService, InfoService, Configuration, LoaderService, CacheService, AuthGuard } from '../../../../helper';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
@@ -26,6 +26,8 @@ export class StokBarangComponent implements OnInit {
   items: any
   isUbah: boolean = false
   isPreview: boolean = false
+  namaProfile:any
+  alamatProfile:any
   constructor(private alertService: AlertService,
     private InfoService: InfoService,
     private httpService: HttpClient,
@@ -34,11 +36,15 @@ export class StokBarangComponent implements OnInit {
     private fb: FormBuilder,
     private loader: LoaderService,
     private router: Router,
-    private cacheHelper: CacheService
+    private cacheHelper: CacheService,
+    private authGuard:AuthGuard
   ) { }
 
 
   ngOnInit() {
+    this.namaProfile = this.authGuard.getUserDto().profile.namaProfile;
+    this.alamatProfile = this.authGuard.getUserDto().profile.alamatProfile;
+
     this.items = [
       {
         label: 'Pdf', icon: 'fa-file-pdf-o', command: () => {
@@ -63,15 +69,15 @@ export class StokBarangComponent implements OnInit {
 
   }
   downloadPdf() {
-    this.confirmationService.confirm({
-      message: 'Preview Pdf File ?',
-      accept: () => {
+    // this.confirmationService.confirm({
+    //   message: 'Preview Pdf File ?',
+    //   accept: () => {
         this.isPreview = true
-      },
-      reject: () => {
-        this.isPreview = false
-      }
-    });
+    //   },
+    //   reject: () => {
+    //     this.isPreview = false
+    //   }
+    // });
   }
   downloadExcel() {
 
