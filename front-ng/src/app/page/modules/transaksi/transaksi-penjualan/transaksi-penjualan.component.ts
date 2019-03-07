@@ -4,7 +4,7 @@ import { DataHandler } from '../../../../helper/handler/DataHandler';
 import { TableHandler } from '../../../../helper/handler/TableHandler';
 import { Observable } from 'rxjs/Rx';
 import { LazyLoadEvent, Message, ConfirmDialogModule, ConfirmationService, SelectItem } from 'primeng/primeng';
-import { AlertService, InfoService, Configuration, LoaderService, CacheService } from '../../../../helper';
+import { AlertService, InfoService, Configuration, LoaderService, CacheService, AuthGuard } from '../../../../helper';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { error } from 'util';
 
@@ -33,7 +33,7 @@ export class TransaksiPenjualanComponent implements OnInit {
   hargaJual: any
   listPenerimaan: any[]
   isEdit: boolean = false
-  
+
   constructor(private alertService: AlertService,
     private InfoService: InfoService,
     private httpService: HttpClient,
@@ -41,7 +41,8 @@ export class TransaksiPenjualanComponent implements OnInit {
     private dataHandler: DataHandler,
     private fb: FormBuilder,
     private loader: LoaderService,
-    private cacheHelper: CacheService
+    private cacheHelper: CacheService,
+    private authGuard: AuthGuard,
   ) { }
 
   ngOnInit() {
@@ -63,6 +64,8 @@ export class TransaksiPenjualanComponent implements OnInit {
       'total': new FormControl(0),
       'konversi': new FormControl(null),
     });
+    this.formGroup.get('kdPegawai').setValue(this.authGuard.getUserDto().kdPegawai)
+
     let cache = this.cacheHelper.get('cacheUbahTransaksiPenjualan')
     if (cache != undefined) {
       this.loadFromEdit(cache)

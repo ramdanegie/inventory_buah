@@ -12,4 +12,5 @@ export interface UserDto {
 	pegawai;
 	namaPerusahaan;
 	kelompokUser;
+	profile;
 }
