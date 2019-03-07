@@ -27,6 +27,8 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($app) {
 
 	/* Example */
+	$app->get('dashboard/count', 'Transaksi\DashboardController@countData');
+
 	$app->group(['prefix' => 'master/'/*, 'middleware' => 'auth2'*/], function ($app) {
 		/** AgamaM */
 		$app->get('agama/get-agama', 'ExampleController@getAgama');
@@ -115,7 +117,10 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->post('toko/save', 'Master\TokoController@save');
 		$app->post('toko/delete', 'Master\TokoController@delete');
 
-
+		$app->get('print/tes', 'Master\PrintController@print');
+		$app->get('print/tes2', 'Master\PrintController@displayReport');
+		$app->get('print/tes3', 'Master\PrintController@pdf2');
+		$app->get('print/tes4', 'Master\PrintController@pdf3');
 	});
 
 	$app->group(['prefix' => 'transaksi/'/*, 'middleware' => 'authentication']*/],function ($app) {
@@ -138,6 +143,9 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->get('stokproduk/get-combo', 'Transaksi\StokProdukController@getCombo');
 		$app->get('stokproduk/get-stok', 'Transaksi\StokProdukController@getStokProduk');
 		$app->post('stokproduk/update-harga', 'Transaksi\StokProdukController@updateHarga');
+
+		/** Dashboard*/
+
 	});
 
 	/* Master */
