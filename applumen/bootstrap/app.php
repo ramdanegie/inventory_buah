@@ -78,6 +78,7 @@ $app->routeMiddleware([
 	'auth' => App\Http\Middleware\Authenticate::class,
 	'authentication' => App\Http\Middleware\Authenticate2::class,
 ]);
+class_alias(\Illuminate\Support\Facades\App::class, 'App');
 
 // $app->middleware([
 //     App\Http\Middleware\ExampleMiddleware::class
@@ -103,9 +104,11 @@ $app->routeMiddleware([
 // $app->register(Illuminate\Session\SessionServiceProvider::class);
  $app->withFacades();
  $app->register(App\Providers\AuthServiceProvider::class);
+ $app->withFacades();
 // $app->register(App\Providers\EventServiceProvider::class);
-
-/*
+ $app->register(Jimmyjs\ReportGenerator\ServiceProvider::class);
+$app->register(Codedge\Fpdf\FpdfServiceProvider::class); // [1]
+ /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
 |--------------------------------------------------------------------------
@@ -124,7 +127,11 @@ $app->router->group([
 $app->register(\Illuminate\Mail\MailServiceProvider::class);
 $app->withFacades();
 $app->register(\Barryvdh\DomPDF\ServiceProvider::class);
+
+//$app->register(Jimmyjs\ReportGenerator\ServiceProvider::class);
 $app->configure('dompdf');
 class_alias(\Barryvdh\DomPDF\Facade::class, 'PDF');
-
+class_alias(    Codedge\Fpdf\Facades\Fpdf::class, 'Fpdf');
+//class_alias(\Jimmyjs\ReportGenerator\Facades\ExcelReportFacad e::class, 'ExcelReport');
+//class_alias(\Jimmyjs\ReportGenerator\Facades\CSVReportFacade::class, 'CSVReport');
 return $app;

@@ -1,5 +1,5 @@
 <p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle"></p-confirmDialog>
-<div class="card card-w-title">
+<div class="card card-w-title" *ngIf="!isPreview">
   <div class="card card-form-header">
     <h1>Data Stok Barang</h1>
   </div>
@@ -57,6 +57,7 @@
           </p-column>
           <p-column field="nopenerimaan" header="No Penerimaan" [sortable]="true"></p-column>
           <p-column field="tgltransaksi" header="Tgl Transaksi" [sortable]="true"></p-column>
+          <p-column field="namatoko" header="Toko" [sortable]="true"></p-column>
           <p-column field="produkfk" header="Kode Produk" [sortable]="true"></p-column>
           <p-column field="namaproduk" header="Nama Produk" [sortable]="true"></p-column>
           <p-column field="stok" header="Stok" [sortable]="true"></p-column>
@@ -94,12 +95,60 @@
           <button type="button" pButton icon="fa fa-edit" (click)="ubah()" label="Ubah"></button>
         </div>
         <div class="ui-g-1">
-          <button type="button" pButton icon="fa fa-print" (click)="cetak()" label="Cetak"></button>
+          <button type="button" pButton icon="fa fa-print" (click)="print()" label="Cetak"></button>
         </div>
+
         <div class="ui-g-1">
           <p-splitButton label="Export" icon="fa fa-external-link" [model]="items"></p-splitButton>
         </div>
       </div>
     </div>
   </form>
+</div>
+<div id="print-section" style="display: none;">
+  <div class="ui-g-12">
+    <br />
+    {{namaProfile}} <br />
+    {{alamatProfile}} <br />
+  </div>
+  <div class="ui-g-12" style="text-align: center;">
+    <h2>DAFTAR STOK</h2>
+  </div>
+  <div class="ui-g-12">
+    <p-dataTable [value]="dataSource">
+      <p-column header="No" [style]="{'width':'40px'}">
+        <ng-template let-index="rowIndex+1" pTemplate="body">
+          {{index}}
+        </ng-template>
+      </p-column>
+      <p-column field="nopenerimaan" header="No Penerimaan" [style]="{'text-align':'center','width':'100px'}">
+      </p-column>
+      <p-column field="tgltransaksi" header="Tgl Transaksi" [style]="{'text-align':'center','width':'100px'}">
+      </p-column>
+      <p-column field="namatoko" header="Toko" [style]="{'text-align':'center','width':'150px'}">
+      </p-column>
+      <p-column field="produkfk" header="Kode Produk" [style]="{'text-align':'center','width':'70px'}"></p-column>
+      <p-column field="namaproduk" header="Nama Produk" [style]="{'text-align':'center','width':'180px'}"></p-column>
+      <p-column field="stok" header="Stok" [style]="{'text-align':'right','width':'70px'}"></p-column>
+      <p-column field="satuanstandard" header="Satuan" [style]="{'text-align':'center','width':'100px'}"></p-column>
+      <p-column field="hargajual" header="Harga" [style]="{'text-align':'right','width':'130px'}" [sortable]="true">
+      </p-column>
+
+    </p-dataTable>
+  </div>
+</div>
+<div class="card card-w-title" *ngIf="isPreview">
+  <div class="card card-form-header">
+    <h1>Preview</h1>
+  </div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <embed src="files/Brochure.pdf" type="application/pdf" width="100%" height="500px" />
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-1 ui-g-offset-11">
+        <button type="button" pButton icon="fa fa-arrow-left" (click)="isPreview = false" label="Tutup"></button>
+      </div>
+    </div>
+  </div>
 </div>

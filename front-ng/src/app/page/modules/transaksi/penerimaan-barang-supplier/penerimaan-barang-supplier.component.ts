@@ -4,7 +4,7 @@ import { DataHandler } from '../../../../helper/handler/DataHandler';
 import { TableHandler } from '../../../../helper/handler/TableHandler';
 import { Observable } from 'rxjs/Rx';
 import { LazyLoadEvent, Message, ConfirmDialogModule, ConfirmationService, SelectItem } from 'primeng/primeng';
-import { AlertService, InfoService, Configuration, LoaderService, CacheService } from '../../../../helper';
+import { AlertService, InfoService, Configuration, LoaderService, CacheService, AuthGuard } from '../../../../helper';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { error } from 'util';
 
@@ -32,10 +32,12 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 		private dataHandler: DataHandler,
 		private fb: FormBuilder,
 		private loader: LoaderService,
-		private cacheHelper: CacheService
+		private cacheHelper: CacheService,
+		private authGuard: AuthGuard
 	) { }
 
 	ngOnInit() {
+
 		this.getList()
 		this.formGroup = this.fb.group({
 			'noRec': new FormControl(null),
@@ -54,10 +56,14 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 			'total': new FormControl(0),
 			'kdSupplier': new FormControl(null),
 			'konversi': new FormControl(0),
-			'isAutoNoTerima': new FormControl(false),
-			'isAutoNoFaktur': new FormControl(false),
+			'isAutoNoTerima': new FormControl(true),
+			'isAutoNoFaktur': new FormControl(true),
 			'satuan': new FormControl(null),
 		});
+		this.formGroup.get('noPenerimaan')[this.formGroup.get('isAutoNoTerima').value ? 'disable' : 'enable']();
+		this.formGroup.get('noFaktur')[this.formGroup.get('isAutoNoFaktur').value ? 'disable' : 'enable']();
+
+		this.formGroup.get('kdPegawai').setValue(this.authGuard.getUserDto().kdPegawai)
 		let cache = this.cacheHelper.get('cacheUbahPenerimaanSupplier')
 		if (cache != undefined) {
 			this.loadFromEdit(cache)

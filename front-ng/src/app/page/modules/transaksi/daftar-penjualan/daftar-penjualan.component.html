@@ -1,5 +1,5 @@
 <p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle"></p-confirmDialog>
-<div class="card card-w-title">
+<div class="card card-w-title"  *ngIf="!isPreview">
   <div class="card card-form-header">
     <h1>Daftar Transaksi Penjualan</h1>
   </div>
@@ -29,8 +29,8 @@
           </div>
           <div class="ui-g-12 ui-md-2">
             <label class="label-web-profile" for="input">Periode Awal </label>
-            <p-calendar formControlName="tglAwal" [showIcon]="true" [monthNavigator]="false"
-              [yearNavigator]="false" yearRange="2000:2030" [showTime]="true">
+            <p-calendar formControlName="tglAwal" [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false"
+              yearRange="2000:2030" [showTime]="true">
             </p-calendar>
           </div>
           <div class="ui-g-12 ui-md-2">
@@ -43,8 +43,8 @@
             <button pButton type="submit" label="Cari" icon="fa-search" (click)="cari()"></button>
           </div>
           <div class="ui-g-12 ui-md-1" style="margin-top:15px">
-              <button pButton type="submit" label="Clear" icon="fa-refresh" (click)="clear()"></button>
-            </div>
+            <button pButton type="submit" label="Clear" icon="fa-refresh" (click)="clear()"></button>
+          </div>
         </p-fieldset>
       </div>
       <div class="ui-g-12">
@@ -97,4 +97,51 @@
       </div>
     </div>
   </form>
+</div>
+
+<div id="print-section" style="display: none;">
+  <div class="ui-g-12">
+    <br />
+    {{namaProfile}} <br />
+    {{alamatProfile}} <br />
+  </div>
+  <div class="ui-g-12" style="text-align: center;">
+    <h2>Daftar Penjualan</h2>
+  </div>
+  <div class="ui-g-12">
+    <p-dataTable [value]="dataSourcePrint">
+      <p-column header="No" [style]="{'width':'20px','text-align':'center'}">
+        <ng-template let-index="rowIndex+1" pTemplate="body">
+          {{index}}
+        </ng-template>
+      </p-column>
+      <p-column field="notransaksi" header="No Transaksi" [style]="{'text-align':'center','width':'100px'}"></p-column>
+      <p-column field="tgltransaksi" header="Tgl Transaksi" [style]="{'text-align':'center','width':'100px'}">
+      </p-column>
+      <p-column field="namacustomer" header="Customer" [style]="{'text-align':'center','width':'100px'}"></p-column>
+      <p-column field="namalengkap" header="Pegawai" [style]="{'text-align':'center','width':'100px'}"></p-column>
+      <p-column field="namatoko" header="Toko" [style]="{'text-align':'center','width':'100px'}"></p-column>
+      <p-column field="namaproduk" header="Produk" [style]="{'text-align':'center','width':'100px'}"></p-column>
+      <p-column field="qty" header="Jumlah" [style]="{ 'text-align':'right','width':'100px'}"></p-column>
+      <p-column field="satuanstandard" header="Satuan" [style]="{'text-align':'center','width':'100px'}"></p-column>
+      <p-column field="hargajual" header="Harga" [style]="{ 'text-align':'right','width':'100px'}"></p-column>
+      <p-column field="hargadiskon" header="Diskon" [style]="{'text-align':'right','width':'100px'}"></p-column>
+      <p-column field="total" header="Total" [style]="{ 'text-align':'right','width':'100px'}"></p-column>
+    </p-dataTable>
+  </div>
+</div>
+<div class="card card-w-title" *ngIf="isPreview">
+  <div class="card card-form-header">
+    <h1>Preview</h1>
+  </div>
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <embed src="files/Brochure.pdf" type="application/pdf" width="100%" height="500px" />
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-1 ui-g-offset-11">
+        <button type="button" pButton icon="fa fa-arrow-left" (click)="isPreview = false" label="Tutup"></button>
+      </div>
+    </div>
+  </div>
 </div>

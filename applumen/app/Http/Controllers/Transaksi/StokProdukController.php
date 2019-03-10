@@ -94,11 +94,12 @@ class  StokProdukController extends Controller
 			->leftJoin('detailjenisproduk_m as djp','djp.id','=','prd.detailjenisprodukfk')
 			->leftJoin('jenisproduk_m as jp','jp.id','=','djp.jenisprodukfk')
 			->leftJoin('kelompokproduk_m as kl','kl.id','=','jp.kelompokprodukfk')
+			->leftJoin('toko_m as tk','tk.id','=','spt.tokofk')
 			->select('sp.norec','sp.produkfk','prd.namaproduk','ss.id as satuanterimafk','ss.satuanstandard',
-				'sp.hargajual','spt.nopenerimaan','sp.nofaktur','spt.tgltransaksi',
+				'sp.hargajual','spt.nopenerimaan','sp.nofaktur','spt.tgltransaksi','spt.tokofk','tk.namatoko',
 				DB::raw("sum(sp.qty) as stok"))
 			->groupBy('sp.norec','sp.produkfk','prd.namaproduk','ss.id','ss.satuanstandard',
-				'sp.hargajual','spt.tgltransaksi','spt.nopenerimaan','sp.nofaktur')
+				'sp.hargajual','spt.tgltransaksi','spt.nopenerimaan','sp.nofaktur','spt.tokofk','tk.namatoko')
 			->where('ss.statusenabled',true)
 			->orderBy('spt.tgltransaksi','desc');
 

@@ -4,7 +4,7 @@ import { DataHandler } from '../../../../helper/handler/DataHandler';
 import { TableHandler } from '../../../../helper/handler/TableHandler';
 import { Observable } from 'rxjs/Rx';
 import { LazyLoadEvent, Message, ConfirmDialogModule, ConfirmationService, SelectItem } from 'primeng/primeng';
-import { AlertService, InfoService, Configuration, LoaderService, CacheService } from '../../../../helper';
+import { AlertService, InfoService, Configuration, LoaderService, CacheService, AuthGuard } from '../../../../helper';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
@@ -25,6 +25,9 @@ export class StokBarangComponent implements OnInit {
   selectedItem: any;
   items: any
   isUbah: boolean = false
+  isPreview: boolean = false
+  namaProfile:any
+  alamatProfile:any
   constructor(private alertService: AlertService,
     private InfoService: InfoService,
     private httpService: HttpClient,
@@ -33,20 +36,24 @@ export class StokBarangComponent implements OnInit {
     private fb: FormBuilder,
     private loader: LoaderService,
     private router: Router,
-    private cacheHelper: CacheService
+    private cacheHelper: CacheService,
+    private authGuard:AuthGuard
   ) { }
 
 
   ngOnInit() {
+    this.namaProfile = this.authGuard.getUserDto().profile.namaProfile;
+    this.alamatProfile = this.authGuard.getUserDto().profile.alamatProfile;
+
     this.items = [
       {
         label: 'Pdf', icon: 'fa-file-pdf-o', command: () => {
-          // this.downloadPdf();
+          this.downloadPdf();
         }
       },
       {
         label: 'Excel', icon: 'fa-file-excel-o ', command: () => {
-          // this.downloadExcel();
+          this.downloadExcel();
         }
       }
     ];
@@ -59,6 +66,20 @@ export class StokBarangComponent implements OnInit {
       'harga': new FormControl(null),
     });
     this.getList()
+
+  }
+  downloadPdf() {
+    // this.confirmationService.confirm({
+    //   message: 'Preview Pdf File ?',
+    //   accept: () => {
+        this.isPreview = true
+    //   },
+    //   reject: () => {
+    //     this.isPreview = false
+    //   }
+    // });
+  }
+  downloadExcel() {
 
   }
   clear() {
@@ -230,6 +251,41 @@ export class StokBarangComponent implements OnInit {
     this.isUbah = false
     this.formGroup.get('harga').reset()
   }
-
+  print(): void {
+    // this.namaProfile = this.authGuard.getUserDto().profile.NamaLengkap;
+    // this.kelaminProfile = this.authGuard.getUserDto().profile.KelaminLengkap;
+    let printContents, popupWin;
+    printContents = document.getElementById('print-section').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+        <html>
+            <head>
+                <title></title>
+                <style>
+                    @media print{
+                        @page {
+                            size: landscape
+                        }
+                    }
+                    table, th, td {
+                        border: 1px solid black;
+                        border-collapse: collapse;
+                        font-size:11px;
+                        font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+                        text-decoration: none;
+                    }
+                    body {
+                      font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+                      text-decoration: none;
+                    }
+                </style>
+            </head>
+            <body onload="window.print();window.close()">${printContents}</body>
+         </html>
+         `
+    );
+    popupWin.document.close();
+  }
 
 }

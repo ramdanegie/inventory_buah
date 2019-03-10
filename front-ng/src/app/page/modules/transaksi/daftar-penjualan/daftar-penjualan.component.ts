@@ -4,7 +4,7 @@ import { DataHandler } from '../../../../helper/handler/DataHandler';
 import { TableHandler } from '../../../../helper/handler/TableHandler';
 import { Observable } from 'rxjs/Rx';
 import { LazyLoadEvent, Message, ConfirmDialogModule, ConfirmationService, SelectItem } from 'primeng/primeng';
-import { AlertService, InfoService, Configuration, LoaderService, CacheService } from '../../../../helper';
+import { AlertService, InfoService, Configuration, LoaderService, CacheService, AuthGuard } from '../../../../helper';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
@@ -22,6 +22,10 @@ export class DaftarPenjualanComponent implements OnInit {
   listToko: SelectItem[]
   selectedItem: any;
   items: any
+  namaProfile: any
+  alamatProfile: any
+  dataSourcePrint: any[]
+  isPreview: boolean = false
   constructor(private alertService: AlertService,
     private InfoService: InfoService,
     private httpService: HttpClient,
@@ -30,20 +34,24 @@ export class DaftarPenjualanComponent implements OnInit {
     private fb: FormBuilder,
     private loader: LoaderService,
     private router: Router,
-    private cacheHelper: CacheService
+    private cacheHelper: CacheService,
+    private authGuard: AuthGuard
   ) { }
 
 
   ngOnInit() {
+    this.namaProfile = this.authGuard.getUserDto().profile.namaProfile;
+    this.alamatProfile = this.authGuard.getUserDto().profile.alamatProfile;
+
     this.items = [
       {
         label: 'Pdf', icon: 'fa-file-pdf-o', command: () => {
-          // this.downloadPdf();
+          this.downloadPdf();
         }
       },
       {
         label: 'Excel', icon: 'fa-file-excel-o ', command: () => {
-          // this.downloadExcel();
+          this.downloadExcel();
         }
       }
     ];
@@ -58,7 +66,21 @@ export class DaftarPenjualanComponent implements OnInit {
     this.getList()
     this.loadGrid()
   }
-  clear(){
+  downloadPdf() {
+    // this.confirmationService.confirm({
+    //   message: 'Preview Pdf File ?',
+    //   accept: () => {
+        this.isPreview = true
+    //   },
+    //   reject: () => {
+    //     this.isPreview = false
+    //   }
+    // });
+  }
+  downloadExcel() {
+
+  }
+  clear() {
     this.formGroup.reset()
     this.formGroup.get('tglAwal').setValue(new Date(this.formatDate(this.now) + ' 00:00'))
     this.formGroup.get('tglAkhir').setValue(this.now)
@@ -128,6 +150,7 @@ export class DaftarPenjualanComponent implements OnInit {
     ).subscribe(res => {
       this.loading = false
       let data = res.data
+      let dataPrint = []
       if (data.length > 0) {
         for (let i = 0; i < data.length; i++) {
           data[i].totalall = this.formatRupiah(data[i].totalall, 'Rp. ');
@@ -138,11 +161,34 @@ export class DaftarPenjualanComponent implements OnInit {
             element.hargajual = this.formatRupiah(element.hargajual, 'Rp. ');
           }
         }
+
+        for (let i = 0; i < data.length; i++) {
+          const element = data[i];
+          for (let j = 0; j < element.details.length; j++) {
+            const element2 = element.details[j]
+            let push = {
+              'notransaksi': element.notransaksi,
+              'tgltransaksi': element.tgltransaksi,
+              'namalengkap':element.namalengkap,
+              'namacustomer': element.namacustomer,
+              'namatoko': element.namatoko,
+              'namaproduk': element2.namaproduk,
+              'qty': element2.qty,
+              'satuanstandard': element2.satuanstandard,
+              'hargajual': element2.hargajual,
+              'hargadiskon': element2.hargadiskon,
+              'total': element2.total,
+            }
+            dataPrint.push(push)
+          }
+        }
         this.dataSource = data
+        this.dataSourcePrint = dataPrint
       } else {
         this.loading = false
         this.alertService.info('Informasi', 'Data tidak ada')
         this.dataSource = []
+        this.dataSourcePrint = []
       }
     })
 
@@ -209,7 +255,40 @@ export class DaftarPenjualanComponent implements OnInit {
       }
     })
   }
-  cetak() {
+  cetak(): void {
 
+    let printContents, popupWin;
+    printContents = document.getElementById('print-section').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+        <html>
+            <head>
+                <title></title>
+                <style>
+                    @media print{
+                        @page {
+                            size: landscape
+                        }
+                    }
+                    table, th, td {
+                        border: 1px solid black;
+                        border-collapse: collapse;
+                        font-size:8px;
+                        font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+                        text-decoration: none;
+                    }
+                    
+                    body {
+                      font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+                      text-decoration: none;
+                    }
+                </style>
+            </head>
+            <body onload="window.print();window.close()">${printContents}</body>
+         </html>
+         `
+    );
+    popupWin.document.close();
   }
 }

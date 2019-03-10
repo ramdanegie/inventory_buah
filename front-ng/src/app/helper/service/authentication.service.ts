@@ -39,7 +39,11 @@ export class Authentication {
       kdPegawai: iKdPegawai,
       pegawai: user.pegawai,
       namaPerusahaan: '',
-      kelompokUser: user.kelompokUser
+      kelompokUser: user.kelompokUser,
+      profile: {
+        namaProfile: 'King Banana',
+        alamatProfile: 'Jln. Jakarta No.01, DKI Jakarta'
+      }
     };
     return userDTO;
   }
@@ -81,9 +85,9 @@ export class Authentication {
             this.alert.error('Error', 'Login gagal, Periksa Koneksi Jaringan.');
           }
         }
-      },error => {
-          this.alert.error('Error', 'Login gagal, Username atau Password Salah.');
-      
+      }, error => {
+        this.alert.error('Error', 'Login gagal, Username atau Password Salah.');
+
       });
   }
 
