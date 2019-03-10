@@ -172,6 +172,7 @@ export class PenerimaanBarangFixComponent implements OnInit {
 	}
 
 	tambah() {
+		var qtyAkhir = this.formGroup.get('konversi').value - this.formGroup.get('ttlTransaksi').value;
 		let namaProduk = this.formGroup.get('namaProduk').value;
 		let kdSatuan = this.formGroup.get('kdSatuan').value;
 		let qtyProduk = this.formGroup.get('qtyProduk').value;
@@ -179,7 +180,7 @@ export class PenerimaanBarangFixComponent implements OnInit {
 		let hargaJual = this.formGroup.get('hargaJual').value;
 		let total = this.formGroup.get('total').value;
 		let kdProduk = this.formGroup.get('kdProduk').value;
-		let konversi = this.formGroup.get('konversi').value;
+		let konversi = qtyAkhir;
 		let satuan = this.formGroup.get('satuan').value;
 		if (!namaProduk) {
 			this.alertService.warn("Peringatan", "Nama Produk harus di isi !")
@@ -195,6 +196,10 @@ export class PenerimaanBarangFixComponent implements OnInit {
 		}
 		if (hargaSatuan == 0) {
 			this.alertService.warn("Peringatan", "Harga Satuan tidak boleh nol !")
+			return
+		}
+		if (this.formGroup.get('qtyProduk').value < this.formGroup.get('ttlTransaksi').value) {
+			this.alertService.warn('Peringatan', 'Qty produk tidak boleh lebih kecil dari transaksi yg terjadi!!')
 			return
 		}
 		let nomor = 0
@@ -417,6 +422,10 @@ export class PenerimaanBarangFixComponent implements OnInit {
 		}
 		if (this.tempDataGrid.length == 0) {
 			this.alertService.warn('Peringatan', 'Pilih produk terlebih dahulu !')
+			return
+		}
+		if (this.formGroup.get('qtyProduk').value < this.formGroup.get('ttlTransaksi').value) {
+			this.alertService.warn('Peringatan', 'Qty produk tidak boleh lebih kecil dari transaksi yg terjadi!!')
 			return
 		}
 
