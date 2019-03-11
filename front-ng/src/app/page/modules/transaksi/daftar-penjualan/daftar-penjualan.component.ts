@@ -465,8 +465,8 @@ export class DaftarPenjualanComponent implements OnInit {
         }
         this.listBayar = e.data
         this.noPembayaran = e.data[0].nopembayaran
-        this.penerimaPembayaran = e.data[0].tglpembayaran
-        this.tglPembayaran = e.data[0].namalengkap
+        this.penerimaPembayaran = e.data[0].namalengkap
+        this.tglPembayaran = e.data[0].tglpembayaran
         this.totalbayarNa = e.data[0].totalbayar
         this.loadHtmlPrint()
       }
