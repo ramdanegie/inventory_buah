@@ -144,6 +144,9 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->get('stokproduk/get-stok', 'Transaksi\StokProdukController@getStokProduk');
 		$app->post('stokproduk/update-harga', 'Transaksi\StokProdukController@updateHarga');
 
+        /** Penerimaan Debit Kredit*/
+        $app->get('penerimaandebitkredit/get-combo', 'Transaksi\SetoranDebitKreditController@getCombo');
+
 		/** Dashboard*/
 
 	});

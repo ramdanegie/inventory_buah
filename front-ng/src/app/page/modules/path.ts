@@ -36,6 +36,7 @@ export const pathMaster = [
     { canActivate: [AuthGuard], path: 'daftar-penjualan', component: pMaster.DaftarPenjualanComponent },
     { canActivate: [AuthGuard], path: 'stok-barang', component: pMaster.StokBarangComponent },
     { canActivate: [AuthGuard], path: 'penerimaan-barang-fix', component: pMaster.PenerimaanBarangFixComponent },
+    { canActivate: [AuthGuard], path: 'daftar-pembayaran', component: pMaster.DaftarPembayaranComponent },
  
     
     // END TRANSAKSI

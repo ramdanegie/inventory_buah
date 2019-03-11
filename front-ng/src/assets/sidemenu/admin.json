@@ -141,6 +141,13 @@
                 "routerLink": [
                     "/daftar-penjualan"
                 ]
+            },
+            {
+                "label": "Daftar Pembayaran",
+                "icon": "fa fa-fw fa-first-order",
+                "routerLink": [
+                    "/daftar-pembayaran"
+                ]
             }
         ]
     },

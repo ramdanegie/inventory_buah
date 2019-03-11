@@ -26,6 +26,7 @@ export * from './transaksi/transaksi-penjualan/transaksi-penjualan.component';
 export * from './transaksi/daftar-penjualan/daftar-penjualan.component';
 export * from './transaksi/stok-barang/stok-barang.component';
 export * from './transaksi/penerimaan-barang-fix/penerimaan-barang-fix.component';
+export * from './transaksi/daftar-pembayaran/daftar-pembayaran.component';
 
 // not found
 export * from './404/not-found.component';

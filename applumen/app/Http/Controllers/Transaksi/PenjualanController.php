@@ -38,7 +38,7 @@ class  PenjualanController extends Controller
 				order by spt.tgltransaksi desc;
 				"),
 			array(
-				'produkId' => $request['produkfk'],
+				'p  rodukId' => $request['produkfk'],
 			)
 		);
 		$jmlstok =0;
