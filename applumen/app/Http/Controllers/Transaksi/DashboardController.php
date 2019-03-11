@@ -102,6 +102,7 @@ class  DashboardController extends Controller
 				$persenTerima = ($todayTerima / $yestTerima )* 100;
 			}
 		}
+
 		$persenTerima = number_format($persenTerima,0,',','.');
 
 		$pegawai = DB::select(DB::raw("select count(id) as jumlah from pegawai_m
@@ -110,10 +111,10 @@ class  DashboardController extends Controller
 			"));
 		$result= array(
 			'code'=> 200,
-			'penjualan' => $todayPenjualan,
+			'penjualan' => $todayPenjualan == 1 ? 0 : $todayPenjualan,
 			'penjualanKemaren' => $yestPenjualan,
 			'persenPenjualan' => $persenPenjualan,
-			'penerimaan' => $todayTerima,
+			'penerimaan' => $todayTerima == 1 ? 0 :$todayTerima ,
 			'persenPenerimaan' => $persenTerima,
 			'pegawai' => $pegawai[0]->jumlah,
 			'uses' => $uses[0]->jumlah,

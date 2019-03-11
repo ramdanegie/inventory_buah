@@ -146,8 +146,16 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 
 		/** Dashboard*/
 
+		/** Pembyarana */
+		$app->get('pembayaran/get-combo', 'Transaksi\StrukPembayaranController@getCombo');
+		$app->get('pembayaran/save-pembayaran', 'Transaksi\StrukPembayaranController@savePembayaran');
+
 	});
 
+	/* Master */
+	$app->group(['prefix' => 'generic/'], function ($app) {
+		$app->get('get-terbilang/{number}', 'Transaksi\StrukPembayaranController@getTerbilangsss');
+	});
 	/* Master */
 	$app->group(['prefix' => 'setting/','middleware' => 'authentication'], function ($app) {
 		$app->get('menu','Core\MenuController@getMenu');

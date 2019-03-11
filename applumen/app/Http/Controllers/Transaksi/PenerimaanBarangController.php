@@ -12,6 +12,7 @@ use App\Model\Master\JenisTransaksi_M;
 use App\Model\Master\Pegawai_M;
 use App\Model\Standar\LoginUser_S;
 use App\Model\Standar\KelompokUser_S;
+use App\Model\Transaksi\KartuStok_T;
 use App\Model\Transaksi\StokProduk_T;
 use App\Model\Transaksi\StrukPenerimaan_T;
 use App\Traits\GenerateCode;
@@ -117,64 +118,38 @@ class  PenerimaanBarangController extends Controller
 				$SP->nofaktur = $noFaktur;
 			} else {
 				$SP = StrukPenerimaan_T::where('norec', $req['noRec'])->first();
+
+				$det = StokProduk_T::where('strukpenerimaanfk',$req['noRec'])->get();
+
+				foreach ($det as $itemss){
+					$TambahStok = (float)$itemss->qty;
+					$dataSaldoAwal = DB::select(DB::raw("select sum(qty) as qty from stokproduk_t
+	                            where  produkfk=:produkfk
+	                            and  strukpenerimaanfk=:strukpenerimaanfk"),
+						array(
+							'produkfk' =>  $itemss->produkfk,
+							'strukpenerimaanfk' => $itemss->strukpenerimaanfk,
+						)
+					);
+					$saldoAwal=0;
+					foreach ($dataSaldoAwal as $itemssss){
+						$saldoAwal = (float)$itemssss->qty;
+					}
+					$newKS = new KartuStok_T();
+					$newKS->norec = $this->generateUid();
+					$newKS->statusenabled = 't';
+					$newKS->jumlah = $TambahStok;
+					$newKS->keterangan = 'Ubah Penerimaan Barang No. ' . $noTerima;
+					$newKS->produkfk = $itemss->produkfk;
+					$newKS->saldoawal = (float)$saldoAwal ;
+					$newKS->status = 0;
+					$newKS->tglinput = date('Y-m-d H:i:s');
+					$newKS->tglkejadian = date('Y-m-d H:i:s');
+					$newKS->strukterimafk = $itemss->norec;
+					$newKS->noreff =  $itemss->norec;
+					$newKS->save();
+				}
 				StokProduk_T::where('strukpenerimaanfk',$req['noRec'])->delete();
-//				$noTerima = $SP->nopenerimaan;
-//				$noFaktur = $SP->nofaktur;
-				//region PENAMBAHAN KEMBALI STOKPRODUKDETAIL
-//				$dataKembaliStok = DB::select(DB::raw("select sp.norec,spd.qtyproduk,spd.hasilkonversi,sp.objectruanganfk,spd.objectprodukfk,
-//                          sp.nostruk
-//                                from strukpelayanandetail_t as spd
-//                                INNER JOIN strukpelayanan_t sp on sp.norec=spd.nostrukfk
-//                                where sp.norec=:norec"),
-//					array(
-//						'norec' => $request['struk']['nostruk'],
-//					)
-//				);
-//
-//				foreach ($dataKembaliStok as $item5) {
-//					$TambahStok = (float)$item5->qtyproduk * (float)$item5->hasilkonversi;
-//					$dataSaldoAwal = DB::select(DB::raw("select sum(qtyproduk) as qty from stokprodukdetail_t
-//                                where objectruanganfk=:ruanganfk and objectprodukfk=:produkfk"),
-//						array(
-//							'ruanganfk' => $item5->objectruanganfk,
-//							'produkfk' => $item5->objectprodukfk,
-//						)
-//					);
-//
-//					$saldoAwal = 0;
-//					foreach ($dataSaldoAwal as $itemss) {
-//						$saldoAwal = (float)$itemss->qty;
-//					}
-//
-//					foreach ($req['details'] as $hit) {
-//						if ($saldoAwal == $hit['jumlah'] || $saldoAwal >= $hit['jumlah']) {
-//							if ($request['struk']['norecOrder'] != '') {
-//								foreach ($req['details'] as $item) {
-//									$dataOP = OrderPelayanan::where('noorderfk', $request['struk']['norecOrder'])
-//										->where('objectprodukfk', $item['produkfk'])
-//										->update([
-//												'qtyterimalast' => (float)$item['jumlah']]
-//										);
-//
-//								}
-//
-//							}
-//
-//
-//
-//							//END##PENAMBAHAN KEMBALI STOKPRODUKDETAIL
-//
-//							//TODO: betulkan ubah penerimaan masih salah
-//							//ubah penerimaan harusnya brg yg di terima hrs di keluarkan dulu
-//							//tpi ini barang sudah terpakai, pengurang stok hanya delete spd dengan brang yg sudah kepake
-//							$delSPD = StokProdukDetail::where('nostrukterimafk', $request['struk']['nostruk'])
-//								->delete();
-//							$delSPD = StrukPelayananDetail::where('nostrukfk', $request['struk']['nostruk'])
-//								->delete();
-//						}
-//					}
-//				}
-				//endregion
 			}
 			$SP->jenistransaksi =1;// JenisTransaksi_M::where('jenistransaksi','PENERIMAAN')->first()->id;
 			$SP->tgltransaksi = $req['tglPenerimaan'];
@@ -204,6 +179,35 @@ class  PenerimaanBarangController extends Controller
 				$SPD->konversi = $item['konversi'];
 //				$SPD->verifikasifk = $item['kdProduk'];
 				$SPD->save();
+
+				$dataSaldoAwal = DB::select(DB::raw("select sum(qty) as qty from stokproduk_t
+                            where  produkfk=:produkfk
+                            and  strukpenerimaanfk=:strukpenerimaanfk"),
+					array(
+						'produkfk' =>  $item['kdProduk'],
+						'strukpenerimaanfk' =>  $SP->norec,
+					)
+				);
+				$saldoAwal=0;
+				foreach ($dataSaldoAwal as $itemss){
+					$saldoAwal = (float)$itemss->qty;
+				}
+				if ($saldoAwal == 0){
+					$saldoAwal =  $item['konversi'];
+				}
+				$newKS = new KartuStok_T();
+				$newKS->norec = $this->generateUid();
+				$newKS->statusenabled = 't';
+				$newKS->jumlah = $item['konversi'];
+				$newKS->keterangan = 'Penerimaan Barang No. ' . $noTerima;
+				$newKS->produkfk = $item['kdProduk'];
+				$newKS->saldoawal = (float)$saldoAwal ;
+				$newKS->status = 1;
+				$newKS->tglinput = date('Y-m-d H:i:s');
+				$newKS->tglkejadian = date('Y-m-d H:i:s');
+				$newKS->strukterimafk = $SP->norec;
+				$newKS->noreff =  $SPD->norec;
+				$newKS->save();
 			}
 			$transStatus = 'true';
 		} catch (\Exception $e) {
@@ -361,31 +365,28 @@ class  PenerimaanBarangController extends Controller
 	{
 		$kdProduk = $request['produkfk'];
 		$norecTerima = $request['norecTerima'];
-		if($norecTerima != '' ){
-			$details = DB::select(DB::raw("select sp.norec, sp.nopenerimaan,spt.norec as norec_stok,spt.produkfk,
-				pr.namaproduk,
-				spt.qty,spt.hargapenerimaan,spt.hargajual,spt.qtypenerimaan,
-				 spt.satuanterimafk,sss.satuanstandard as satuanterima,spt.konversi
- 				from stokproduk_t as spt
-				join strukpenerimaan_t as sp on sp.norec= spt.strukpenerimaanfk
-				join produk_m as pr on pr.id= spt.produkfk
-				left join satuanstandard_m as sss on sss.id= spt.satuanterimafk
-				where spt.qty  > 0
-				and pr.id=$kdProduk
-				and sp.norec ='$norecTerima'
-		"));
-		}else{
-			$details = DB::select(DB::raw("select sp.norec, sp.nopenerimaan,spt.norec as norec_stok,spt.produkfk,
-				pr.namaproduk,
-				spt.qty,spt.hargapenerimaan,spt.hargajual,spt.qtypenerimaan,
-				 spt.satuanterimafk,sss.satuanstandard as satuanterima,spt.konversi
- 				from stokproduk_t as spt
-				join strukpenerimaan_t as sp on sp.norec= spt.strukpenerimaanfk
-				join produk_m as pr on pr.id= spt.produkfk
-				left join satuanstandard_m as sss on sss.id= spt.satuanterimafk
-				where spt.qty  > 0
-				and pr.id=$kdProduk "));
+		$paramNoTerima = '';
+		$paramProduk ='';
+		if(isset($norecTerima) && $norecTerima!='' && $norecTerima!='undefined'){
+			$paramNoTerima = " and  sp.norec ='$norecTerima'";
 		}
+		if(isset($kdProduk) && $kdProduk!='' && $kdProduk!='undefined'){
+			$paramProduk = " and pr.id=$kdProduk";
+		}
+
+		$details = DB::select(DB::raw("select sp.norec, sp.nopenerimaan,spt.norec as norec_stok,spt.produkfk,
+				pr.namaproduk,
+				spt.qty,spt.hargapenerimaan,spt.hargajual,spt.qtypenerimaan,
+				 spt.satuanterimafk,sss.satuanstandard as satuanterima,spt.konversi
+ 				from stokproduk_t as spt
+				join strukpenerimaan_t as sp on sp.norec= spt.strukpenerimaanfk
+				join produk_m as pr on pr.id= spt.produkfk
+				left join satuanstandard_m as sss on sss.id= spt.satuanterimafk
+				where spt.qty  > 0
+			$paramNoTerima
+			$paramProduk
+		"));
+
 
 		$jmlstok =0;
 		foreach ($details as $item){
