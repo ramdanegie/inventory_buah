@@ -42,7 +42,7 @@ export class AppMenuComponent implements OnInit {
 
     ngOnInit() {
         this.getJSON().subscribe(data => this.core = data);
-        this.dashboard = [{ label: 'Dashboard', icon: 'fa fa-fw fa-home', routerLink: ['/'] }];
+        this.dashboard = [{ label: 'Dashboard', icon: 'fa fa-fw fa-home', routerLink: [''] }];
         // this.setting = [{ label: 'Tes Page', icon: 'fa fa-fw fa-sitemap', routerLink: ['/empty'] }];
         // this.core = [
         //     {

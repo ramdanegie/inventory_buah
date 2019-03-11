@@ -148,8 +148,8 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 
 		/** Pembyarana */
 		$app->get('pembayaran/get-combo', 'Transaksi\StrukPembayaranController@getCombo');
-		$app->get('pembayaran/save-pembayaran', 'Transaksi\StrukPembayaranController@savePembayaran');
-
+		$app->post('pembayaran/save-pembayaran', 'Transaksi\StrukPembayaranController@savePembayaran');
+		$app->get('pembayaran/get-bayar-by-no', 'Transaksi\StrukPembayaranController@getPembayaranByNoBayar');
 	});
 
 	/* Master */

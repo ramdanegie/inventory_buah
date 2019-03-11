@@ -252,7 +252,7 @@ class  PenjualanController extends Controller
 
 					$stokProduk = StokProduk_T::where('strukpenerimaanfk',$item['strukpenerimaanfk'])
 						->where('produkfk',$item['kdProduk'])
-						->where('tokofk',$req['kdToko'] )
+//						->where('tokofk',$req['kdToko'] )
 						->first();
 
 					$jmlStok = (float) $stokProduk->qty - (float)$item['konversi'];
@@ -300,8 +300,9 @@ class  PenjualanController extends Controller
 			->LEFTJOIN('toko_m as tk', 'tk.id', '=', 'sp.tokofk')
 			->LEFTJOIN('customer_m as cus', 'cus.id', '=', 'sp.customerfk')
 			->LEFTJOIN('pegawai_m as pg', 'pg.id', '=', 'sp.pegawaifk')
+			->LEFTJOIN('strukpembayaran_t as sbm', 'sbm.norec', '=', 'sp.strukpembayaranfk')
 			->select('sp.norec','sp.tgltransaksi', 'sp.notransaksi','jt.id as jenistransaksifk', 'jt.jenistransaksi', 'sp.tokofk', 'tk.namatoko',
-				'sp.customerfk', 'cus.namacustomer','cus.notlp','cus.nohp','sp.pegawaifk', 'pg.namalengkap')
+				'sp.customerfk', 'cus.namacustomer','cus.notlp','cus.nohp','sp.pegawaifk', 'pg.namalengkap','sbm.nopembayaran')
 			->where('sp.statusenabled',true)
 			->orderBy('sp.tgltransaksi','desc');
 
@@ -367,7 +368,8 @@ class  PenjualanController extends Controller
 				'telpon' => $item->notlp.'-'.$item->nohp,
 				'qtyproduk' => $qty,
 				'totalall' => $total,
-				'details' => $details
+				'details' => $details,
+				'nopembayaran' =>  $item->nopembayaran != null ? $item->nopembayaran : '-'
 			);
 		}
 		$result = array(

@@ -14,9 +14,8 @@
             </div>
             <div class="ui-g-12 ui-md-12">
               <label class="label-web-profile" for="input">Tgl Transaksi </label>
-              <p-calendar dataType="string" formControlName="tglTransaksi" dateFormat="dd/mm/yy" [defaultDate]="now"
-                [showIcon]="true" [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030"
-                [showTime]="true"></p-calendar>
+              <p-calendar formControlName="tglTransaksi" dateFormat="dd/mm/yy" [defaultDate]="now" [showIcon]="true"
+                [monthNavigator]="false" [yearNavigator]="false" yearRange="2000:2030" [showTime]="true"></p-calendar>
             </div>
           </div>
           <div class="ui-g-4">
@@ -152,5 +151,91 @@
       </div>
 
     </div>
+    <p-dialog header="Tambah" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
+      [width]="750" [minWidth]="100" [minHeight]="120" [baseZIndex]="8000" [positionTop]="80" appendTo="body">
+      <div class="ui-g-12">
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12">
+            <p-fieldset legend="Pembayaran" [toggleable]="true">
+
+              <div class="ui-g-6">
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Total Tagihan</label>
+                  <input type="text" pInputText formControlName="totalTagihan" disabled />
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Jumlah Bayar</label>
+                  <input type="text" pInputText formControlName="totalTagihan" disabled />
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Terbilang</label>
+                  <input type="text" pInputText formControlName="terbilang" disabled />
+                </div>
+
+              </div>
+              <div class="ui-g-6">
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Penerima</label>
+                  <p-dropdown formControlName="kdPegawaiPenerima" [options]="listPegawai" [filter]="true"
+                    [autoWidth]="false">
+                  </p-dropdown>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Tipe Pembayaran</label>
+                  <p-dropdown formControlName="tipeBayar" [options]="listTipePembayaran" [filter]="true"
+                    [autoWidth]="false">
+                  </p-dropdown>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Nominal</label>
+                  <input type="text" pInputText formControlName="nominal" />
+                </div>
+              </div>
+              <div class="ui-g-12">
+                <div class="ui-g-3 ui-g-offset-9">
+                  <button pButton type="submit" (click)="addPembayaran()" label="Tambah" icon="fa fa-plus"></button>
+                </div>
+
+              </div>
+              <div class="ui-g-12">
+                <p-dataTable [globalFilter]="gs" [value]="dataSourcePembayaran" [rows]="10" [paginator]="true"
+                  [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected" [immutable]="false"
+                  (onRowSelect)="onRowSelect($event)">
+                  <p-column field="no" header="No" [style]="{'width':'30px'}">
+                      <ng-template let-index="rowIndex+1" pTemplate="body">
+                        {{index}}
+                      </ng-template>
+                    </p-column>
+                  <p-column field="tipepembayaran" header="Tipe Pembayaran"></p-column>
+                  <p-column field="nominal" header="Nominal"></p-column>
+                  <p-column [style]="{'width':'80px'}">
+                    <ng-template let-h="rowData" pTemplate="body">
+                      <!-- <button pButton type="button" (click)="editBayar(h)" icon="fa-edit"></button> -->
+                      <button pButton type="button" (click)="hapusBayar(h)" icon="fa-trash"></button>
+                    </ng-template>
+                  </p-column>
+                  <p-footerColumnGroup>
+                    <p-row>
+                      <p-column footer="" colspan="2"></p-column>
+                      <p-column footer="Total:"></p-column>
+                      <p-column footer="{{totalPembayaran}}"></p-column>
+                    </p-row>
+                  </p-footerColumnGroup>
+                </p-dataTable>
+              </div>
+            </p-fieldset>
+          </div>
+          <div class="ui-g-12">
+            <div class="ui-g-3 ui-g-offset-6">
+              <button pButton type="submit" (click)="savePembayaran()" label="Simpan" icon="fa fa-save"></button>
+            </div>
+            <div class="ui-g-3">
+              <button pButton type="button" (click)="tutupPembayaran()" label="Tutup"
+                icon="fa fa-angle-left"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
   </form>
 </div>
