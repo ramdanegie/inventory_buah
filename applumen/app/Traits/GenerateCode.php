@@ -147,4 +147,32 @@ Trait GenerateCode
 	protected function generateUid(){
     	return substr(Uuid::generate(), 0, 32);
 	}
+	public function getTerbilang($number){
+		$x = abs($number);
+		$angka = array("", "satu", "dua", "tiga", "empat", "lima",
+			"enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
+		$temp = "";
+		if ($number <12) {
+			$temp = " ". $angka[$number];
+		} else if ($number <20) {
+			$temp = $this->getTerbilang($number - 10). " belas";
+		} else if ($number <100) {
+			$temp = $this->getTerbilang($number/10)." puluh". $this->getTerbilang($number % 10);
+		} else if ($number <200) {
+			$temp = " seratus" . $this->getTerbilang($number - 100);
+		} else if ($number <1000) {
+			$temp = $this->getTerbilang($number/100) . " ratus" . $this->getTerbilang($number % 100);
+		} else if ($number <2000) {
+			$temp = " seribu" . $this->getTerbilang($number - 1000);
+		} else if ($number <1000000) {
+			$temp = $this->getTerbilang($number/1000) . " ribu" . $this->getTerbilang($number % 1000);
+		} else if ($number <1000000000) {
+			$temp = $this->getTerbilang($number/1000000) . " juta" . $this->getTerbilang($number % 1000000);
+		} else if ($number <1000000000000) {
+			$temp = $this->getTerbilang($number/1000000000) . " milyar" . $this->getTerbilang(fmod($number,1000000000));
+		} else if ($number <1000000000000000) {
+			$temp = $this->getTerbilang($number/1000000000000) . " trilyun" . $this->getTerbilang(fmod($number,1000000000000));
+		}
+		return $temp;
+	}
 }

@@ -30,13 +30,109 @@ class  PrintController extends Controller
 	public function print(Request $request){
 
 		try {
-			$profile = CapabilityProfile::load("simple");
-			$ip = '192.168.100.123'; // IP Komputer kita atau printer lain yang masih satu jaringan
-			$printer = 'Send To OneNote 2016'; // Nama Printer yang di sharing
+//			$profile = CapabilityProfile::load("simple");
+			$ip = '127.0.0.1'; // IP Komputer kita atau printer lain yang masih satu jaringan
+			$printer = 'EPSON LX-310'; // Nama Printer yang di sharing
 			$connector = new WindowsPrintConnector("smb://" . $ip . "/" . $printer);
-//			return response()->json($connector);
-			$printer = new Printer($connector,$profile);
-			$printer -> text("Hello World!\n");
+			$printer = new Printer($connector);
+			$text = '<!DOCTYPE html>
+<html>
+
+<head>
+  <title>King Banana</title>
+  <style>
+    .table_style {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .td_style,
+    .th_style {
+      border-top: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    .tr_style:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2 style="text-align:center">King Banana</h2>
+  <p style="text-align:center">Jln. Jakarta No 6 Jakarta Selatan.</p>
+  <p style="font-weight:bold "> Faktur Pembayaran</p>
+  <table style="border:0px;  width: 100%;margin-bottom:15px;margin-top:-10px">
+    <tr>
+      <th style="text-align:left">No Struk # : ST90172817</th>
+      <th style="text-align:right"> 23-03-2019</th>
+    </tr>
+    <tr>
+      <th style="text-align:left">Petugas : Admin </th>
+    </tr>
+  </table>
+
+  <table class="table_style">
+    <tr class="tr_style">
+      <th class="th_style">Produk</th>
+      <th class="th_style">Harga</th>
+      <th class="th_style">Jumlah</th>
+      <th class="th_style">Diskon</th>
+      <th class="th_style">Total</th>
+    </tr>
+    <tr class="tr_style">
+      <td class="td_style">Jeruk</td>
+      <td class="td_style"> 1000</td>
+      <td class="td_style">10</td>
+      <td class="td_style">0</td>
+      <td class="td_style"> 10000</td>
+    </tr>
+    <tr class="tr_style">
+      <td class="td_style">Mangga</td>
+      <td class="td_style">5000</td>
+      <td class="td_style">10</td>
+      <td class="td_style">10000</td>
+      <td class="td_style"> 40000</td>
+    </tr>
+    <tr class="tr_style">
+      <td class="td_style">Jambu</td>
+      <td class="td_style">4000</td>
+      <td class="td_style">1</td>
+      <td class="td_style">0</td>
+      <td class="td_style"> 4000</td>
+    </tr>
+  </table>
+  <table style="border:0px;  width: 30%;margin-bottom:15px;margin-top:15px;margin-right:110px" align="right">
+    <tr>
+      <th style="text-align:left">Subtotal</th>
+      <th style="text-align:right"> 54000</th>
+
+    </tr>
+    <tr>
+      <th style="text-align:left">Pajak </th>
+      <th style="text-align:right"> 0</th>
+    </tr>
+    <tr>
+      <th style="text-align:left">Total </th>
+      <th style="text-align:right"> 54000</th>
+    </tr>
+
+    <tr>
+      <th style="text-align:left">Tunai </th>
+      <th style="text-align:right"> 100000</th>
+    </tr>
+    <tr>
+      <th style="text-align:left">Kembali </th>
+      <th style="text-align:right"> 46000</th>
+    </tr>
+  </table>
+</body>
+
+</html>';
+			$printer -> text("Hello World!");
 			$printer -> cut();
 			$printer -> close();
 			$response  = ['success'=>'true'];
@@ -133,20 +229,21 @@ class  PrintController extends Controller
 //			"Attachment" => false,
 //		));
 
-		$pdf = new Fpdf('L','mm',array(120,50));
-		$pdf->AddPage();
-		$pdf->SetFont('Courier', 'B', 20);
-		$pdf->Cell(50, 25, 'Hello World!');
-//		$pdf->Image(__DIR__.'/qrcode.png',"5","10","30","30","png");
-		$pdf->Output('I','');
+//		$pdf = new Fpdf('L','mm',array(120,50));
+//		$pdf->AddPage();
+//		$pdf->SetFont('Courier', 'B', 20);
+//		$pdf->Cell(50, 25, 'Hello World!');
+////		$pdf->Image(__DIR__.'/qrcode.png',"5","10","30","30","png");
+//		$pdf->Output('I','');
 //		exit;
 //		return exit(0);
-		$pdf = App::make('dompdf.wrapper');
+		$pdf = new Dompdf();
+//		$pdf = App::make('dompdf.wrapper');
 		$pdf->loadHtml('<h1 style="color: black">Test</h1>');
 		$pdf->setPaper('letter', 'Lanscape');
-//		$pdf->render();
-		$pdf->stream('dompdf_out.pdf', array('Attachment' => 0));
+		$pdf->render();
+		$pdf->stream("dompdf_out.pdf", array("Attachment" => 0));
 //		return response()->download($pdf);
-//		return exit (0);
+		exit (0);
 	}
 }
