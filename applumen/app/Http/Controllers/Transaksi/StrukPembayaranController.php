@@ -126,9 +126,9 @@ class  StrukPembayaranController extends Controller
 	public function getPembayaranByNoBayar(Request $request)
 	{
 		$data = DB::table('strukpembayaran_t as ss')
-			->join('strukpembayarandetail_t as dd','dd.strukpembayaranfk','=','ss.norec')
+//			->join('strukpembayarandetail_t as dd','dd.strukpembayaranfk','=','ss.norec')
 			->join('pegawai_m as pg','pg.id','=','ss.pegawaifk')
-			->join('tipepembayaran_m as tt','tt.id','=','dd.tipepembayaranfk')
+//			->join('tipepembayaran_m as tt','tt.id','=','dd.tipepembayaranfk')
 			->join('struk_t as str','str.strukpembayaranfk','=','ss.norec')
 			->join('transaksi_t as tr','tr.strukfk','=','str.norec')
 			->leftjoin('produk_m as prd','prd.id','=','tr.produkfk')

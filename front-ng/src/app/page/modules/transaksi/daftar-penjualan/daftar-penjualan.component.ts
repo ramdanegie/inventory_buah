@@ -200,6 +200,7 @@ export class DaftarPenjualanComponent implements OnInit {
               'hargajual': element2.hargajual,
               'hargadiskon': element2.hargadiskon,
               'total': element2.total,
+              'nopembayaran': element.nopembayaran,
             }
             dataPrint.push(push)
           }
@@ -223,6 +224,7 @@ export class DaftarPenjualanComponent implements OnInit {
   }
   onRowSelect(e) {
     this.selectedItem = e.data
+    this.cetakBukti()
   }
   getList() {
     this.httpService.get('transaksi/penerimaan/get-list-data').subscribe(data => {
@@ -442,10 +444,10 @@ export class DaftarPenjualanComponent implements OnInit {
       this.alertService.warn('Peringatan', 'Pilih data dulu')
       return
     }
-    if (this.selectedItem.nopembayaran == '-') {
-      this.alertService.error('Peringatan', 'Transaksi Belum Dibayar')
-      return
-    }
+    // if (this.selectedItem.nopembayaran == '-') {
+    //   this.alertService.error('Peringatan', 'Transaksi Belum Dibayar')
+    //   return
+    // }
     this.httpService.get('transaksi/pembayaran/get-bayar-by-no?nopembayaran=' + this.selectedItem.nopembayaran).subscribe(e => {
       if (e.data.length > 0) {
         let totals: any = 0
@@ -467,15 +469,69 @@ export class DaftarPenjualanComponent implements OnInit {
         this.noPembayaran = e.data[0].nopembayaran
         this.penerimaPembayaran = e.data[0].namalengkap
         this.tglPembayaran = e.data[0].tglpembayaran
-        this.totalbayarNa = e.data[0].totalbayar
-        this.loadHtmlPrint()
+        this.totalbayarNa = parseFloat(e.data[0].totalbayar).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
+
       }
     })
   }
 
   loadHtmlPrint(): void {
+    if (this.selectedItem.nopembayaran == '-') {
+      this.alertService.error('Peringatan', 'Transaksi Belum Dibayar')
+      return
+    }
     let printContents, popupWin;
     printContents = document.getElementById('bayar-section').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+        <html>
+            <head>
+                <title></title>
+                <style>
+                    @media print{
+                        @page {
+                            size: portrait
+                        }
+                    }
+                    table{
+                      font-size:7px;
+                    }
+                    .table_style {
+                      font-family: arial, sans-serif;
+                      border-collapse: collapse;
+                      width: 100%;
+               
+                    }
+                  
+                    .td_style,
+                    .th_style {
+                      border-top: 1px solid #dddddd;
+                      text-align: left;
+                      padding: 10px;
+                    }
+                
+                    .tr_style:nth-child(even) {
+                      background-color: #dddddd;
+                    }
+                    body {
+                      font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+                      text-decoration: none;
+                      font-size:7px;
+                    }
+                </style>
+            </head>
+            <body onload="window.print();window.close()">${printContents}</body>
+         </html>
+         `
+    );
+    popupWin.document.close();
+  }
+  cetak(): void {
+    // this.namaProfile = this.authGuard.getUserDto().profile.NamaLengkap;
+    // this.kelaminProfile = this.authGuard.getUserDto().profile.KelaminLengkap;
+    let printContents, popupWin;
+    printContents = document.getElementById('print-section').innerHTML;
     popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
     popupWin.document.open();
     popupWin.document.write(`
@@ -488,21 +544,12 @@ export class DaftarPenjualanComponent implements OnInit {
                             size: landscape
                         }
                     }
-                    .table_style {
-                      font-family: arial, sans-serif;
-                      border-collapse: collapse;
-                      width: 100%;
-                    }
-                
-                    .td_style,
-                    .th_style {
-                      border-top: 1px solid #dddddd;
-                      text-align: left;
-                      padding: 8px;
-                    }
-                
-                    .tr_style:nth-child(even) {
-                      background-color: #dddddd;
+                    table, th, td {
+                        border: 1px solid black;
+                        border-collapse: collapse;
+                        font-size:10px;
+                        font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+                        text-decoration: none;
                     }
                     body {
                       font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
@@ -516,4 +563,5 @@ export class DaftarPenjualanComponent implements OnInit {
     );
     popupWin.document.close();
   }
+
 }
