@@ -48,6 +48,52 @@ class  StrukPembayaranController extends Controller
 		return response()->json($result);
 	}
 
+    public function getPenerimaanKasir(Request $request)
+    {
+        $data = DB::table('strukpembayaran_t as sp')
+            ->leftJoin('pegawai_m as pg', 'pg.id', '=', 'sp.pegawaifk')
+            ->select('sp.*', 'pg.id as pegawaiid', 'pg.namalengkap')
+            ->where('sp.statusenabled','true');
+
+        if (isset($request['tglAwal']) && $request['tglAwal'] != "" && $request['tglAwal'] != "undefined") {
+            $data = $data->where('sp.tglpembayaran', '>=', $request['tglAwal']);
+        }
+        if (isset($request['tglAkhir']) && $request['tglAkhir'] != "" && $request['tglAkhir'] != "undefined") {
+            $tgl = $request['tglAkhir'];
+            $data = $data->where('sp.tglpembayaran', '<=', $tgl);
+        }
+        if (isset($request['noPembayaran']) && $request['noPembayaran'] != "" && $request['noPembayaran'] != "undefined") {
+            $data = $data->where('sp.nopembayaran', 'ilike', $request['noPembayaran']);
+        }
+        if (isset($request['kdPegawai']) && $request['kdPegawai'] != "" && $request['kdPegawai'] != "undefined") {
+            $data = $data->where('pg.id', '=', $request['kdPegawai']);
+        }
+
+        $data=$data->get();
+        $resData = [];
+        foreach ($data as $item){
+            $norec=$item->norec;
+            $details = DB::select(DB::raw("SELECT spd.*
+                FROM strukpembayarandetail_t as spd
+                LEFT JOIN strukpembayaran_t as sp on sp.norec = spd.strukpembayaranfk
+                LEFT JOIN tipepembayaran_m as tp on tp.id = spd.tipepembayaranfk
+				where spd.strukpembayaranfk = '$norec'
+			"));
+            $resData [] = array(
+                'norec' => $item->norec,
+                'nopembayaran' => $item->nopembayaran,
+                'tlgpembayaran' => $item->tglpembayaran,
+                'totalbayar' => $item->totalbayar,
+                'details' => $details
+            );
+        }
+        $result = array(
+            'data' => $resData,
+            'as' => 'SitepuMan'
+        );
+        return response()->json($result);
+    }
+
 	public function getTerbilangsss($number)
 	{
 		$data = $this->getTerbilang($number);

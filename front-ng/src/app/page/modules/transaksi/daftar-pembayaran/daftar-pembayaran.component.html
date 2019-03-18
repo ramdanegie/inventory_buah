@@ -1,7 +1,7 @@
 <p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle"></p-confirmDialog>
 <div class="card card-w-title">
   <div class="card card-form-header">
-    <h1>Daftar Pembayaran</h1>
+    <h1>Daftar Penerimaan Kasir</h1>
   </div>
 
   <form [formGroup]="formGroup">
@@ -9,20 +9,12 @@
       <div class="ui-g-12">
         <p-fieldset legend="Pencarian" [toggleable]="true">
           <div class="ui-g-12 ui-md-1">
-            <label class="label-web-profile" for="input">No Penerimaan </label>
-            <input type="text" formControlName="noPenerimaan" pInputText />
+            <label class="label-web-profile" for="input">No Pembayaran </label>
+            <input type="text" formControlName="noPembayaran" pInputText />
           </div>
           <div class="ui-g-12 ui-md-2">
-            <label class="label-web-profile" for="input">No Faktur </label>
-            <input type="text" formControlName="noFaktur" pInputText />
-          </div>
-          <div class="ui-g-12 ui-md-2">
-            <label class="label-web-profile" for="input">Nama Supplier </label>
-            <input type="text" formControlName="namaSupplier" pInputText />
-          </div>
-          <div class="ui-g-12 ui-md-2">
-            <label class="label-web-profile" for="input">Pegawai </label>
-            <p-dropdown formControlName="kdPegawai" [options]="listPegawai" [filter]="true" [autoWidth]="false">
+            <label class="label-web-profile" for="input">Kasir </label>
+            <p-dropdown formControlName="kdPegawai" [options]="listKasir" [filter]="true" [autoWidth]="false">
             </p-dropdown>
           </div>
           <div class="ui-g-12 ui-md-2">
@@ -52,38 +44,29 @@
               {{index}}
             </ng-template>
           </p-column>
-          <p-column field="nopenerimaan" header="No Penerimaan" [sortable]="true"></p-column>
-          <p-column field="nofaktur" header="Nomor Faktur" [sortable]="true"></p-column>
-          <p-column field="tgltransaksi" header="Tgl Penerimaan" [sortable]="true"></p-column>
-          <p-column field="jenistransaksi" header="Jenis Transaksi" [sortable]="true"></p-column>
-          <p-column field="namasupplier" header="Nama Supplier" [sortable]="true"></p-column>
-          <p-column field="namapenerima" header="Pegawai Penerima" [sortable]="true"></p-column>
-          <p-column field="total" header="Total" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+          <p-column field="nopembayaran" header="No Pembayaran" [sortable]="true"></p-column>
+          <p-column field="tlgpembayaran" header="Tgl Pembayaran" [sortable]="true"></p-column>
+          <p-column field="namacustomer" header="Nama Customer" [sortable]="true"></p-column>
+          <p-column field="namalengkap" header="Nama Pegawai" [sortable]="true"></p-column>
+          <p-column field="total" header="Total Bayar" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
           <ng-template let-abc pTemplate="rowexpansion">
             <p-dataTable [value]="abc.details" scrollable="true">
-              <p-column field="namaproduk" header="Produk" [style]="{'text-align':'left'}"></p-column>
-              <p-column field="qtypenerimaan" header="Qty Penerimaan" [style]="{ 'text-align':'right'}"></p-column>
-              <p-column field="satuanterima" header="Satuan Terima" [style]="{ 'text-align':'center'}"></p-column>
-              <p-column field="hargapenerimaan" header="Harga Penerimaan" [style]="{ 'text-align':'right'}"></p-column>
-              <p-column field="totalpenerimaan" header="Total Penerimaan" [style]="{'text-align':'right'}"></p-column>
-              <p-column field="hargajual" header="Harga Jual" [style]="{ 'text-align':'right'}"></p-column>
+              <p-column field="tipepembayaranfk" header="Tipe Pembayaran" [style]="{'text-align':'left'}"></p-column>
+              <p-column field="subtotalbayar" header="Sub Total Bayar" [style]="{ 'text-align':'right'}"></p-column>
             </p-dataTable>
           </ng-template>
         </p-dataTable>
       </div>
       <div class="ui-g-12 ">
-        <div class="ui-g-1 ui-g-offset-7">
+        <!-- <div class="ui-g-1 ui-g-offset-7">
           <button type="button" pButton icon="fa fa-plus" [routerLink]="['/penerimaan-barang-supplier']"
             label="Tambah"></button>
-        </div>
-        <div class="ui-g-1">
-          <button type="button" pButton icon="fa fa-edit" (click)="ubahPenerimaan()" label="Ubah"></button>
+        </div> -->
+        <div class="ui-g-1 ui-g-offset-9">
+          <button type="button" pButton icon="fa fa-edit" (click)="ubah()" label="Ubah"></button>
         </div>
         <div class="ui-g-2">
-          <button type="button" pButton icon="fa fa-edit" (click)="penerimaanFix()" label="Penerimaan Fix"></button>
-        </div>
-        <div class="ui-g-1">
-          <button type="button" pButton icon="fa fa-trash" (click)="hapusPenerimaan()" label="Hapus"></button>
+          <button type="button" pButton icon="fa fa-trash" (click)="batalBayar()" label="Batal Setor"></button>
         </div>
       </div>
     </div>

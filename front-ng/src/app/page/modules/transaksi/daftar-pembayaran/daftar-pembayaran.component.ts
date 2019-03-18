@@ -37,10 +37,8 @@ export class DaftarPembayaranComponent implements OnInit {
 
 	ngOnInit() {
 		this.formGroup = this.fb.group({
-			'noPenerimaan': new FormControl(null),
-			'noFaktur': new FormControl(null),
-			'namaSupplier': new FormControl(null),
-			'kdPegawai': new FormControl(null),
+			'noPembayaran': new FormControl,
+			'kdPegawai': new FormControl,
 			'tglAwal': new FormControl(new Date(this.formatDate(this.now) + ' 00:00')),
 			'tglAkhir': new FormControl(this.now),
 		});
@@ -77,27 +75,15 @@ export class DaftarPembayaranComponent implements OnInit {
 		}
 	}
 	loadGrid() {
-		let noPenerimaan = this.formGroup.get('noPenerimaan').value;
-		let noFaktur = this.formGroup.get('noFaktur').value;
-		let namaSupplier = this.formGroup.get('namaSupplier').value;
+		let noPembayaran = this.formGroup.get('noPembayaran').value;
 		let tglAkhir = this.formatDateFull(this.formGroup.get('tglAkhir').value);
 		let tglAwal = this.formatDateFull(this.formGroup.get('tglAwal').value);
 		let kdPegawai = this.formGroup.get('kdPegawai').value;
 
-		if (noPenerimaan)
-			noPenerimaan = '&nopenerimaan=' + noPenerimaan
+		if (noPembayaran)
+			noPembayaran = '&nopenerimaan=' + noPembayaran
 		else
-			noPenerimaan = ''
-
-		if (noFaktur)
-			noFaktur = '&nofaktur=' + noFaktur
-		else
-			noFaktur = ''
-
-		if (namaSupplier)
-			namaSupplier = '&namasupplier=' + namaSupplier
-		else
-			namaSupplier = ''
+			noPembayaran = ''
 
 		if (kdPegawai)
 			kdPegawai = '&kdpegawai=' + kdPegawai
@@ -105,23 +91,26 @@ export class DaftarPembayaranComponent implements OnInit {
 			kdPegawai = ''
 
 		this.loading = true
-		this.httpService.get('transaksi/penerimaan/get-daftar-penerimaan?tglAwal=' + tglAwal
+		this.httpService.get('transaksi/pembayaran/get-penerimaan-kasir?tglAwal=' + tglAwal
 			+ '&tglAkhir=' + tglAkhir
-			+ noPenerimaan + noFaktur + namaSupplier + kdPegawai
+			+ noPembayaran + kdPegawai
 		).subscribe(res => {
 			this.loading = false
 			let data = res.data
 			if (data.length > 0) {
 				for (let i = 0; i < data.length; i++) {
-					data[i].total = this.formatRupiah(data[i].total, 'Rp. ');
-					for (let j = 0; j < data[i].details.length; j++) {
-						const element = data[i].details[j]
-						// element.qtypenerimaan  = this.formatRupiah(element.qtypenerimaan, '');
-						element.hargapenerimaan = this.formatRupiah(element.hargapenerimaan, 'Rp. ');
-						element.totalpenerimaan = this.formatRupiah(element.totalpenerimaan, 'Rp. ');
-						element.hargajual = this.formatRupiah(element.hargajual, 'Rp. ');
-					}
-				}
+					data[i].no = i + 1
+				  }
+				// for (let i = 0; i < data.length; i++) {
+				// 	data[i].total = this.formatRupiah(data[i].total, 'Rp. ');
+				// 	for (let j = 0; j < data[i].details.length; j++) {
+				// 		const element = data[i].details[j]
+				// 		// element.qtypenerimaan  = this.formatRupiah(element.qtypenerimaan, '');
+				// 		element.hargapenerimaan = this.formatRupiah(element.hargapenerimaan, 'Rp. ');
+				// 		element.totalpenerimaan = this.formatRupiah(element.totalpenerimaan, 'Rp. ');
+				// 		element.hargajual = this.formatRupiah(element.hargajual, 'Rp. ');
+				// 	}
+				// }
 				this.dataSource = data
 			} else {
 				this.loading = false
