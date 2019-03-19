@@ -272,7 +272,7 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 		this.resetPart()
 	}
 	onChangeHargaSatuan(value: number) {
-		let qty = this.formGroup.get('qtyProduk').value
+		let qty = this.formGroup.get('konversi').value
 		let total = qty * value
 		this.formGroup.get('total').setValue(total)
 		// console.log(total);
@@ -293,9 +293,9 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 				})
 		}
 
-		let hargaSatuan = this.formGroup.get('hargaSatuan').value
-		let total = hargaSatuan * value
-		this.formGroup.get('total').setValue(total)
+		// let hargaSatuan = this.formGroup.get('hargaSatuan').value
+		// let total = hargaSatuan * value
+		// this.formGroup.get('total').setValue(total)
 
 		// console.log(total);
 	}
