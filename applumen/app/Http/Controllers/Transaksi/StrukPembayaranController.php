@@ -14,6 +14,9 @@ use App\Model\Master\Pegawai_M;
 use App\Model\Standar\LoginUser_S;
 use App\Model\Standar\KelompokUser_S;
 use App\Model\Transaksi\StokProduk_T;
+use App\Model\Transaksi\Struk_T;
+use App\Model\Transaksi\StrukPembayaran_T;
+use App\Model\Transaksi\StrukPembayaranDetail_T;
 use App\Model\Transaksi\StrukPenerimaan_T;
 use App\Traits\GenerateCode;
 
@@ -114,22 +117,31 @@ class  StrukPembayaranController extends Controller
 		DB::beginTransaction();
 		try {
 			if ($request['norec_transaksi'] != null) {
-				$SP = new Struk_T();
+				$SP = new StrukPembayaran_T();
 				$norecSP = $this->generateUid();
 				$SP->norec = $norecSP;
 				$SP->statusenabled = true;
 				$SP->nopembayaran = $maxNoTransaksi;
-				$SP->totalbayar = $request['kdCustomer'];
-				$SP->pegawaifk = $request['kdToko'];
-				$SP->jenistransaksifk = 2;
-//				$SP->pegawaifk = $req['kdPegawai'];
-//				$SP->tgltransaksi = date('Y-m-d H:i:s', strtotime($req['tglTransaksi']));
-//			return date('Y-m-d H:i:s', strtotime($req['tglTransaksi']));
+				$SP->totalbayar = $request['totalbayar'];
+				$SP->pegawaifk = $request['pegawaifk'];
+				$SP->tglpembayaran = date('Y-m-d H:i:s');
 				$SP->save();
 				$norecStruk = $SP->norec;
-				$noTrans = $SP->notransaksi;
+				foreach ($request['detail'] as $item){
+					$det = new StrukPembayaranDetail_T();
+					$det->norec = $this->generateUid();
+					$det->statusenabled = true;
+					$det->tipepembayaranfk = $item['tipepembayaranfk'];
+					$det->subtotalbayar = $item['nominal'];
+					$det->strukpembayaranfk = $norecStruk;
+					$det->save();
+				}
 
-
+				Struk_T::where('norec',$request['norec_transaksi'])->update(
+					[
+						'strukpembayaranfk' => $norecStruk
+					]
+				);
 			}
 
 			$transStatus = 'true';
@@ -138,7 +150,7 @@ class  StrukPembayaranController extends Controller
 		}
 
 		if ($transStatus == 'true') {
-			$transMessage = "Simpan Penjualan";
+			$transMessage = "Simpan Pembayaran";
 			DB::commit();
 			$result = array(
 				"message" => $transMessage,
@@ -147,7 +159,7 @@ class  StrukPembayaranController extends Controller
 				"as" => 'ramdanegie',
 			);
 		} else {
-			$transMessage = "Simpan Penjualan Gagal";
+			$transMessage = "Simpan Pembayaran Gagal";
 			DB::rollBack();
 			$result = array(
 				"message" => $transMessage,
@@ -156,5 +168,27 @@ class  StrukPembayaranController extends Controller
 			);
 		}
 		return response()->json($result,$result['status']);
+	}
+	public function getPembayaranByNoBayar(Request $request)
+	{
+		$data = DB::table('strukpembayaran_t as ss')
+//			->join('strukpembayarandetail_t as dd','dd.strukpembayaranfk','=','ss.norec')
+			->join('pegawai_m as pg','pg.id','=','ss.pegawaifk')
+//			->join('tipepembayaran_m as tt','tt.id','=','dd.tipepembayaranfk')
+			->join('struk_t as str','str.strukpembayaranfk','=','ss.norec')
+			->join('transaksi_t as tr','tr.strukfk','=','str.norec')
+			->leftjoin('produk_m as prd','prd.id','=','tr.produkfk')
+			->select('ss.norec','ss.nopembayaran' ,'ss.totalbayar','ss.tglpembayaran' ,'pg.namalengkap','prd.namaproduk','tr.qty','tr.hargajual','tr.hargadiskon')
+			->where('ss.statusenabled', true)
+			->where('ss.nopembayaran',$request['nopembayaran'])
+			->orderBy('prd.namaproduk')
+			->get();
+
+
+		$result['code'] = 200;
+		$result['data'] =$data;
+		$result['as'] = "ramdanegie";
+
+		return response()->json($result);
 	}
 }

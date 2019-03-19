@@ -1,5 +1,5 @@
 <p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle"></p-confirmDialog>
-<div class="card card-w-title"  *ngIf="!isPreview">
+<div class="card card-w-title" *ngIf="!isPreview">
   <div class="card card-form-header">
     <h1>Daftar Transaksi Penjualan</h1>
   </div>
@@ -65,6 +65,7 @@
           <p-column field="namalengkap" header="Pegawai"></p-column>
           <p-column field="namatoko" header="Toko"></p-column>
           <p-column field="totalall" header="Total" [style]="{'text-align':'right'}"></p-column>
+          <p-column field="nopembayaran" header="No Pembayaran" [style]="{ 'text-align':'right'}"></p-column>
           <ng-template let-abc pTemplate="rowexpansion">
             <p-dataTable [value]="abc.details" scrollable="true">
               <p-column field="namaproduk" header="Produk" [style]="{'text-align':'left'}"></p-column>
@@ -78,7 +79,7 @@
         </p-dataTable>
       </div>
       <div class="ui-g-12 ">
-        <div class="ui-g-1 ui-g-offset-7">
+        <div class="ui-g-1 ui-g-offset-4">
           <button type="button" pButton icon="fa fa-plus" [routerLink]="['/transaksi-penjualan']"
             label="Tambah"></button>
         </div>
@@ -89,6 +90,16 @@
           <button type="button" pButton icon="fa fa-trash" (click)="hapus()" label="Hapus"></button>
         </div>
         <div class="ui-g-1">
+          <button type="button" pButton icon="fa fa-flash" (click)="returPenjualan()" label="Retur"></button>
+        </div>
+        <div class="ui-g-1">
+          <button type="button" pButton icon="fa fa-shopping-cart" (click)="bayar()" label="Bayar"></button>
+        </div>
+        <div class="ui-g-1">
+          <button type="button" pButton icon="fa fa-shopping-bag" (click)="loadHtmlPrint()"
+            label="Cetak Bukti"></button>
+        </div>
+        <div class="ui-g-1">
           <button type="button" pButton icon="fa fa-print" (click)="cetak()" label="Cetak"></button>
         </div>
         <div class="ui-g-1">
@@ -96,6 +107,92 @@
         </div>
       </div>
     </div>
+
+    <p-dialog header="Tambah" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
+      [width]="750" [minWidth]="100" [minHeight]="120" [baseZIndex]="8000" [positionTop]="80" appendTo="body">
+      <div class="ui-g-12">
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12">
+            <p-fieldset legend="Pembayaran" [toggleable]="true">
+
+              <div class="ui-g-6">
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Total Tagihan</label>
+                  <input type="text" pInputText formControlName="totalTagihan" disabled />
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Jumlah Bayar</label>
+                  <input type="text" pInputText formControlName="totalTagihan" disabled />
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Terbilang</label>
+                  <input type="text" pInputText formControlName="terbilang" disabled />
+                </div>
+
+              </div>
+              <div class="ui-g-6">
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Penerima</label>
+                  <p-dropdown formControlName="kdPegawaiPenerima" [options]="listPegawai" [filter]="true"
+                    [autoWidth]="false">
+                  </p-dropdown>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Tipe Pembayaran</label>
+                  <p-dropdown formControlName="tipeBayar" [options]="listTipePembayaran" [filter]="true"
+                    [autoWidth]="false">
+                  </p-dropdown>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                  <label for="input">Nominal</label>
+                  <input type="text" pInputText formControlName="nominal" />
+                </div>
+              </div>
+              <div class="ui-g-12">
+                <div class="ui-g-3 ui-g-offset-9">
+                  <button pButton type="submit" (click)="addPembayaran()" label="Tambah" icon="fa fa-plus"></button>
+                </div>
+
+              </div>
+              <div class="ui-g-12">
+                <p-dataTable [globalFilter]="gs" [value]="dataSourcePembayaran" [rows]="10" [paginator]="true"
+                  [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected" [immutable]="false"
+                  (onRowSelect)="onRowSelect($event)">
+                  <p-column field="no" header="No" [style]="{'width':'30px'}">
+                    <ng-template let-index="rowIndex+1" pTemplate="body">
+                      {{index}}
+                    </ng-template>
+                  </p-column>
+                  <p-column field="tipepembayaran" header="Tipe Pembayaran"></p-column>
+                  <p-column field="nominal" header="Nominal"></p-column>
+                  <p-column [style]="{'width':'80px'}">
+                    <ng-template let-h="rowData" pTemplate="body">
+                      <button pButton type="button" (click)="hapusBayar(h)" icon="fa-trash"></button>
+                    </ng-template>
+                  </p-column>
+                  <p-footerColumnGroup>
+                    <p-row>
+                      <p-column footer="" colspan="2"></p-column>
+                      <p-column footer="Total:"></p-column>
+                      <p-column footer="{{totalPembayaran}}"></p-column>
+                    </p-row>
+                  </p-footerColumnGroup>
+                </p-dataTable>
+              </div>
+            </p-fieldset>
+          </div>
+          <div class="ui-g-12">
+            <div class="ui-g-3 ui-g-offset-6">
+              <button pButton type="submit" (click)="savePembayaran()" label="Simpan" icon="fa fa-save"></button>
+            </div>
+            <div class="ui-g-3">
+              <button pButton type="button" (click)="tutupPembayaran()" label="Tutup" icon="fa fa-angle-left"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+
   </form>
 </div>
 
@@ -127,6 +224,9 @@
       <p-column field="hargajual" header="Harga" [style]="{ 'text-align':'right','width':'100px'}"></p-column>
       <p-column field="hargadiskon" header="Diskon" [style]="{'text-align':'right','width':'100px'}"></p-column>
       <p-column field="total" header="Total" [style]="{ 'text-align':'right','width':'100px'}"></p-column>
+      <p-column field="nopembayaran" header="No Pembayaran" [style]="{ 'text-align':'center','width':'100px'}">
+      </p-column>
+
     </p-dataTable>
   </div>
 </div>
@@ -143,5 +243,60 @@
         <button type="button" pButton icon="fa fa-arrow-left" (click)="isPreview = false" label="Tutup"></button>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="bayar-section" style="display: none;">
+  <div class="ui-g-12">
+    <h2 style="text-align:center"> {{namaProfile}} </h2>
+    <p style="text-align:center"> {{alamatProfile}}</p>
+    <p style="font-weight:bold "> Faktur Pembayaran</p>
+    <table style="border:0px;  width: 100%;margin-bottom:15px;margin-top:-5px">
+      <tr>
+        <th style="text-align:left">No Pembayaran : {{noPembayaran}}</th>
+        <th style="text-align:right"> {{tglPembayaran}}</th>
+      </tr>
+      <tr>
+        <th style="text-align:left">Penerima : {{penerimaPembayaran}} </th>
+      </tr>
+    </table>
+    <table class="table_style">
+      <tr class="tr_style">
+        <th class="th_style">Nama Produk</th>
+        <th class="th_style">Harga</th>
+        <th class="th_style">Jumlah</th>
+        <th class="th_style">Diskon</th>
+        <th class="th_style">Total</th>
+      </tr>
+      <tr class="tr_style" *ngFor="let item of listBayar">
+        <td class="th_style">{{item.namaproduk}}</td>
+        <td class="th_style">{{item.hargajual}}</td>
+        <td class="th_style">{{item.qty}}</td>
+        <td class="th_style">{{item.hargadiskon}}</td>
+        <td class="th_style">{{item.total}}</td>
+      </tr>
+    </table>
+    <table style="border:0px;  width: 30%;margin-bottom:15px;margin-top:15px;margin-right:110px" align="right">
+      <tr>
+        <th style="text-align:left">Subtotal</th>
+        <th style="text-align:right"> {{subtotalPembayaran}}</th>
+      </tr>
+      <tr>
+        <th style="text-align:left">Pajak </th>
+        <th style="text-align:right"> 0</th>
+      </tr>
+      <tr>
+        <th style="text-align:left">Total Tagihan</th>
+        <th style="text-align:right"> {{subtotalPembayaran}}</th>
+      </tr>
+      <tr>
+        <th style="text-align:left">Total Bayar </th>
+        <th style="text-align:right"> {{totalbayarNa}}</th>
+      </tr>
+      <!-- <tr>
+        <th style="text-align:left">Kembali </th>
+        <th style="text-align:right"> 46000</th>
+      </tr> -->
+    </table>
   </div>
 </div>

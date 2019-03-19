@@ -95,7 +95,8 @@ body .ui-icon {
   line-height: 16px; }
 body .ui-state-disabled,
 body .ui-widget:disabled {
-  opacity: .35;
+  /* opacity: .35; */
+   opacity: 1;
   filter: Alpha(Opacity=35);
   background-image: none;
   cursor: default !important; }
