@@ -145,6 +145,19 @@
         ]
     },
     {
+        "label": "Laporan",
+        "icon": "fa fa-fw fa-print",
+        "items": [
+            {
+                "label": "Daftar Detail Penerimaan Barang",
+                "icon": "fa fa-fw fa-bar-chart",
+                "routerLink": [
+                    "/daftar-detail-penerimaan-barang"
+                ]
+            }
+        ]
+    },
+    {
         "label": "Pengaturan",
         "icon": "fa fa-fw fa-wrench",
         "items": [

@@ -28,6 +28,11 @@ export * from './transaksi/stok-barang/stok-barang.component';
 export * from './transaksi/penerimaan-barang-fix/penerimaan-barang-fix.component';
 export * from './transaksi/retur-penjualan/retur-penjualan.component';
 
+// laporam
+export * from './laporan/daftar-detail-penerimaan-barang/daftar-detail-penerimaan-barang.component';
+
+
+
 // not found
 export * from './404/not-found.component';
 import * as component from './';
