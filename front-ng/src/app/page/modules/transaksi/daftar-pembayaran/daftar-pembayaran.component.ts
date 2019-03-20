@@ -21,7 +21,7 @@ export class DaftarPembayaranComponent implements OnInit {
 	now = new Date()
 	dataSource: any[];
 	loading: boolean = false
-	listPegawai: SelectItem[]
+	listKasir: SelectItem[]
 	selectedItem: any;
 	constructor(private alertService: AlertService,
 		private InfoService: InfoService,
@@ -91,7 +91,7 @@ export class DaftarPembayaranComponent implements OnInit {
 			kdPegawai = ''
 
 		this.loading = true
-		this.httpService.get('transaksi/pembayaran/get-penerimaan-kasir?tglAwal=' + tglAwal
+		this.httpService.get('transaksi/penerimaankasir/get-penetimaan-kasir?tglAwal=' + tglAwal
 			+ '&tglAkhir=' + tglAkhir
 			+ noPembayaran + kdPegawai
 		).subscribe(res => {
@@ -101,16 +101,6 @@ export class DaftarPembayaranComponent implements OnInit {
 				for (let i = 0; i < data.length; i++) {
 					data[i].no = i + 1
 				  }
-				// for (let i = 0; i < data.length; i++) {
-				// 	data[i].total = this.formatRupiah(data[i].total, 'Rp. ');
-				// 	for (let j = 0; j < data[i].details.length; j++) {
-				// 		const element = data[i].details[j]
-				// 		// element.qtypenerimaan  = this.formatRupiah(element.qtypenerimaan, '');
-				// 		element.hargapenerimaan = this.formatRupiah(element.hargapenerimaan, 'Rp. ');
-				// 		element.totalpenerimaan = this.formatRupiah(element.totalpenerimaan, 'Rp. ');
-				// 		element.hargajual = this.formatRupiah(element.hargajual, 'Rp. ');
-				// 	}
-				// }
 				this.dataSource = data
 			} else {
 				this.loading = false
@@ -130,12 +120,12 @@ export class DaftarPembayaranComponent implements OnInit {
 		this.selectedItem = e.data
 	}
 	getList() {
-		this.httpService.get('transaksi/penerimaan/get-list-data').subscribe(data => {
+		this.httpService.get('transaksi/penerimaankasir/get-combo').subscribe(data => {
 			var getData: any = this.dataHandler.get(data);
-			this.listPegawai = [];
-			this.listPegawai.push({ label: '--Pilih Pegawai --', value: null });
+			this.listKasir = [];
+			this.listKasir.push({ label: '--Pilih Pegawai --', value: null });
 			getData.pegawai.forEach(response => {
-				this.listPegawai.push({ label: response.namalengkap, value: response.id });
+				this.listKasir.push({ label: response.namalengkap, value: response.id });
 			});
 
 		}, error => {

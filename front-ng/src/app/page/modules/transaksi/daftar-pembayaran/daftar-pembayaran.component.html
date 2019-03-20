@@ -46,9 +46,10 @@
           </p-column>
           <p-column field="nopembayaran" header="No Pembayaran" [sortable]="true"></p-column>
           <p-column field="tlgpembayaran" header="Tgl Pembayaran" [sortable]="true"></p-column>
+          <p-column field="cuntomerid" header="Id Customer" [sortable]="true"></p-column>
           <p-column field="namacustomer" header="Nama Customer" [sortable]="true"></p-column>
-          <p-column field="namalengkap" header="Nama Pegawai" [sortable]="true"></p-column>
-          <p-column field="total" header="Total Bayar" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+          <p-column field="namapegawai" header="Nama Pegawai" [sortable]="true"></p-column>
+          <p-column field="totalbayar" header="Total Bayar" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
           <ng-template let-abc pTemplate="rowexpansion">
             <p-dataTable [value]="abc.details" scrollable="true">
               <p-column field="tipepembayaranfk" header="Tipe Pembayaran" [style]="{'text-align':'left'}"></p-column>
