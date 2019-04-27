@@ -23,6 +23,7 @@ export class AppSideBarComponent implements OnInit {
         this.confirm.confirm({
             message: 'Apakah anda yakin mau logout ?',
             accept: () => {
+                this.app.onMenuButtonClick(event,0)
                 this.auth.logout(this.authGuard, this.info, this.router);
                 event.preventDefault();
             }

@@ -88,18 +88,21 @@ class  StokProdukController extends Controller
 	public function getStokProduk(Request $request)
 	{
 		$data = DB::table('stokproduk_t as sp')
+		->join('produk_m as prd','prd.id','=','sp.produkfk')
 			->join('strukpenerimaan_t as spt','spt.norec','=','sp.strukpenerimaanfk')
-			->join('satuanstandard_m as ss','ss.id','=','sp.satuanterimafk')
-			->join('produk_m as prd','prd.id','=','sp.produkfk')
+			->jOIN ('satuanstandard_m AS ss','ss.id','=','prd.satuanstandardfk')
+			->JOIN('satuanstandard_m AS ssd','ssd.id','=','sp.satuanterimafk')
+			
 			->leftJoin('detailjenisproduk_m as djp','djp.id','=','prd.detailjenisprodukfk')
 			->leftJoin('jenisproduk_m as jp','jp.id','=','djp.jenisprodukfk')
 			->leftJoin('kelompokproduk_m as kl','kl.id','=','jp.kelompokprodukfk')
 			->leftJoin('toko_m as tk','tk.id','=','spt.tokofk')
-			->select('sp.norec','sp.produkfk','prd.namaproduk','ss.id as satuanterimafk','ss.satuanstandard',
+			->select('sp.norec','sp.produkfk','prd.namaproduk',	'ssd.id AS satuanterimafk',	'ssd.satuanstandard as satuanterima',
+				'ss.id as satuanfk','ss.satuanstandard' ,
 				'sp.hargajual','spt.nopenerimaan','sp.nofaktur','spt.tgltransaksi','spt.tokofk','tk.namatoko',
 				DB::raw("sum(sp.qty) as stok"))
 			->groupBy('sp.norec','sp.produkfk','prd.namaproduk','ss.id','ss.satuanstandard',
-				'sp.hargajual','spt.tgltransaksi','spt.nopenerimaan','sp.nofaktur','spt.tokofk','tk.namatoko')
+				'sp.hargajual','spt.tgltransaksi','spt.nopenerimaan','sp.nofaktur','spt.tokofk','tk.namatoko','ssd.id','ssd.satuanstandard')
 			->where('ss.statusenabled',true)
 			->orderBy('spt.tgltransaksi','desc');
 
@@ -123,6 +126,7 @@ class  StokProdukController extends Controller
 			$data= $data->take($request['row']);
 		}
 		$data = $data->get();
+	
 
 		$result= array(
 			'code'=> 200,

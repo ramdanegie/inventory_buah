@@ -364,14 +364,19 @@ class  PenerimaanBarangController extends Controller
 	public function getPenerimaanAvailableStok (Request $request)
 	{
 		$kdProduk = $request['produkfk'];
+		$kdToko = $request['tokofk'];
 		$norecTerima = $request['norecTerima'];
 		$paramNoTerima = '';
 		$paramProduk ='';
+		$paramToko ='';
 		if(isset($norecTerima) && $norecTerima!='' && $norecTerima!='undefined'){
 			$paramNoTerima = " and  sp.norec ='$norecTerima'";
 		}
 		if(isset($kdProduk) && $kdProduk!='' && $kdProduk!='undefined'){
 			$paramProduk = " and pr.id=$kdProduk";
+		}
+		if(isset($kdToko) && $kdToko!='' && $kdToko!='undefined' ){
+			$paramToko = " and spt.tokofk=$kdToko";
 		}
 
 		$details = DB::select(DB::raw("select sp.norec, sp.nopenerimaan,spt.norec as norec_stok,spt.produkfk,
@@ -385,6 +390,7 @@ class  PenerimaanBarangController extends Controller
 				where spt.qty  > 0
 			$paramNoTerima
 			$paramProduk
+			$paramToko
 		"));
 
 
