@@ -60,17 +60,18 @@
               <label class="label-web-profile" for="input">Stok </label>
               <input type="number" formControlName="stok" pInputText disabled>
             </div>
-            <div class="ui-g-12 ui-md-1">
-              <label class="label-web-profile" for="input">Qty Produk </label>
-              <input type="number" formControlName="qtyProduk" pInputText (input)="onChangeQty($event.target.value)"
-                [disabled]="isEdit" />
-            </div>
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Satuan </label>
               <p-dropdown formControlName="kdSatuan" [options]="listSatuan" [filter]="true" [autoWidth]="false"
                 (input)="onChangeSatuan($event.target.value)" [disabled]="isEdit">
               </p-dropdown>
             </div>
+            <div class="ui-g-12 ui-md-1">
+              <label class="label-web-profile" for="input">Qty Produk </label>
+              <input type="number" formControlName="qtyProduk" pInputText (input)="onChangeQty($event.target.value)"
+                [disabled]="isEdit" />
+            </div>
+          
             <div class="ui-g-12 ui-md-2">
               <label class="label-web-profile" for="input">Konversi </label>
               <input type="number" formControlName="konversi" pInputText disabled />
@@ -226,8 +227,11 @@
             </p-fieldset>
           </div>
           <div class="ui-g-12">
-            <div class="ui-g-3 ui-g-offset-6">
+            <div class="ui-g-3 ui-g-offset-6" *ngIf="!isPrintBukti">
               <button pButton type="submit" (click)="savePembayaran()" label="Simpan" icon="fa fa-save"></button>
+            </div>
+            <div class="ui-g-3 ui-g-offset-6" *ngIf="isPrintBukti">
+              <button pButton type="submit" (click)="loadHtmlPrint()" label="Cetak" icon="fa fa-print"></button>
             </div>
             <div class="ui-g-3">
               <button pButton type="button" (click)="tutupPembayaran()" label="Tutup"
@@ -238,4 +242,59 @@
       </div>
     </p-dialog>
   </form>
+</div>
+
+<div id="bayar-section" style="display: none;">
+  <div class="ui-g-12">
+    <h2 style="text-align:center"> {{namaProfile}} </h2>
+    <p style="text-align:center"> {{alamatProfile}}</p>
+    <p style="font-weight:bold "> Faktur Pembayaran</p>
+    <table style="border:0px;  width: 100%;margin-bottom:15px;margin-top:-5px">
+      <tr>
+        <th style="text-align:left">No Pembayaran : {{noPembayaran}}</th>
+        <th style="text-align:right"> {{tglPembayaran}}</th>
+      </tr>
+      <tr>
+        <th style="text-align:left">Penerima : {{penerimaPembayaran}} </th>
+      </tr>
+    </table>
+    <table class="table_style">
+      <tr class="tr_style">
+        <th class="th_style">Nama Produk</th>
+        <th class="th_style">Harga</th>
+        <th class="th_style">Jumlah</th>
+        <th class="th_style">Diskon</th>
+        <th class="th_style">Total</th>
+      </tr>
+      <tr class="tr_style" *ngFor="let item of listBayar">
+        <td class="th_style">{{item.namaproduk}}</td>
+        <td class="th_style">{{item.hargajual}}</td>
+        <td class="th_style">{{item.qty}}</td>
+        <td class="th_style">{{item.hargadiskon}}</td>
+        <td class="th_style">{{item.total}}</td>
+      </tr>
+    </table>
+    <table style="border:0px;  width: 30%;margin-bottom:15px;margin-top:15px;margin-right:110px" align="right">
+      <tr>
+        <th style="text-align:left">Subtotal</th>
+        <th style="text-align:right"> {{subtotalPembayaran}}</th>
+      </tr>
+      <tr>
+        <th style="text-align:left">Pajak </th>
+        <th style="text-align:right"> 0</th>
+      </tr>
+      <tr>
+        <th style="text-align:left">Total Tagihan</th>
+        <th style="text-align:right"> {{subtotalPembayaran}}</th>
+      </tr>
+      <tr>
+        <th style="text-align:left">Total Bayar </th>
+        <th style="text-align:right"> {{totalbayarNa}}</th>
+      </tr>
+      <!-- <tr>
+        <th style="text-align:left">Kembali </th>
+        <th style="text-align:right"> 46000</th>
+      </tr> -->
+    </table>
+  </div>
 </div>

@@ -40,6 +40,16 @@ export class TransaksiPenjualanComponent implements OnInit {
   totalPembayaran: any = 0
   temPembayaran: any = []
   norecTransaksi: any = null
+  selectNoBayar: any
+  subtotalPembayaran: any
+  listBayar: any
+  noPembayaran: any
+  penerimaPembayaran: any
+  tglPembayaran: any
+  totalbayarNa: any
+  namaProfile: any
+  alamatProfile: any
+  isPrintBukti: boolean = false
   constructor(private alertService: AlertService,
     private InfoService: InfoService,
     private httpService: HttpClient,
@@ -52,6 +62,8 @@ export class TransaksiPenjualanComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.namaProfile = this.authGuard.getUserDto().profile.namaProfile;
+    this.alamatProfile = this.authGuard.getUserDto().profile.alamatProfile;
     this.getList()
     this.formGroup = this.fb.group({
       'noRec': new FormControl(null),
@@ -366,11 +378,18 @@ export class TransaksiPenjualanComponent implements OnInit {
     // console.log(total);
   }
   getPenerimaan() {
-
+  
     let produk = this.formGroup.get('produk').value;
+    let kdToko = this.formGroup.get('kdToko').value;
+    if(kdToko == null){
+      this.alertService.warn('Peringatan','Pilih Toko dulu')
+      this.formGroup.get('produk').reset()
+      return
+    }
     let norec = ''//this.formGroup.get('noRecTerima').value;
     this.httpService.get("transaksi/penerimaan/get-penerimaan-ada-stok?" +
       "produkfk=" + produk.kdProduk
+      + "&tokofk="+ kdToko
       + "&norecTerima="
     ).subscribe(res => {
       // this.dataProdukDetail = res.data
@@ -636,7 +655,34 @@ export class TransaksiPenjualanComponent implements OnInit {
       'detail': this.temPembayaran
     }
     this.httpService.post('transaksi/pembayaran/save-pembayaran', json).subscribe(res => {
-      this.tutupPembayaran()
+      this.selectNoBayar = res.data.nopembayaran
+      this.httpService.get('transaksi/pembayaran/get-bayar-by-no?nopembayaran=' + this.selectNoBayar).subscribe(e => {
+        if (e.data.length > 0) {
+          let totals: any = 0
+          for (let i = 0; i < e.data.length; i++) {
+            const element = e.data[i];
+            element.total = parseFloat(element.hargajual) * parseFloat(element.qty)
+            totals = totals + element.total
+          }
+          this.subtotalPembayaran = parseFloat(totals).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
+
+          for (let i = 0; i < e.data.length; i++) {
+            const element = e.data[i];
+            element.total = parseFloat(element.total).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
+            element.hargajual = parseFloat(element.hargajual).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
+            element.hargadiskon = parseFloat(element.hargadiskon).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
+            element.qty = parseFloat(element.qty).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
+          }
+          this.listBayar = e.data
+          this.noPembayaran = e.data[0].nopembayaran
+          this.penerimaPembayaran = e.data[0].namalengkap
+          this.tglPembayaran = e.data[0].tglpembayaran
+          this.totalbayarNa = parseFloat(e.data[0].totalbayar).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
+          this.isPrintBukti = true
+        }
+      })
+
+
     }, error => {
 
     })
@@ -660,5 +706,56 @@ export class TransaksiPenjualanComponent implements OnInit {
 
 
   }
+
+  loadHtmlPrint(): void {
+
+    let printContents, popupWin;
+    printContents = document.getElementById('bayar-section').innerHTML;
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.open();
+    popupWin.document.write(`
+          <html>
+              <head>
+                  <title></title>
+                  <style>
+                      @media print{
+                          @page {
+                              size: portrait
+                          }
+                      }
+                      table{
+                        font-size:7px;
+                      }
+                      .table_style {
+                        font-family: arial, sans-serif;
+                        border-collapse: collapse;
+                        width: 100%;
+                 
+                      }
+                    
+                      .td_style,
+                      .th_style {
+                        border-top: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 10px;
+                      }
+                  
+                      .tr_style:nth-child(even) {
+                        background-color: #dddddd;
+                      }
+                      body {
+                        font-family: "Source Sans Pro", "Helvetica Neue", sans-serif;
+                        text-decoration: none;
+                        font-size:7px;
+                      }
+                  </style>
+              </head>
+              <body onload="window.print();window.close()">${printContents}</body>
+           </html>
+           `
+    );
+    popupWin.document.close();
+  }
+
 }
 

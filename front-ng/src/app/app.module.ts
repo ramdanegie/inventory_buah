@@ -39,6 +39,7 @@ import { Http, HttpModule } from '@angular/http';
 import { pagesAuth } from './page/auth';
 import { ComponentMaster, ServiceMaster } from './page/modules';
 import { ProdukComponent } from './page/modules/master/produk/produk.component';
+import { ChartModule } from 'angular-highcharts';
 // import { ChartModule } from 'angular-highcharts';
 //import { ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
 //import * as more from 'highcharts/highcharts-more.src';
@@ -60,7 +61,7 @@ import { ProdukComponent } from './page/modules/master/produk/produk.component';
         RouterModule,
         ReactiveFormsModule,
         HttpModule,
-        //ChartModule,
+        ChartModule,
         // LoadingPageModule, MaterialBarModule,
     ],
     declarations: [
