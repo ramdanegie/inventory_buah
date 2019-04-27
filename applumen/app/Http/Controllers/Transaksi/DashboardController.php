@@ -122,4 +122,37 @@ class  DashboardController extends Controller
 		);
 		return response()->json($result);
 	}
+	public function trend(Request $request){
+
+        if($request['tipe'] == 'sehari'){
+            $tglAwal = date( 'Y-m-d 00:00');
+        }
+        if($request['tipe'] == 'seminggu'){
+            $tglAwal = Carbon::now()->subWeek(1)->toDateString();//  Carbon::now()->subMonth(1);
+            $tglAwal = date($tglAwal.' 00:00');
+        }
+        $tglAkhir =date('Y-m-d 23:59');
+
+        $data =DB::select(DB::raw("
+        
+            SELECT to_char(s.tgltransaksi,'YYYY-MM-DD') as tglpencarian ,COALESCE(sum((tt.hargajual*tt.qty)-tt.hargadiskon),0) as total from struk_t as s
+			join transaksi_t as tt on tt.strukfk =s.norec
+			where  s.tgltransaksi between '$tglAwal' and '$tglAkhir'
+			and s.statusenabled =true	
+			GROUP BY to_char(s.tgltransaksi,'YYYY-MM-DD') 
+	
+           "));
+
+        foreach ($data as $key => $row) {
+            $count[$key] = $row->tglpencarian;
+        }
+
+        array_multisort($count, SORT_ASC, $data);
+
+        $result = array(
+            'data' => $data,
+            'message' => 'ramdanegie',
+        );
+       return response()->json($result);
+	}
 }

@@ -28,6 +28,7 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 
 	/* Example */
 	$app->get('dashboard/count', 'Transaksi\DashboardController@countData');
+	$app->get('dashboard/get-trend-pendapatan', 'Transaksi\DashboardController@trend');
 
 	$app->group(['prefix' => 'master/'/*, 'middleware' => 'auth2'*/], function ($app) {
 		/** AgamaM */
