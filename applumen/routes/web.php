@@ -150,6 +150,7 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
         /** Penerimaan Kasir*/
         $app->get('penerimaankasir/get-penetimaan-kasir', 'Transaksi\PenerimaanKasirController@getPenerimaanKasir');
         $app->get('penerimaankasir/get-combo', 'Transaksi\PenerimaanKasirController@getCombo');
+        $app->post('stokproduk/simpan-setoran', 'Transaksi\PenerimaanKasirController@saveSetoran');
 
 		/** Dashboard*/
 

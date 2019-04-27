@@ -24,7 +24,8 @@ class SetoranDebitKreditController extends Controller
             ->where ('statusenabled',true)
             ->orderBy('namalengkap')
             ->get();
-        $result = array(
+        $result['code'] = 200;
+        $result[''] = array(
             'status' => 200,
             'data' => $datapegawai,
             'as' => "{ng-SitepuMan}"
