@@ -51,8 +51,8 @@
           <p-column field="subtotalbayar" header="Sub Total Bayar" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
         </p-dataTable>
       </div>
-      <div class="ui-g-4 ui-g-offset-8">
-        <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
+      <div class="ui-g-2 ui-g-offset-10">
+        <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="false" [pageLinks]="3"
           [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected" [loading]="loading"
           loadingIcon="fa fa-spinner" (onRowSelect)="onRowSelect($event)" scrollable="true" expandableRows="true">
           <!-- <p-column header="No" [style]="{'width':'40px'}">

@@ -291,6 +291,7 @@ export class DaftarPembayaranComponent implements OnInit {
 			accept: () => {
 				this.httpService.post('transaksi/penerimaankasir/save-closing', jsonSave).subscribe(res => {
 					// this.formGroup.reset()
+					this.cari()
 				}, error => {
 
 				})
