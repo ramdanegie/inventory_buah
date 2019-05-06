@@ -34,44 +34,34 @@
           </div>
         </p-fieldset>
       </div>
-      <div class="ui-g-6">
-        <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
-          [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected" [loading]="loading"
-          loadingIcon="fa fa-spinner" (onRowSelect)="onRowSelect($event)" scrollable="true" expandableRows="true">
-          <!-- <p-column expander="true" styleClass="col-icon" [style]="{'width':'40px', 'text-align':'left'}"></p-column> -->
-          <p-column header="No" [style]="{'width':'40px'}">
-            <ng-template let-index="rowIndex+1" pTemplate="body">
-              {{index}}
-            </ng-template>
-          </p-column>
-          <p-column field="tipepembayaran" header="Tipe Pembayaran" [sortable]="true"></p-column>
-          <p-column field="totalpenerimaan" header="Total Penerimaan" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
-          <p-column field="" header="Total Setor" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
-          <p-column field="" header="Sisa" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
-          <!-- <ng-template let-abc pTemplate="rowexpansion">
-            <p-dataTable [value]="abc.details" scrollable="true">
-              <p-column field="csid" header="Id Customer" [style]="{'text-align':'left'}"></p-column>
-              <p-column field="namacustomer" header="Nama Customer" [style]="{ 'text-align':'right'}"></p-column>
-              <p-column field="notransaksi" header="No Transaksi" [style]="{ 'text-align':'right'}"></p-column>
-              <p-column field="subtotalbayar" header="Sub Total Bayar" [style]="{ 'text-align':'right'}"></p-column>
-            </p-dataTable>
-          </ng-template> -->
-        </p-dataTable>
-      </div>
-      <div class="ui-g-6">
+      <div class="ui-g-12">
         <p-dataTable [globalFilter]="gs" [value]="dataSource2" [rows]="10" [paginator]="true" [pageLinks]="3"
           [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected" [loading]="loading"
-          loadingIcon="fa fa-spinner" (onRowSelect)="onRowSelect($event)" scrollable="true" expandableRows="true">
-          <p-column expander="true" styleClass="col-icon" [style]="{'width':'40px', 'text-align':'left'}"></p-column>
+          loadingIcon="fa fa-spinner" (onRowSelect)="onRowSelect2($event)" scrollable="true" expandableRows="true">
           <p-column header="No" [style]="{'width':'40px'}">
             <ng-template let-index="rowIndex+1" pTemplate="body">
               {{index}}
             </ng-template>
           </p-column>
           <p-column field="csid" header="Id Customer" [sortable]="true"></p-column>
+          <p-column field="nopembayaran" header="No Pembayaran" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
           <p-column field="namacustomer" header="Nama Customer" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
-          <p-column field="notransaksi" header="No Transaksi" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+          <p-column field="tipepembayaran" header="Tipe Pembayaran" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+          <p-column field="tglpembayaran" header="Tgl Pembayaran" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
           <p-column field="subtotalbayar" header="Sub Total Bayar" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+        </p-dataTable>
+      </div>
+      <div class="ui-g-4 ui-g-offset-8">
+        <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
+          [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected" [loading]="loading"
+          loadingIcon="fa fa-spinner" (onRowSelect)="onRowSelect($event)" scrollable="true" expandableRows="true">
+          <!-- <p-column header="No" [style]="{'width':'40px'}">
+            <ng-template let-index="rowIndex+1" pTemplate="body">
+              {{index}}
+            </ng-template>
+          </p-column> -->
+          <!-- <p-column field="tipepembayaran" header="Tipe Pembayaran" [sortable]="true"></p-column> -->
+          <p-column field="totalpenerimaan" header="Total Penerimaan" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
         </p-dataTable>
       </div>
       <div class="ui-g-12 ">
@@ -79,8 +69,11 @@
           <button type="button" pButton icon="fa fa-plus" [routerLink]="['/penerimaan-barang-supplier']"
             label="Tambah"></button>
         </div> -->
-        <div class="ui-g-1 ui-g-offset-11">
+        <!-- <div class="ui-g-1 ui-g-offset-10">
           <button type="button" pButton icon="fa fa-dollar" (click)="simpanSetor()" label="Setor"></button>
+        </div> -->
+        <div class="ui-g-1 ui-g-offset-11">
+          <button type="button" pButton icon="fa fa-dollar" (click)="closing()" label="Closing"></button>
         </div>
         <!-- <div class="ui-g-2">
           <button type="button" pButton icon="fa fa-trash" (click)="batalBayar()" label="Batal Setor"></button>

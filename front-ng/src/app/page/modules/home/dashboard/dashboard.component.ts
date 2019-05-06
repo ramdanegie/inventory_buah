@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getData()
-    this.getTrendPendapatan()
+    // this.getTrendPendapatan()
   }
   getData() {
     this.httpService.get('dashboard/count').subscribe(e => {
