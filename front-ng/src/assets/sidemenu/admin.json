@@ -148,6 +148,13 @@
                 "routerLink": [
                     "/daftar-pembayaran"
                 ]
+            },
+            {
+                "label": "Daftar Closing",
+                "icon": "fa fa-fw fa-first-order",
+                "routerLink": [
+                    "/daftar-closing-pembayaran"
+                ]
             }
         ]
     },
