@@ -113,6 +113,19 @@ class  StrukPembayaranController extends Controller
 			);
 			return response()->json($result,$result['status']);
 		}
+		if(isset($request['isPenerimaanSupplier']) && $request['isPenerimaanSupplier'] ==true){
+			$maxNoTransaksi = $this->getNewCode( 'nopembayaran', 12, 'IS'.date('ym'));
+			if ($maxNoTransaksi == ''){
+				DB::rollBack();
+				$result = array(
+					"status" => 400,
+					"message"  => 'Gagal mengumpukan data, Coba lagi.',
+					"as" => 'ramdanegie',
+				);
+				return response()->json($result,$result['status']);
+			}
+		}
+
 
 		DB::beginTransaction();
 		try {
@@ -136,7 +149,13 @@ class  StrukPembayaranController extends Controller
 					$det->strukpembayaranfk = $norecStruk;
 					$det->save();
 				}
-
+				if(isset($request['isPenerimaanSupplier']) && $request['isPenerimaanSupplier'] ==true) {
+					StrukPenerimaan_T::where('norec',$request['norec_transaksi'])->update(
+						[
+							'strukpembayaranfk' => $norecStruk
+						]
+					);
+				}
 				Struk_T::where('norec',$request['norec_transaksi'])->update(
 					[
 						'strukpembayaranfk' => $norecStruk

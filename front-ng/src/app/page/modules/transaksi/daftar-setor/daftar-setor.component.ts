@@ -10,13 +10,12 @@ import { Router } from '@angular/router';
 import * as moment from 'moment'
 
 @Component({
-	selector: 'app-daftar-penerimaan-barang-supplier',
-	templateUrl: './daftar-penerimaan-barang-supplier.component.html',
-	styleUrls: ['./daftar-penerimaan-barang-supplier.component.scss'],
+	selector: 'app-daftar-setor',
+	templateUrl: './daftar-setor.component.html',
+	styleUrls: ['./daftar-setor.component.scss'],
 	providers: [ConfirmationService]
 })
-export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
-
+export class DaftarSetorComponent implements OnInit {
 	formGroup: FormGroup;
 	now = new Date()
 	dataSource: any[];
@@ -41,6 +40,9 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 	listBayar: any = []
 	subtotalPembayaran: any = 0
 	totalbayarNa: any
+	listKeterangan: SelectItem[]
+	norecSetoran: any
+	totalAll: any
 	constructor(private alertService: AlertService,
 		private InfoService: InfoService,
 		private httpService: HttpClient,
@@ -59,17 +61,21 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 		this.namaProfile = this.authGuard.getUserDto().profile.namaProfile;
 		this.alamatProfile = this.authGuard.getUserDto().profile.alamatProfile;
 		this.formGroup = this.fb.group({
-			'noPenerimaan': new FormControl(null),
-			'noFaktur': new FormControl(null),
-			'namaSupplier': new FormControl(null),
-			'kdPegawai': new FormControl(null),
+			'cariNoSetor': new FormControl(null),
+			'cariPenyetor': new FormControl(null),
+			'cariJenis': new FormControl(null),
+			'cariPenerima': new FormControl(null),
 			'tglAwal': new FormControl(new Date(this.formatDate(this.now) + ' 00:00')),
 			'tglAkhir': new FormControl(this.now),
-			'totalTagihan': new FormControl(0),
+			'cariKeterangan': new FormControl(null),
 			'terbilang': new FormControl(null),
 			'tipeBayar': new FormControl(null),
 			'nominal': new FormControl(null),
 			'kdPegawaiPenerima': new FormControl(null),
+			'tglSetor': new FormControl(new Date()),
+			'keterangan': new FormControl(null),
+			'jumlahSetor': new FormControl(null),
+			'penyetor': new FormControl(null),
 		});
 		this.formGroup.get('kdPegawaiPenerima').setValue(this.authGuard.getUserDto().kdPegawai)
 		this.getList()
@@ -105,55 +111,75 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 		}
 	}
 	loadGrid() {
-		let noPenerimaan = this.formGroup.get('noPenerimaan').value;
-		let noFaktur = this.formGroup.get('noFaktur').value;
-		let namaSupplier = this.formGroup.get('namaSupplier').value;
+
+		let noSetor = this.formGroup.get('cariNoSetor').value;
+		let penyetor = this.formGroup.get('cariPenyetor').value;
+		let jenis = this.formGroup.get('cariJenis').value;
+		let penerima = this.formGroup.get('cariPenerima').value;
+
 		let tglAkhir = this.formatDateFull(this.formGroup.get('tglAkhir').value);
 		let tglAwal = this.formatDateFull(this.formGroup.get('tglAwal').value);
-		let kdPegawai = this.formGroup.get('kdPegawai').value;
+		let keterangan = this.formGroup.get('cariKeterangan').value;
 
-		if (noPenerimaan)
-			noPenerimaan = '&nopenerimaan=' + noPenerimaan
+		if (noSetor)
+			noSetor = '&noSetor=' + noSetor
 		else
-			noPenerimaan = ''
+			noSetor = ''
 
-		if (noFaktur)
-			noFaktur = '&nofaktur=' + noFaktur
+		if (penyetor)
+			penyetor = '&penyetor=' + penyetor
 		else
-			noFaktur = ''
+			penyetor = ''
 
-		if (namaSupplier)
-			namaSupplier = '&namasupplier=' + namaSupplier
+		if (jenis)
+			jenis = '&jenis=' + jenis
 		else
-			namaSupplier = ''
+			jenis = ''
 
-		if (kdPegawai)
-			kdPegawai = '&kdpegawai=' + kdPegawai
+		if (penerima)
+			penerima = '&penerima=' + penerima
 		else
-			kdPegawai = ''
+			penerima = ''
+
+		if (keterangan)
+			keterangan = '&keterangan=' + keterangan.id
+		else
+			keterangan = ''
 
 		this.loading = true
-		this.httpService.get('transaksi/penerimaan/get-daftar-penerimaan?tglAwal=' + tglAwal
+		this.httpService.get('transaksi/setoran/get-daftar-setor?tglAwal=' + tglAwal
 			+ '&tglAkhir=' + tglAkhir
-			+ noPenerimaan + noFaktur + namaSupplier + kdPegawai
+			+ noSetor + penerima + penyetor + jenis + keterangan
 		).subscribe(res => {
 			this.loading = false
 			this.tempDataGrid = res.data
 			let data = res.data
 
 			if (data.length > 0) {
-				for (let i = 0; i < data.length; i++) {
-					data[i].totalall = data[i].total
-					data[i].total = this.formatRupiah(data[i].total, 'Rp. ');
 
-					for (let j = 0; j < data[i].details.length; j++) {
-						const element = data[i].details[j]
-						// element.qtypenerimaan  = this.formatRupiah(element.qtypenerimaan, '');
-						element.hargapenerimaan = this.formatRupiah(element.hargapenerimaan, 'Rp. ');
-						element.totalpenerimaan = this.formatRupiah(element.totalpenerimaan, 'Rp. ');
-						element.hargajual = this.formatRupiah(element.hargajual, 'Rp. ');
+				for (let i = 0; i < data.length; i++) {
+					data[i].jml = data[i].ttldebitkredit
+					// data[i].ttldebitkredit = this.formatRupiah(data[i].ttldebitkredit, 'Rp. ');
+					if (data[i].jenisdebitkredit == 'd') {
+						data[i].debitjml = data[i].ttldebitkredit
+						data[i].debit = this.formatRupiah(data[i].ttldebitkredit, 'Rp. ');
+						data[i].kreditjml = 0
+						data[i].kredit = this.formatRupiah(0, 'Rp. ');
+					}
+					if (data[i].jenisdebitkredit == 'k') {
+						data[i].kreditjml = data[i].ttldebitkredit
+						data[i].kredit = this.formatRupiah(data[i].ttldebitkredit, 'Rp. ');
+						data[i].debitjml = 0
+						data[i].debit = this.formatRupiah(0, 'Rp. ');
 					}
 				}
+				this.totalAll = 0
+				for (let i = 0; i < data.length; i++) {
+					const element = data[i];
+					this.totalAll = this.totalAll + parseFloat(element.debitjml) - parseFloat(element.kreditjml)
+
+				}
+				this.totalAll = this.formatRupiah(this.totalAll, 'Rp. ')
 				this.dataSource = data
 				this.dataSourcePrint = data
 			} else {
@@ -172,15 +198,20 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 	}
 	onRowSelect(e) {
 		this.selectedItem = e.data
-		this.cetakBukti()
+		// this.cetakBukti()
 	}
 	getList() {
-		this.httpService.get('transaksi/penerimaan/get-list-data').subscribe(data => {
+		this.httpService.get('transaksi/setoran/get-combo').subscribe(data => {
 			var getData: any = this.dataHandler.get(data);
 			this.listPegawai = [];
 			this.listPegawai.push({ label: '--Pilih Pegawai --', value: null });
 			getData.pegawai.forEach(response => {
 				this.listPegawai.push({ label: response.namalengkap, value: response.id });
+			});
+			this.listKeterangan = [];
+			this.listKeterangan.push({ label: '--Pilih Keterangan --', value: null });
+			getData.keterangansetor.forEach(response => {
+				this.listKeterangan.push({ label: response.keterangansetor, value: response });
 			});
 
 		}, error => {
@@ -188,18 +219,25 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 		});
 
 	}
-	ubahPenerimaan() {
+	ubah() {
 		if (this.selectedItem == undefined) {
 			this.alertService.warn('Peringatan', 'Pilih data dulu')
 			return
 		}
-		var cache = {
-			0: this.selectedItem.norec,
-			1: 'EditTerima',
-		}
+		this.norecSetoran = this.selectedItem.norec
+		this.formGroup.get('tglSetor').setValue(new Date(this.selectedItem.tgl))
+		this.formGroup.get('keterangan').setValue({
+			id: this.selectedItem.keteranganfk,
+			jenisdebitkredit: this.selectedItem.jenisdebitkredit,
+			keterangansetor: this.selectedItem.keterangansetor,
+			statusenabled: true
+		})
+		this.formGroup.get('jumlahSetor').setValue(this.selectedItem.ttldebitkredit)
+		this.formGroup.get('kdPegawaiPenerima').setValue(this.selectedItem.pegawaipenerimafk)
+		this.formGroup.get('penyetor').setValue(this.selectedItem.pegawaisetorfk)
+		this.displayDialog = true
 
-		this.cacheHelper.set('cacheUbahPenerimaanSupplier', cache);
-		this.router.navigate(['/penerimaan-barang-supplier'])
+
 	}
 	penerimaanFix() {
 		if (this.selectedItem == undefined) {
@@ -214,23 +252,29 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 		this.cacheHelper.set('cacheUbahPenerimaanSupplier', cache);
 		this.router.navigate(['/penerimaan-barang-fix'])
 	}
-	hapusPenerimaan() {
+	hapus() {
 		if (this.selectedItem == undefined) {
 			this.alertService.warn('Peringatan', 'Pilih data dulu')
 			return
 		}
 		let obj = {
-			'noRec': this.selectedItem.norec
+			'norecSetoran': this.selectedItem.norec
 		}
 		this.confirmationService.confirm({
 			message: 'Yakin mau menghapus data?',
 			accept: () => {
-				this.httpService.post('transaksi/penerimaan/delete-penerimaan', obj).subscribe(res => {
+				this.httpService.post('transaksi/setoran/hapus-setoran', obj).subscribe(res => {
 					this.loadGrid()
 				}, error => {
 
 				})
 			}
+		})
+	}
+	onChangeJml(value: number) {
+
+		this.httpService.get('generic/get-terbilang/' + value).subscribe(data => {
+			this.formGroup.get('terbilang').setValue(data)
 		})
 	}
 	bayar() {
@@ -316,59 +360,25 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 	}
 	tutupPembayaran() {
 		this.displayDialog = false
-		this.formGroup.get('nominal').reset()
-		this.formGroup.get('totalTagihan').reset()
-		this.formGroup.get('tipeBayar').reset()
-		this.temPembayaran = []
-		this.dataSourcePembayaran = this.temPembayaran
-		this.totalPembayaran = 0
+		this.formGroup.get('tglSetor').setValue(new Date())
+		this.formGroup.get('keterangan').reset()
+		this.formGroup.get('jumlahSetor').reset()
+		this.formGroup.get('terbilang').reset()
+		this.formGroup.get('penyetor').reset()
 		this.selectedItem = undefined
 	}
 	savePembayaran() {
-		if (this.temPembayaran.length == 0) {
-			this.alertService.warn('Peringatan', 'Pembayaran Belum ada ')
-			return
-		}
-		let totalTagihan = this.formGroup.get('totalTagihan').value
-		let kdPegawaiPenerima = this.formGroup.get('kdPegawaiPenerima').value
-		let total = 0
-		for (let i = this.temPembayaran.length - 1; i >= 0; i--) {
-			total = total + parseFloat(this.temPembayaran[i].nominal)
-		}
-		let json = {
-			'isPenerimaanSupplier': true,
-			'norec_transaksi': this.selectedItem.norec,
-			'totalbayar': total,
-			'pegawaifk': kdPegawaiPenerima,
-			'detail': this.temPembayaran
-		}
-		this.httpService.post('transaksi/pembayaran/save-pembayaran', json).subscribe(res => {
-			this.saveSetoran(res.data)
-			// this.tutupPembayaran()
-			this.loadGrid()
-		}, error => {
 
-		})
-	}
-	saveSetoran(data) {
-
-		let json = {
-			'norecSetoran' : null,
-			'asalsetorfk':data.norec,
-			'tglSetor':moment(new Date()).format('YYYY-MM-DD HH:mm'),
-			'keterangan':{
-				'jenisdebitkredit': 'k',
-				'id':1
-			},
-			'kdPegawaiPenerima':this.authGuard.getUserDto().pegawai.id ,
-			'penyetor': this.authGuard.getUserDto().pegawai.id ,
-			'jumlahSetor': data.totalbayar
-
-		}
-		
+		let json = this.formGroup.value
+		if (this.norecSetoran) {
+			json.norecSetoran = this.norecSetoran
+		} else
+			json.norecSetoran = null
+		json.asalsetorfk = null
+		json.tglSetor = moment(json.tglSetor).format('YYYY-MM-DD HH:mm')
 		this.httpService.post('transaksi/setoran/save-setoran-manual', json).subscribe(res => {
 			this.tutupPembayaran()
-			// this.loadGrid()
+			this.loadGrid()
 		}, error => {
 
 		})
@@ -396,10 +406,10 @@ export class DaftarPenerimaanBarangSupplierComponent implements OnInit {
 			this.alertService.warn('Peringatan', 'Pilih data dulu')
 			return
 		}
-		if (this.selectedItem.nopembayaran == '-') {
+		// if (this.selectedItem.nopembayaran == '-') {
 		//   this.alertService.error('Peringatan', 'Transaksi Belum Dibayar')
-		  return
-		}
+		//   return
+		// }
 		this.httpService.get('transaksi/pembayaran/get-bayar-penerimaan-by-no?nopembayaran=' + this.selectedItem.nopembayaran).subscribe(e => {
 			if (e.data.length > 0) {
 				let totals: any = 0

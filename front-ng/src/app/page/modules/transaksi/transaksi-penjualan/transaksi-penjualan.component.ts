@@ -8,6 +8,7 @@ import { AlertService, InfoService, Configuration, LoaderService, CacheService, 
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { error } from 'util';
 import { TemplatePortal } from '@angular/cdk/portal';
+import * as moment from 'moment'
 
 @Component({
   selector: 'app-transaksi-penjualan',
@@ -536,6 +537,8 @@ export class TransaksiPenjualanComponent implements OnInit {
       this.alertService.warn('Peringatan', 'Pilih produk terlebih dahulu !')
       return
     }
+
+    this.formGroup.value.tglTransaksi = (moment(new Date(this.formGroup.get('tglTransaksi').value)).format('YYYY-MM-DD HH:mm'))
 
     let jsonSave = {
       'penjualan': this.formGroup.value,

@@ -102,7 +102,7 @@ class  PenjualanController extends Controller
 			$SP->tokofk = $req['kdToko'];
 			$SP->jenistransaksifk = 2;
 			$SP->pegawaifk = $req['kdPegawai'];
-			$SP->tgltransaksi = date('Y-m-d H:i:s', strtotime($req['tglTransaksi']));
+			$SP->tgltransaksi = $req['tglTransaksi'];
 //			return date('Y-m-d H:i:s', strtotime($req['tglTransaksi']));
 			$SP->save();
 			$norecStruk = $SP->norec;

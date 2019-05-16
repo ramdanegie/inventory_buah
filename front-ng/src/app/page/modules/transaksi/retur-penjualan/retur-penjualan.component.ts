@@ -7,7 +7,7 @@ import { LazyLoadEvent, Message, ConfirmDialogModule, ConfirmationService, Selec
 import { AlertService, InfoService, Configuration, LoaderService, CacheService, AuthGuard } from '../../../../helper';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { error } from 'util';
-
+import * as moment from 'moment'
 @Component({
   selector: 'app-retur-penjualan',
   templateUrl: './retur-penjualan.component.html',
@@ -519,6 +519,9 @@ export class ReturPenjualanComponent implements OnInit {
       this.alertService.warn('Peringatan', 'Pilih produk terlebih dahulu !')
       return
     }
+    this.formGroup.value.tglTransaksi = (moment(new Date(this.formGroup.get('tglTransaksi').value)).format('YYYY-MM-DD HH:mm'))
+
+    // this.formGroup.get('tglTransaksi').setValue (moment(	this.formGroup.get('tglTransaksi').value).format('YYYY-MM-DD HH:mm')) 
 
     let jsonSave = {
       'penjualan': this.formGroup.value,
