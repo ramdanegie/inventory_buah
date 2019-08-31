@@ -1,7 +1,7 @@
 export class Configuration {
   static get() {
     return {
-      apiBackend: 'http://localhost:8000/service/',
+      apiBackend: 'http://192.168.1.5:8000/service/',
       headerToken: 'token',
       authLogin: ':8000',
     }

@@ -1,2 +1,2 @@
 #!/bin/sh
-npm start 
+ng serve -o --host=192.168.1.5 
