@@ -148,6 +148,9 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
         /** Penerimaan Debit Kredit*/
         $app->get('penerimaandebitkredit/get-combo', 'Transaksi\SetoranDebitKreditController@getCombo');
 
+        /** Setoran Penjualan*/
+        $app->get('setoranpenjualan/get-data-closing', 'Transaksi\SetoranPenjualanController@getDataClosing');
+
         /** Penerimaan Kasir*/
         $app->get('penerimaankasir/get-penetimaan-kasir', 'Transaksi\PenerimaanKasirController@getPenerimaanKasir');
         $app->get('penerimaankasir/get-combo', 'Transaksi\PenerimaanKasirController@getCombo');
