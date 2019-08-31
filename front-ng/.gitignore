@@ -10,6 +10,7 @@ package-lock_copy.json
 
 # dependencies
 /node_modules
+/node_modules_
 
 # IDEs and editors
 /.idea
