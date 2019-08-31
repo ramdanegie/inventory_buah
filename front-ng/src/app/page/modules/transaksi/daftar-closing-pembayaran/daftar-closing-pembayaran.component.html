@@ -1,0 +1,54 @@
+<p-confirmDialog header="Konfirmasi" icon="fa fa-question-circle"></p-confirmDialog>
+<div class="card card-w-title">
+  <div class="card card-form-header">
+    <h1>Daftar Closing Pembayaran</h1>
+  </div>
+
+  <form [formGroup]="formGroup">
+    <div class="ui-g ui-fluid">
+      <div class="ui-g-12">
+        <p-fieldset legend="Pencarian" [toggleable]="true">
+          <div class="ui-g-12 ui-md-1">
+            <label class="label-web-profile" for="input">No Closing </label>
+            <input type="text" formControlName="noclosing" pInputText />
+          </div>
+          <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">Periode Awal </label>
+            <p-calendar formControlName="tglAwal" [defaultDate]="now" [showIcon]="true" [monthNavigator]="false"
+              [yearNavigator]="false" yearRange="2000:2030" [showTime]="true">
+            </p-calendar>
+          </div>
+          <div class="ui-g-12 ui-md-2">
+            <label class="label-web-profile" for="input">Periode Akhir </label>
+            <p-calendar formControlName="tglAkhir" [defaultDate]="now" [showIcon]="true" [monthNavigator]="false"
+              [yearNavigator]="false" yearRange="2000:2030" [showTime]="true">
+            </p-calendar>
+          </div>
+          <div class="ui-g-12 ui-md-1" style="margin-top:15px">
+            <button pButton type="submit" label="Cari" icon="fa-search" (click)="cari()"></button>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="ui-g-12">
+        <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
+          [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected" [loading]="loading"
+          loadingIcon="fa fa-spinner" (onRowSelect)="onRowSelect($event)" scrollable="true" expandableRows="true">
+          <p-column header="No" [style]="{'width':'40px'}">
+            <ng-template let-index="rowIndex+1" pTemplate="body">
+              {{index}}
+            </ng-template>
+          </p-column>
+          <p-column field="noclosing" header="No Closing" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+          <p-column field="tglclosing" header="Tgl Closing" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+          <p-column field="namalengkap" header="Nama Pegawai Closing" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+          <p-column field="totalclosing" header="Total Closing" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+        </p-dataTable>
+      </div>
+      <div class="ui-g-12 ">
+        <div class="ui-g-1 ui-g-offset-11">
+          <button type="button" pButton icon="fa fa-dollar" (click)="simpanSetoran()" label="Setor"></button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

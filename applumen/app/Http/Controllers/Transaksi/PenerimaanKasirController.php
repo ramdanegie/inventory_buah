@@ -27,6 +27,7 @@ use App\Helper\StringHelper;
 use Illuminate\Support\Facades\DB;
 
 class PenerimaanKasirController extends Controller{
+    use GenerateCode;
     public function getCombo(Request $request)
     {
         $tipePembayaran = DB::table('pegawai_m')
@@ -79,13 +80,12 @@ class PenerimaanKasirController extends Controller{
     {
         $data = DB::table('strukpembayarandetail_t as spd')
             ->leftJoin('strukpembayaran_t as sp', 'sp.norec', '=', 'spd.strukpembayaranfk')
-            ->leftJoin('tipepembayaran_m as tp', 'tp.id', '=', 'spd.tipepembayaranfk')
+            ->leftJoin('verifikasi_t as vr', 'vr.norec', '=', 'sp.verifikasifk')
             ->leftJoin('pegawai_m as pg', 'pg.id', '=', 'sp.pegawaifk')
-            ->select('tp.tipepembayaran',
-                        DB::raw('sum(spd.subtotalbayar) as totalpenerimaan'))
+            ->select(DB::raw('sum(spd.subtotalbayar) as totalpenerimaan'))
             ->where('sp.statusenabled','true')
-            ->where('pg.id','=', $request['kdPegawai'])
-            ->groupBy('tp.tipepembayaran');
+            ->where('sp.verifikasifk', '=', null)
+            ->where('pg.id','=', $request['kdPegawai']);
 
         if (isset($request['tglAwal']) && $request['tglAwal'] != "" && $request['tglAwal'] != "undefined") {
             $data = $data->where('sp.tglpembayaran', '>=', $request['tglAwal']);
@@ -100,14 +100,15 @@ class PenerimaanKasirController extends Controller{
         $data2 = DB::table('strukpembayarandetail_t as spd')
             ->leftJoin('strukpembayaran_t as sp', 'sp.norec', '=', 'spd.strukpembayaranfk')
             ->leftJoin('struk_t as str', 'str.strukpembayaranfk', '=', 'sp.norec')
-            ->leftJoin('transaksi_t as tr', 'tr.strukfk', '=', 'str.norec')
             ->leftJoin('pegawai_m as pg', 'pg.id', '=', 'sp.pegawaifk')
             ->leftJoin('customer_m as cs', 'cs.id', '=', 'str.customerfk')
+            ->leftJoin('verifikasi_t as vr', 'vr.norec', '=', 'sp.verifikasifk')
             ->leftJoin('tipepembayaran_m as tp', 'tp.id', '=', 'spd.tipepembayaranfk')
-            ->select('cs.id as csid', 'cs.namacustomer', 'tr.notransaksi', 'spd.subtotalbayar')
+            ->select('sp.norec as norecSP', 'cs.id as csid', 'cs.namacustomer',
+                'spd.subtotalbayar', 'tp.tipepembayaran', 'sp.tglpembayaran', 'sp.nopembayaran')
             ->where('sp.statusenabled','true')
-            ->where('pg.id','=', $request['kdPegawai'])
-            ->where('tp.id','=', $request['tpId']);
+            ->where('sp.verifikasifk', '=', null)
+            ->where('pg.id','=', $request['kdPegawai']);
 
         if (isset($request['tglAwal']) && $request['tglAwal'] != "" && $request['tglAwal'] != "undefined") {
             $data2 = $data2->where('sp.tglpembayaran', '>=', $request['tglAwal']);
@@ -171,6 +172,66 @@ class PenerimaanKasirController extends Controller{
                 "message" => $transMessage,
                 "status" => 200,
                 "data" => $SP,
+                "as" => 'SitepuMan',
+            );
+        } else {
+            $transMessage = "Simpan Pembayaran Gagal";
+            DB::rollBack();
+            $result = array(
+                "message" => $transMessage,
+                "status" => 500,
+                "as" => 'SitepuMan',
+            );
+        }
+        return response()->json($result,$result['status']);
+    }
+    public function saveClosing(Request $request){
+        $maxNoVerifikasi = $this->getNewCode( 'noclosing', 12, 'CL'.date('ym'));
+        if ($maxNoVerifikasi == ''){
+            DB::rollBack();
+            $result = array(
+                "status" => 400,
+                "message"  => 'Gagal mengumpukan data, Coba lagi.',
+                "as" => 'SitepuMan',
+            );
+            return response()->json($result,$result['status']);
+        }
+
+        DB::beginTransaction();
+//        try {
+//            if ($request['norecVR'] != null) {
+                $VR = new Verifikasi_T();
+                $norecVR = $this->generateUid();
+                $VR->norec = $norecVR;
+                $VR->statusenabled = true;
+                $VR->noverifikasi = $maxNoVerifikasi;
+                $VR->pegawaifk = $request['pegawaifk'];
+                $VR->totalclosing = $request['totalpenerimaan'];
+                $VR->jenistransaksifk = 5;
+                $VR->tglverifikasi = date('Y-m-d H:i:s');
+                $VR->save();
+                $norecVerif = $VR->norec;
+                foreach ($request['detail'] as $item){
+                    StrukPembayaran_T::where('norec',$item['norecSP'])->update(
+                        [
+                            'verifikasifk' => $norecVerif
+                        ]
+                    );
+                }
+//            }
+
+            $transStatus = 'true';
+//        } catch (\Exception $e) {
+//            $transStatus = 'false';
+//        }
+
+        if ($transStatus == 'true') {
+            $transMessage = "Simpan Pembayaran";
+            DB::commit();
+            $result = array(
+                "message" => $transMessage,
+                "status" => 200,
+//                "data" => $VR,
                 "as" => 'SitepuMan',
             );
         } else {

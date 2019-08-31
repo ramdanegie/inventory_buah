@@ -7,6 +7,7 @@ import { LazyLoadEvent, Message, ConfirmDialogModule, ConfirmationService, Selec
 import { AlertService, InfoService, Configuration, LoaderService, CacheService, AuthGuard } from '../../../../helper';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { error } from 'util';
+import * as moment from 'moment';
 
 @Component({
 	selector: 'app-penerimaan-barang-supplier',
@@ -417,6 +418,7 @@ export class PenerimaanBarangSupplierComponent implements OnInit {
 			this.alertService.warn('Peringatan', 'Pilih produk terlebih dahulu !')
 			return
 		}
+		this.formGroup.value.tglPenerimaan = (moment(new Date(this.formGroup.get('tglPenerimaan').value)).format('YYYY-MM-DD HH:mm'))
 
 		let jsonSave = {
 			'isAutoNoTerima': this.formGroup.get('isAutoNoTerima').value,

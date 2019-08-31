@@ -9,8 +9,8 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
 	selector: 'app-daftar-pembayaran',
-  	templateUrl: './daftar-pembayaran.component.html',
-  	styleUrls: ['./daftar-pembayaran.component.scss'],
+	templateUrl: './daftar-pembayaran.component.html',
+	styleUrls: ['./daftar-pembayaran.component.scss'],
 	providers: [ConfirmationService]
 })
 export class DaftarPembayaranComponent implements OnInit {
@@ -18,9 +18,12 @@ export class DaftarPembayaranComponent implements OnInit {
 	formGroup: FormGroup;
 	now = new Date()
 	dataSource: any[];
+	dataSource2: any[];
 	loading: boolean = false
 	listKasir: SelectItem[]
 	selectedItem: any;
+	nomor: any = undefined;
+	tpId: any = undefined;
 	constructor(private alertService: AlertService,
 		private InfoService: InfoService,
 		private httpService: HttpClient,
@@ -38,9 +41,11 @@ export class DaftarPembayaranComponent implements OnInit {
 		this.formGroup = this.fb.group({
 			'noPembayaran': new FormControl,
 			'kdPegawai': new FormControl,
+			'pegawaiFk': new FormControl,
 			'tglAwal': new FormControl(new Date(this.formatDate(this.now) + ' 00:00')),
 			'tglAkhir': new FormControl(this.now),
 		});
+		this.formGroup.get('pegawaiFk').setValue(this.authGuard.getUserDto().kdPegawai)
 		this.getList()
 	}
 	formatDate(value) {
@@ -104,10 +109,42 @@ export class DaftarPembayaranComponent implements OnInit {
 		).subscribe(res => {
 			this.loading = false
 			let data = res.data
+			let data2 = res.data2
 			if (data.length > 0) {
 				for (let i = 0; i < data.length; i++) {
 					data[i].no = i + 1
-				  }
+				}
+				this.dataSource = data
+				this.dataSource2 = data2
+			} else {
+				this.loading = false
+				this.alertService.info('Informasi', 'Data tidak ada')
+				this.dataSource = []
+			}
+		})
+	}
+	loadGrid2() {
+		let noPembayaran = this.formGroup.get('noPembayaran').value;
+		let tglAkhir = this.formatDateFull(this.formGroup.get('tglAkhir').value);
+		let tglAwal = this.formatDateFull(this.formGroup.get('tglAwal').value);
+		let kdPegawai = this.formGroup.get('kdPegawai').value;
+
+		// if (kdPegawai)
+		// 	kdPegawai = '&kdpegawai=' + kdPegawai
+		// else
+		// 	kdPegawai = ''
+
+		this.loading = true
+		this.httpService.get('transaksi/penerimaankasir/get-penetimaan-kasir?tglAwal=' + tglAwal
+			+ '&tglAkhir=' + tglAkhir
+			+ '&kdPegawai=' + kdPegawai
+		).subscribe(res => {
+			this.loading = false
+			let data = res.data
+			if (data.length > 0) {
+				for (let i = 0; i < data.length; i++) {
+					data[i].no = i + 1
+				}
 				this.dataSource = data
 			} else {
 				this.loading = false
@@ -121,86 +158,59 @@ export class DaftarPembayaranComponent implements OnInit {
 	}
 	cari() {
 		let kdPegawai = this.formGroup.get('kdPegawai').value;
-		if(kdPegawai == undefined){
+		if (kdPegawai == undefined) {
 			this.alertService.warn('Peringatan', 'Pilih Nama Kasir terlebih dahulu!!!')
 			return
 		}
-		if(kdPegawai == ""){
+		if (kdPegawai == "") {
 			this.alertService.warn('Peringatan', 'Pilih Nama Kasir terlebih dahulu!!!')
 			return
 		}
-		if(kdPegawai == null){
+		if (kdPegawai == null) {
 			this.alertService.warn('Peringatan', 'Pilih Nama Kasir terlebih dahulu!!!')
 			return
 		}
+		this.dataSource2 = []
 		this.loadGrid()
 	}
-	onRowSelect(e) {
-		this.selectedItem = e.data
-	}
-	ubahPenerimaan() {
-		if (this.selectedItem == undefined) {
-			this.alertService.warn('Peringatan', 'Pilih data dulu')
-			return
-		}
-		var cache = {
-			0: this.selectedItem.norec,
-			1: 'EditTerima',
-		}
+	onRowSelect(event) {
+		this.dataSource2 = []
+		let e = event.data
+		this.tpId = e.tpid
+		let noPembayaran = this.formGroup.get('noPembayaran').value;
+		let tglAkhir = this.formatDateFull(this.formGroup.get('tglAkhir').value);
+		let tglAwal = this.formatDateFull(this.formGroup.get('tglAwal').value);
+		let kdPegawai = this.formGroup.get('kdPegawai').value;
 
-		this.cacheHelper.set('cacheUbahPenerimaanSupplier', cache);
-		this.router.navigate(['/penerimaan-barang-supplier'])
-	}
-	penerimaanFix() {
-		if (this.selectedItem == undefined) {
-			this.alertService.warn('Peringatan', 'Pilih data dulu')
-			return
-		}
-		var cache = {
-			0: this.selectedItem.norec,
-			1: 'EditTerima',
-		}
-
-		this.cacheHelper.set('cacheUbahPenerimaanSupplier', cache);
-		this.router.navigate(['/penerimaan-barang-fix'])
-	}
-	hapusPenerimaan() {
-		if (this.selectedItem == undefined) {
-			this.alertService.warn('Peringatan', 'Pilih data dulu')
-			return
-		}
-		let obj = {
-			'noRec': this.selectedItem.norec
-		}
-		this.confirmationService.confirm({
-			message: 'Yakin mau menghapus data?',
-			accept: () => {
-				this.httpService.post('transaksi/penerimaan/delete-penerimaan', obj).subscribe(res => {
-					this.loadGrid()
-				}, error => {
-
-				})
+		this.loading = true
+		this.httpService.get('transaksi/penerimaankasir/get-penetimaan-kasir?tglAwal=' + tglAwal
+			+ '&tglAkhir=' + tglAkhir
+			+ '&kdPegawai=' + kdPegawai
+		).subscribe(res => {
+			this.loading = false
+			let data2 = res.data2
+			if (data2.length > 0) {
+				for (let i = 0; i < data2.length; i++) {
+					data2[i].no = i + 1
+				}
+				this.dataSource2 = data2
+			} else {
+				this.loading = false
+				this.alertService.info('Informasi', 'Data tidak ada')
+				this.dataSource2 = []
 			}
 		})
 	}
 	simpanSetor() {
-		if (!this.formGroup.get('kdToko').value) {
-			this.alertService.warn('Peringatan', 'Pilih Toko terlebih dahulu !')
-			return
-		}
-		if (!this.formGroup.get('kdPegawai').value) {
-			this.alertService.warn('Peringatan', 'Pilih Pegawai terlebih dahulu !')
-			return
-		}
-		if (!this.formGroup.get('kdSupplier').value) {
-			this.alertService.warn('Peringatan', 'Pilih Supplier terlebih dahulu !')
-			return
+		let data = this.dataSource
+		if (data.length > 0) {
+			for (let i = 0; i < data.length; i++) {
+				data[i].no = i + 1
+			}
+			this.dataSource = data
 		}
 
 		let jsonSave = {
-			'isAutoNoTerima': this.formGroup.get('isAutoNoTerima').value,
-			'isAutoNoFaktur': this.formGroup.get('isAutoNoFaktur').value,
-			'penerimaan': this.formGroup.value,
 			'details': this.dataSource
 		}
 		this.confirmationService.confirm({
@@ -209,6 +219,34 @@ export class DaftarPembayaranComponent implements OnInit {
 				this.httpService.post('transaksi/penerimaan/save-penerimaan', jsonSave).subscribe(res => {
 					this.formGroup.reset()
 
+				}, error => {
+
+				})
+			}
+		})
+	}
+	closing() {
+		let detail = []
+		let totalpenerimaan = []
+		for (let i = 0; i < this.dataSource2.length; i++) {
+			const element = this.dataSource2[i];
+			detail.push({ 'norecSP': element.norecSP })
+		}
+		for (let i = 0; i < this.dataSource.length; i++) {
+			const element = this.dataSource[i];
+			totalpenerimaan = element.totalpenerimaan
+		}
+		let jsonSave = {
+			'pegawaifk': this.formGroup.get('pegawaiFk').value,
+			'totalpenerimaan' : totalpenerimaan,
+			'detail': detail
+		}
+		this.confirmationService.confirm({
+			message: 'Yakin mau menyimpan data?',
+			accept: () => {
+				this.httpService.post('transaksi/penerimaankasir/save-closing', jsonSave).subscribe(res => {
+					// this.formGroup.reset()
+					this.cari()
 				}, error => {
 
 				})

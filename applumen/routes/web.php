@@ -148,20 +148,30 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
         /** Penerimaan Debit Kredit*/
         $app->get('penerimaandebitkredit/get-combo', 'Transaksi\SetoranDebitKreditController@getCombo');
 
+        /** Setoran Penjualan*/
+        $app->get('setoranpenjualan/get-data-closing', 'Transaksi\SetoranPenjualanController@getDataClosing');
+
         /** Penerimaan Kasir*/
         $app->get('penerimaankasir/get-penetimaan-kasir', 'Transaksi\PenerimaanKasirController@getPenerimaanKasir');
         $app->get('penerimaankasir/get-combo', 'Transaksi\PenerimaanKasirController@getCombo');
-        $app->post('stokproduk/simpan-setoran', 'Transaksi\PenerimaanKasirController@saveSetoran');
+        $app->post('penerimaankasir/simpan-setoran', 'Transaksi\PenerimaanKasirController@saveSetoran');
+        $app->post('penerimaankasir/save-closing', 'Transaksi\PenerimaanKasirController@saveClosing');
 
 		/** Dashboard*/
 
 		/** Pembyarana */
 		$app->get('pembayaran/get-combo', 'Transaksi\StrukPembayaranController@getCombo');
         $app->get('pembayaran/get-penerimaan-kasir', 'Transaksi\StrukPembayaranController@getPenerimaanKasir');
-		$app->get('pembayaran/save-pembayaran', 'Transaksi\StrukPembayaranController@savePembayaran');
+		// $app->get('pembayaran/save-pembayaran', 'Transaksi\StrukPembayaranController@savePembayaran');
 
 		$app->post('pembayaran/save-pembayaran', 'Transaksi\StrukPembayaranController@savePembayaran');
 		$app->get('pembayaran/get-bayar-by-no', 'Transaksi\StrukPembayaranController@getPembayaranByNoBayar');
+		$app->get('pembayaran/get-bayar-penerimaan-by-no', 'Transaksi\StrukPembayaranController@getPembayaranByNoBayarPenerimaan');
+
+		$app->get('setoran/get-combo', 'Transaksi\SetoranDebitKreditController@getCombo2');
+		$app->post('setoran/save-setoran-manual', 'Transaksi\SetoranDebitKreditController@saveSetoranManual');
+		$app->get('setoran/get-daftar-setor', 'Transaksi\SetoranDebitKreditController@getDaftarSetoran');
+		$app->post('setoran/hapus-setoran', 'Transaksi\SetoranDebitKreditController@hapusSetoran');
 
 		/** Laporan */
 		$app->get('laporan/get-detail-terimabarang', 'Transaksi\LaporanController@getDaftarDetailTerimaBarang');
