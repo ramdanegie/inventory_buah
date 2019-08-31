@@ -7,7 +7,7 @@ import { LazyLoadEvent, Message, ConfirmDialogModule, ConfirmationService, Selec
 import { AlertService, InfoService, Configuration, LoaderService, CacheService } from '../../../../helper';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { error } from 'util';
-
+import * as moment from 'moment'
 @Component({
   selector: 'app-penerimaan-barang-fix',
   templateUrl: './penerimaan-barang-fix.component.html',
@@ -428,6 +428,7 @@ export class PenerimaanBarangFixComponent implements OnInit {
 			this.alertService.warn('Peringatan', 'Qty produk tidak boleh lebih kecil dari transaksi yg terjadi!!')
 			return
 		}
+		this.formGroup.value.tglPenerimaan = (moment(new Date(this.formGroup.get('tglPenerimaan').value)).format('YYYY-MM-DD HH:mm'))
 
 		let jsonSave = {
 			'isAutoNoTerima': this.formGroup.get('isAutoNoTerima').value,

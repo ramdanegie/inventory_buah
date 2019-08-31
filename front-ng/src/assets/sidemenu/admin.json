@@ -144,16 +144,23 @@
             },
             {
                 "label": "Daftar Pembayaran",
-                "icon": "fa fa-fw fa-first-order",
+                "icon": "fa fa-fw fa-credit-card",
                 "routerLink": [
                     "/daftar-pembayaran"
                 ]
             },
             {
                 "label": "Daftar Closing",
-                "icon": "fa fa-fw fa-first-order",
+                "icon": "fa fa-fw fa-times-circle-o",
                 "routerLink": [
                     "/daftar-closing-pembayaran"
+                ]
+            },
+            {
+                "label": "Daftar Setoran",
+                "icon": "fa fa-fw fa-paypal",
+                "routerLink": [
+                    "/daftar-setor"
                 ]
             }
         ]

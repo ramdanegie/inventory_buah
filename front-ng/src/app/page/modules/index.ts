@@ -29,6 +29,7 @@ export * from './transaksi/penerimaan-barang-fix/penerimaan-barang-fix.component
 export * from './transaksi/daftar-pembayaran/daftar-pembayaran.component';
 export * from './transaksi/retur-penjualan/retur-penjualan.component';
 export * from './transaksi/daftar-closing-pembayaran/daftar-closing-pembayaran.component';
+export * from './transaksi/daftar-setor/daftar-setor.component';
 
 // laporam
 export * from './laporan/daftar-detail-penerimaan-barang/daftar-detail-penerimaan-barang.component';

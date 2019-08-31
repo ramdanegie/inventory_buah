@@ -242,8 +242,10 @@ class  PenerimaanBarangController extends Controller
 			->LEFTJOIN('supplier_m as sup', 'sup.id', '=', 'sp.supplierfk')
 //			->LEFTJOIN('satuanstandard_m as ss', 'ss.id', '=', 'sp.supplierfk')
 			->LEFTJOIN('pegawai_m as pg', 'pg.id', '=', 'sp.pegawaifk')
+			->LEFTJOIN('strukpembayaran_t as spt', 'spt.norec', '=', 'sp.strukpembayaranfk')
 			->select('sp.norec','sp.tgltransaksi', 'sp.nopenerimaan', 'sp.nofaktur','jt.id as jenistransaksifk', 'jt.jenistransaksi', 'sp.tokofk', 'tk.namatoko',
-				'sp.supplierfk', 'sup.namasupplier','sp.pegawaifk', 'pg.namalengkap as namapenerima')
+				'sp.supplierfk', 'sup.namasupplier','sp.pegawaifk', 'pg.namalengkap as namapenerima',
+				'spt.nopembayaran')
 			->where('sp.statusenabled',true)
 			->orderBy('sp.tgltransaksi','desc');
 
@@ -271,6 +273,7 @@ class  PenerimaanBarangController extends Controller
 		}
 		$data = $data->get();
 		$resData = [];
+
 		foreach ($data as $item){
 			$norec = $item->norec;
 			$details = DB::select(DB::raw("select spt.norec as norec_stok,spt.produkfk,
@@ -291,6 +294,10 @@ class  PenerimaanBarangController extends Controller
 				$totalterima = $totalterima + (float) $items->totalpenerimaan;
 				$qty = $qty + (float) $items->qtypenerimaan;
 			}
+			$noPembayaran = '-';
+			if($item->nopembayaran != null){
+				$noPembayaran =$item->nopembayaran;
+			}
 			$resData [] = array(
 				'norec' => $item->norec,
 				'tgltransaksi' =>date('Y-m-d H:i', strtotime($item->tgltransaksi)),
@@ -306,7 +313,8 @@ class  PenerimaanBarangController extends Controller
 				'namapenerima' => $item->namapenerima,
 				'qty' => $qty,
 				'total' => $totalterima,
-				'details' => $details
+				'details' => $details,
+				'nopembayaran'=> $noPembayaran
 			);
 		}
 		$result = array(
