@@ -4,7 +4,7 @@
     <h1>Alamat</h1>
   </div>
   <form [formGroup]="formGroup">
-    <div class="ui-g ui-fluid">
+    <div class="ui-fluid ui-g">
       <div class="ui-g-12">
         <p-fieldset legend="Daftar Alamat" [toggleable]="true">
           <div class="ui-g-12">
@@ -14,18 +14,18 @@
             </div>
           </div>
           <div class="ui-g-12">
-            <p-dataTable [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true" [pageLinks]="3"
-              [rowsPerPageOptions]="[5,10,20]" selectionMode="single" [(selection)]="selected">
+            <p-dataTable scrollable="true" [globalFilter]="gs" [value]="dataSource" [rows]="10" [paginator]="true"
+              [rowsPerPageOptions]="[5,10,20]"  >
               <p-column field="no" header="No" [style]="{'width':'30px'}">
                 <ng-template let-index="rowIndex+1" pTemplate="body">
                   {{index}}
                 </ng-template>
               </p-column>
-              <p-column field="alamat" header="Alamat Lengkap"></p-column>
-              <p-column field="kecamatan" header="Kecamatan"></p-column>
-              <p-column field="kota" header="Kota"></p-column>
-              <p-column field="kabupaten" header="Kabupaten"></p-column>
-              <p-column field="provinsi" header="Provinsi"></p-column>
+              <p-column field="alamat" header="Alamat Lengkap"  [style]="{'width':'200px'}"></p-column>
+              <p-column field="kecamatan" header="Kecamatan" [style]="{'width':'150px'}"></p-column>
+              <p-column field="kota" header="Kota" [style]="{'width':'150px'}"></p-column>
+              <p-column field="kabupaten" header="Kabupaten" [style]="{'width':'150px'}"></p-column>
+              <p-column field="provinsi" header="Provinsi" [style]="{'width':'150px'}"></p-column>
               <p-column [style]="{'width':'80px'}">
                 <ng-template let-h="rowData" pTemplate="body">
                   <button pButton type="button" (click)="edit(h)" icon="fa-edit"></button>

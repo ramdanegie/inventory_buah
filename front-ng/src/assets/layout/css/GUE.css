@@ -72,8 +72,10 @@
       box-shadow: 0 0 7px 0 #999999;*/
     }
     .card.card-w-title {
-      padding-top: 0;
-      padding-bottom: 0px; }
+
+      padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 4px solid #634b89; }
       .card.card-form-header {
         padding: 0px 14px;
         background: #fff;

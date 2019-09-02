@@ -1476,8 +1476,8 @@ body .ui-datatable .ui-datatable-tfoot > tr > td {
   body .ui-datatable .ui-datatable-thead > tr > th.ui-sortable-column:not(.ui-state-active):hover {
     background-color: #d1d1d1; }
   body .ui-datatable .ui-datatable-thead > tr > th.ui-state-active {
-    background-color: #607D8B;
-    color: #ffffff; }
+    /* background-color: #607D8B; */
+    color: #8d46dd; }
   body .ui-datatable .ui-datatable-thead > tr > th:focus {
     outline: 0 none;
     background-color: #f0f3f5; }

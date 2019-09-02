@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationService } from 'primeng/primeng';
+import { ConfirmationService, SelectItem } from 'primeng/primeng';
 import { AlertService } from '../../../../demo';
 import { InfoService, HttpClient, LoaderService, CacheService, AuthGuard } from '../../../../helper';
 import { DataHandler } from '../../../../helper/handler/DataHandler';
@@ -7,17 +7,20 @@ import { FormBuilder, FormGroup, FormGroupDirective, FormControl } from '@angula
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-daftar-closing-pembayaran',
-  templateUrl: './daftar-closing-pembayaran.component.html',
-  styleUrls: ['./daftar-closing-pembayaran.component.scss'],
-  providers: [ConfirmationService]
+	selector: 'app-daftar-closing-pembayaran',
+	templateUrl: './daftar-closing-pembayaran.component.html',
+	styleUrls: ['./daftar-closing-pembayaran.component.scss'],
+	providers: [ConfirmationService]
 })
 export class DaftarClosingPembayaranComponent implements OnInit {
 	formGroup: FormGroup;
 	loading: boolean = false
 	dataSource: any[];
-  now = new Date()
-  constructor(private alertService: AlertService,
+	now = new Date()
+	selectedItem: any
+	listPegawai: SelectItem[]
+	displayDialog :boolean
+	constructor(private alertService: AlertService,
 		private InfoService: InfoService,
 		private httpService: HttpClient,
 		private confirmationService: ConfirmationService,
@@ -28,15 +31,32 @@ export class DaftarClosingPembayaranComponent implements OnInit {
 		private cacheHelper: CacheService,
 		private authGuard: AuthGuard) { }
 
-  ngOnInit() {
-    this.formGroup = this.fb.group({
-      'noclosing': new FormControl,
-      'tglAwal': new FormControl(new Date(this.formatDate(this.now) + ' 00:00')),
-      'tglAkhir': new FormControl(this.now),
+	ngOnInit() {
+		this.formGroup = this.fb.group({
+			'noclosing': new FormControl,
+			'tglAwal': new FormControl(new Date(this.formatDate(this.now) + ' 00:00')),
+			'tglAkhir': new FormControl(this.now),
+			'kdPegawaiPenerima': new FormControl
 		});
+		this.httpService.get('transaksi/penerimaan/get-list-data').subscribe(data => {
+			var getData: any = this.dataHandler.get(data);
+			this.listPegawai = [];
+			this.listPegawai.push({ label: '--Pilih --', value: null });
+			getData.pegawai.forEach(response => {
+				this.listPegawai.push({ label: response.namalengkap, value: response.id });
+			});
+
+
+		}, error => {
+			this.alertService.error('Error', 'Terjadi kesalahan saat loading data');
+		});
+
 		this.loadGrid()
-  }
-  formatDate(value) {
+	}
+	onRowSelect(event) {
+		this.selectedItem = event.data
+	}
+	formatDate(value) {
 		if (value == null || value == undefined) {
 			return null
 		} else {
@@ -65,7 +85,7 @@ export class DaftarClosingPembayaranComponent implements OnInit {
 			return format
 		}
 	}
-  cari(){
+	cari() {
 		this.loadGrid()
 	}
 	loadGrid() {
@@ -88,7 +108,57 @@ export class DaftarClosingPembayaranComponent implements OnInit {
 				this.alertService.info('Informasi', 'Data tidak ada')
 				this.dataSource = []
 			}
+		},error =>{
+			this.loading = false
+			this.alertService.info('Informasi', 'Data tidak ada')
+			this.dataSource = []
 		})
 	}
+	showSetor(){
+		let dataSetor = []
+		for (let i = 0; i < this.dataSource.length; i++) {
+			const element = this.dataSource[i];
+			if(element.nosetor == null){
+				dataSetor.push(element)
+			}
+		}
+		if (dataSetor.length == 0) {
+			this.alertService.info('Peringatan', 'Semua data semua sudah di setor')
+			return
+		}
+	}
+	simpanSetoran() {
+		if (this.formGroup.get('kdPegawaiPenerima').value == undefined) {
+			this.alertService.info('Peringatan', 'Penerima belum di pilih')
+			return
+		}
+		
+		let dataSetor = []
+		for (let i = 0; i < this.dataSource.length; i++) {
+			const element = this.dataSource[i];
+			if(element.nosetor == null){
+				dataSetor.push(element)
+			}
+		}
+		if (dataSetor.length == 0) {
+			this.alertService.info('Peringatan', 'Semua data semua sudah di setor')
+			return
+		}
+		var data = {
+			'data':dataSetor,
+			'penerimafk': this.formGroup.get('kdPegawaiPenerima').value,
+		}
+		// this.confirmationService.confirm({
+		// 	message: 'Yakin mau setor semua ?',
+		// 	accept: () => {
+		this.httpService.post('transaksi/setoran/save-setoran-dari-closing', data).subscribe(res => {
+			this.displayDialog = false
+			this.loadGrid()
+			
+		}, error => {
 
+		})
+		// }
+		// })
+	}
 }

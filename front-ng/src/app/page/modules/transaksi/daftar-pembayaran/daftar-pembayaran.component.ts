@@ -174,32 +174,51 @@ export class DaftarPembayaranComponent implements OnInit {
 		this.loadGrid()
 	}
 	onRowSelect(event) {
-		this.dataSource2 = []
-		let e = event.data
-		this.tpId = e.tpid
-		let noPembayaran = this.formGroup.get('noPembayaran').value;
-		let tglAkhir = this.formatDateFull(this.formGroup.get('tglAkhir').value);
-		let tglAwal = this.formatDateFull(this.formGroup.get('tglAwal').value);
-		let kdPegawai = this.formGroup.get('kdPegawai').value;
+		// this.dataSource2 = []
+		this.selectedItem = event.data
+		// this.tpId = e.tpid
+		// let noPembayaran = this.formGroup.get('noPembayaran').value;
+		// let tglAkhir = this.formatDateFull(this.formGroup.get('tglAkhir').value);
+		// let tglAwal = this.formatDateFull(this.formGroup.get('tglAwal').value);
+		// let kdPegawai = this.formGroup.get('kdPegawai').value;
 
-		this.loading = true
-		this.httpService.get('transaksi/penerimaankasir/get-penetimaan-kasir?tglAwal=' + tglAwal
-			+ '&tglAkhir=' + tglAkhir
-			+ '&kdPegawai=' + kdPegawai
-		).subscribe(res => {
-			this.loading = false
-			let data2 = res.data2
-			if (data2.length > 0) {
-				for (let i = 0; i < data2.length; i++) {
-					data2[i].no = i + 1
-				}
-				this.dataSource2 = data2
-			} else {
-				this.loading = false
-				this.alertService.info('Informasi', 'Data tidak ada')
-				this.dataSource2 = []
+		// this.loading = true
+		// this.httpService.get('transaksi/penerimaankasir/get-penetimaan-kasir?tglAwal=' + tglAwal
+		// 	+ '&tglAkhir=' + tglAkhir
+		// 	+ '&kdPegawai=' + kdPegawai
+		// ).subscribe(res => {
+		// 	this.loading = false
+		// 	let data2 = res.data2
+		// 	if (data2.length > 0) {
+		// 		for (let i = 0; i < data2.length; i++) {
+		// 			data2[i].no = i + 1
+		// 		}
+		// 		this.dataSource2 = data2
+		// 	} else {
+		// 		this.loading = false
+		// 		this.alertService.info('Informasi', 'Data tidak ada')
+		// 		this.dataSource2 = []
+		// 	}
+		// })
+	}
+	batalBayar(){
+		if(this.selectedItem == undefined){
+			this.alertService.warn('Peringatan','Pilih data dulu')
+			return
+		}
+		this.confirmationService.confirm({
+			message: 'Yakin mau membatalkan pembayaran ini ?',
+			accept: () => {
+				this.httpService.post('transaksi/pembayaran/batal-bayar', this.selectedItem).subscribe(res => {
+					this.selectedItem  = undefined
+					this.loadGrid()
+
+				}, error => {
+
+				})
 			}
 		})
+		
 	}
 	simpanSetor() {
 		let data = this.dataSource

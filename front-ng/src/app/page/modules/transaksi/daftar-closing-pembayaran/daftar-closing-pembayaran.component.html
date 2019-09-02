@@ -38,17 +38,48 @@
               {{index}}
             </ng-template>
           </p-column>
-          <p-column field="noclosing" header="No Closing" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
-          <p-column field="tglclosing" header="Tgl Closing" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
-          <p-column field="namalengkap" header="Nama Pegawai Closing" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
-          <p-column field="totalclosing" header="Total Closing" [style]="{'text-align':'right'}" [sortable]="true"></p-column>
+          <p-column field="noclosing" header="No Closing" [style]="{'width':'100px'}" [sortable]="true"></p-column>
+          <p-column field="tglclosing" header="Tgl Closing"  [style]="{'width':'100px'}" [sortable]="true"></p-column>
+          <p-column field="namalengkap" header="Nama Pegawai Closing" [style]="{'width':'200px'}" [sortable]="true"></p-column>
+          <p-column field="totalclosing" header="Total Closing" [style]="{'text-align':'right','width':'150px'}" [sortable]="true"></p-column>
+          <p-column field="nosetor" header="No Setor" [style]="{'text-align':'right','width':'100px'}" [sortable]="true"></p-column>
         </p-dataTable>
       </div>
       <div class="ui-g-12 ">
         <div class="ui-g-1 ui-g-offset-11">
-          <button type="button" pButton icon="fa fa-dollar" (click)="simpanSetoran()" label="Setor"></button>
+          <button type="button" pButton icon="fa fa-dollar" (click)="showSetor()" label="Setor"></button>
         </div>
       </div>
     </div>
+
+    <p-dialog header="Tambah" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
+      [width]="500"   [minWidth]="100" [minHeight]="120" [baseZIndex]="8000" [positionTop]="80"  [contentStyle]="{'overflow':'visible'}">
+      <div class="ui-g-12">
+        <div class="ui-g ui-fluid">
+          <div class="ui-g-12">
+            <p-fieldset legend="Setoran" [toggleable]="true">
+
+              <div class="ui-g-12 ui-md-12">
+          
+                  <label for="input">Penerima Setoran</label>
+                  <p-dropdown formControlName="kdPegawaiPenerima" [options]="listPegawai" [filter]="true"
+                    [autoWidth]="false" > 
+                  </p-dropdown>
+            
+            
+              </div>
+            </p-fieldset>
+          </div>
+          <div class="ui-g-12">
+            <div class="ui-g-3 ui-g-offset-6">
+              <button pButton type="submit" (click)="simpanSetoran()" label="Simpan" icon="fa fa-save"></button>
+            </div>
+            <div class="ui-g-3">
+              <button pButton type="button" (click)="displayDialog = false" label="Tutup" icon="fa fa-angle-left"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
   </form>
 </div>
