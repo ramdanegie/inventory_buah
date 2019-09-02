@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Transaksi;
 
 use App\Http\Controllers\Controller;
 use App\Model\Transaksi\SetoranDebitKredit_T;
+use App\Model\Transaksi\Verifikasi_T;
 use App\Traits\GenerateCode;
 use Illuminate\Http\Request;
 use App\Traits\Core;
@@ -188,4 +189,65 @@ class SetoranDebitKreditController extends Controller
 		}
 		return response()->json($result, $result['status']);
 	}
+    public function saveSetoranDariClosing(Request $request)
+    {
+        $maxNoTransaksi = $this->getNewCode( 'nosetor', 12, 'S'.date('ym'));
+        if ($maxNoTransaksi == ''){
+            DB::rollBack();
+            $result = array(
+                "status" => 400,
+                "message"  => 'Gagal mengumpukan data, Coba lagi.',
+                "as" => 'ramdanegie',
+            );
+            return response()->json($result,$result['status']);
+        }
+
+        DB::beginTransaction();
+        try {
+
+            foreach ($request['data']  as $item){
+                $log = new SetoranDebitKredit_T();
+                $log->norec = $this->generateUid();
+                $log->statusenabled = 't';
+                $log->nosetor =$maxNoTransaksi;
+                $log->pegawaisetorfk = $item['pgid'];
+                $log->pegawaipenerimafk = $request['penerimafk'];
+                $log->tgl = date('Y-m-d H:i');
+                $log->ttldebitkredit = (float) $item['totalclosing'];
+                $log->keteranganfk = 1;//penerimaan
+                $log->jenisdebitkredit = 'd';
+                $log->asalsetorfk = $item['noclosing'];
+                $log->save();
+                $norec = $log->norec;
+
+                Verifikasi_T::where('norec',$item['norec'])->update(
+                  [
+                      'setorandebitkreditfk'=> $norec
+                  ]
+                );
+            }
+
+            $transStatus = 'true';
+        } catch (\Exception $e) {
+            $transStatus = 'false';
+        }
+        if ($transStatus == 'true') {
+            $transMessage = "Simpan Setoran";
+            DB::commit();
+            $result = array(
+                'status' => 200,
+                'message' => $transMessage,
+                'as' => 'ramdanegie',
+            );
+        } else {
+            $transMessage = "Terjadi Kesalahan saat menyimpan data";
+            DB::rollBack();
+            $result = array(
+                'status' => 500,
+                'message' => $transMessage,
+                'as' => 'ramdanegie',
+            );
+        }
+        return response()->json($result, $result['status']);
+    }
 }

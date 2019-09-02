@@ -210,4 +210,52 @@ class  StrukPembayaranController extends Controller
 
 		return response()->json($result);
 	}
+    public function batalPemabayaran(Request $request){
+
+        DB::beginTransaction();
+        try {
+            StrukPembayaranDetail_T::where('strukpembayaranfk',$request['norecSP'])->delete();
+            StrukPembayaran_T::where('norec',$request['norecSP'])->delete();
+            $strukTerima = StrukPenerimaan_T::where('strukpembayaranfk',$request['norecSP'])->first();
+            $strukPenjualan= Struk_T::where('strukpembayaranfk',$request['norecSP'])->first();
+            if(!empty($strukTerima)){
+                 StrukPenerimaan_T::where('norec',$strukTerima->norec )->update(
+                    [
+                        'strukpembayaranfk' => null
+                    ]
+                );
+            }
+            if(!empty($strukPenjualan)){
+                Struk_T::where('norec',$strukPenjualan->norec )->update(
+                    [
+                        'strukpembayaranfk' => null
+                    ]
+                );
+            }
+
+            $transStatus = 'true';
+        } catch (\Exception $e) {
+            $transStatus = 'false';
+        }
+
+        if ($transStatus == 'true') {
+            $transMessage = "Batal Pembayaran";
+            DB::commit();
+            $result = array(
+                "message" => $transMessage,
+                "status" => 200,
+//                "data" => $SP,
+                "as" => 'ramdanegie',
+            );
+        } else {
+            $transMessage = "Batal Pembayaran Gagal";
+            DB::rollBack();
+            $result = array(
+                "message" => $transMessage,
+                "status" => 500,
+                "as" => 'ramdanegie',
+            );
+        }
+        return response()->json($result,$result['status']);
+    }
 }

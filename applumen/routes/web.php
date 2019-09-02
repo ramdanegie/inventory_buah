@@ -167,12 +167,13 @@ $router->group(['prefix' => 'service'/*, 'middleware' => 'auth'*/], function ($a
 		$app->post('pembayaran/save-pembayaran', 'Transaksi\StrukPembayaranController@savePembayaran');
 		$app->get('pembayaran/get-bayar-by-no', 'Transaksi\StrukPembayaranController@getPembayaranByNoBayar');
 		$app->get('pembayaran/get-bayar-penerimaan-by-no', 'Transaksi\StrukPembayaranController@getPembayaranByNoBayarPenerimaan');
+        $app->post('pembayaran/batal-bayar', 'Transaksi\StrukPembayaranController@batalPemabayaran');
 
 		$app->get('setoran/get-combo', 'Transaksi\SetoranDebitKreditController@getCombo2');
 		$app->post('setoran/save-setoran-manual', 'Transaksi\SetoranDebitKreditController@saveSetoranManual');
 		$app->get('setoran/get-daftar-setor', 'Transaksi\SetoranDebitKreditController@getDaftarSetoran');
 		$app->post('setoran/hapus-setoran', 'Transaksi\SetoranDebitKreditController@hapusSetoran');
-
+        $app->post('setoran/save-setoran-dari-closing', 'Transaksi\SetoranDebitKreditController@saveSetoranDariClosing');
 		/** Laporan */
 		$app->get('laporan/get-detail-terimabarang', 'Transaksi\LaporanController@getDaftarDetailTerimaBarang');
 	});
