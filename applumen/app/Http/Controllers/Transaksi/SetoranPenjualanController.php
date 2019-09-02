@@ -30,9 +30,11 @@ class SetoranPenjualanController extends Controller{
     {
         $data = DB::table('verifikasi_t as vr')
             ->select('vr.norec', 'vr.tglverifikasi as tglclosing', 'vr.noverifikasi as noclosing',
-                'pg.id as pgid', 'pg.namalengkap', 'vr.totalclosing')
+                'pg.id as pgid', 'pg.namalengkap', 'vr.totalclosing','set.nosetor')
             ->leftJoin('pegawai_m as pg', 'pg.id', '=', 'vr.pegawaifk')
+            ->leftJoin('setorandebitkredit_t as set', 'set.norec', '=', 'vr.setorandebitkreditfk')
             ->where('vr.statusenabled', true)
+//            ->wherenull('vr.setorandebitkreditfk')
             ->where('vr.jenistransaksifk', '=', 5)
             ->orderBy('vr.tglverifikasi');
             if (isset($request['tglAwal']) && $request['tglAwal'] != "" && $request['tglAwal'] != "undefined") {
